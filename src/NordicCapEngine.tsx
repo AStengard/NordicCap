@@ -1,5 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Download, HelpCircle, Layers, Play, Printer, Scale, Sliders, TrendingUp } from 'lucide-react';
+import {
+  Building2,
+  Compass,
+  Download,
+  HelpCircle,
+  Layers,
+  Play,
+  Printer,
+  Scale,
+  Sliders,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
 import { WorkspaceTab } from './types';
 import { useCapTable, useCapTableMetrics } from './context/CapTableContext';
 import { useRecruiterDemo } from './context/RecruiterDemoContext';
@@ -18,6 +30,8 @@ import { DemoNarratorBox } from './components/demo/DemoNarratorBox';
 import { DemoPlayerBar } from './components/demo/DemoPlayerBar';
 import { DemoCompletionModal } from './components/demo/DemoCompletionModal';
 import { AboutModal } from './components/modals/AboutModal';
+import { StarterView } from './components/views/StarterView';
+import { CompanySetupView } from './components/views/CompanySetupView';
 import { ExecutiveTransactionMemo } from './components/memo/ExecutiveTransactionMemo';
 import { CapTableTab } from './tabs/CapTableTab';
 import { RoundSimulatorTab } from './tabs/RoundSimulatorTab';
@@ -77,12 +91,12 @@ export function NordicCapEngine() {
             <button
               type="button"
               onClick={() => {
-                dispatch({ type: 'SET_TAB', payload: 'cap_table' });
+                dispatch({ type: 'SET_TAB', payload: 'starter' });
                 if (demo.isDemoActive) demo.exitDemo();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none"
-              title="NordicCap Home (Cap Table)"
+              title="NordicCap Home (Starter Page)"
             >
               <BrandEmblem className="w-8 h-8 shrink-0 transition-transform group-hover:scale-105" />
               <div>
@@ -206,8 +220,10 @@ export function NordicCapEngine() {
         {/* Workspace Navigation Bar */}
         <nav className="bg-[#FCFBF9] border-b border-[#E5E0D5] sticky top-0 z-30 shadow-xs">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between overflow-x-auto">
-            <div className="flex space-x-1 sm:space-x-4 py-2">
+            <div className="flex space-x-1 sm:space-x-2 py-2">
               {[
+                { id: 'starter', label: t.tabStarter, icon: Compass },
+                { id: 'setup', label: t.tabSetup, icon: Users },
                 { id: 'cap_table', label: t.tabCapTable, icon: Layers },
                 { id: 'round_sim', label: t.tabRoundSim, icon: Sliders },
                 { id: 'waterfall', label: t.tabWaterfall, icon: TrendingUp },
@@ -221,7 +237,7 @@ export function NordicCapEngine() {
                     key={tab.id}
                     type="button"
                     onClick={() => dispatch({ type: 'SET_TAB', payload: tab.id as WorkspaceTab })}
-                    className={`inline-flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-md whitespace-nowrap transition-colors ${
+                    className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors ${
                       isActive
                         ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
                         : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
@@ -244,6 +260,8 @@ export function NordicCapEngine() {
 
         {/* Workspace Content Area */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28">
+          {state.activeTab === 'starter' && <StarterView />}
+          {state.activeTab === 'setup' && <CompanySetupView />}
           {state.activeTab === 'cap_table' && <CapTableTab />}
           {state.activeTab === 'round_sim' && <RoundSimulatorTab />}
           {state.activeTab === 'waterfall' && <WaterfallTab />}

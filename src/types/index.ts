@@ -3,7 +3,7 @@
 // ============================================================================
 
 export type Language = 'EN' | 'SV';
-export type WorkspaceTab = 'cap_table' | 'round_sim' | 'waterfall' | 'abl_legal';
+export type WorkspaceTab = 'starter' | 'setup' | 'cap_table' | 'round_sim' | 'waterfall' | 'abl_legal';
 
 export type StakeholderCategory = 'Founder' | 'Angel' | 'VC' | 'ESOP';
 export type WarrantRecipient = 'Employees' | 'Board' | 'Key Advisors';

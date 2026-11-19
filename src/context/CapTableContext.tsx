@@ -251,7 +251,7 @@ export function CapTableProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(capTableReducer, {
     ...initialScenario,
     language: 'EN',
-    activeTab: 'cap_table',
+    activeTab: 'starter',
     history: [],
   });
 

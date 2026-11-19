@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import {
+  ArrowRight,
   BookOpen,
+  Building2,
   Calculator,
   CheckCircle2,
+  ChevronRight,
   FileText,
   HelpCircle,
   Layers,
@@ -13,6 +16,7 @@ import {
   Scale,
   Sliders,
   TrendingUp,
+  Users,
   X,
 } from 'lucide-react';
 import { useCapTable } from '../../context/CapTableContext';
@@ -26,7 +30,7 @@ interface AboutModalProps {
 }
 
 export function AboutModal({ isOpen, onClose }: AboutModalProps) {
-  const { state, dispatch, t } = useCapTable();
+  const { state, dispatch } = useCapTable();
   const demo = useRecruiterDemo();
   const isSV = state.language === 'SV';
 
@@ -64,7 +68,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                   className="text-lg font-bold text-[#FCFBF9]"
                   style={{ fontFamily: "'Newsreader', Georgia, serif" }}
                 >
-                  {isSV ? 'Så fungerar NordicCap' : 'About NordicCap & User Guide'}
+                  {isSV ? 'Hur du använder NordicCap' : 'How to use NordicCap'}
                 </h2>
                 <span className="px-2 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded bg-[#8C6D46]/30 text-[#D8B98E] border border-[#8C6D46]/50">
                   ABL 2005:551
@@ -72,8 +76,8 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
               </div>
               <p className="text-xs text-[#D8D1C3] mt-0.5">
                 {isSV
-                  ? 'Svensk aktiebok, emissions- och waterfall-motor för tillväxtbolag & VC'
-                  : 'Institutional Swedish Cap Table & VC Waterfall Engine for Ventures & Funds'}
+                  ? 'Steg-för-steg-guide: Från inmatning av bolagsuppgifter till nyemission och exit-waterfall'
+                  : 'Step-by-step guide: From entering company info to modeling equity rounds & exit waterfalls'}
               </p>
             </div>
           </div>
@@ -89,79 +93,137 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
 
         {/* Modal Body */}
         <div className="p-6 sm:p-8 overflow-y-auto space-y-6 text-sm">
-          {/* Prominent FAQ Box: "Can I input my own information?" */}
-          <div className="bg-[#F3EFE6] border-2 border-[#8C6D46]/60 rounded-xl p-5 shadow-xs space-y-3">
-            <div className="flex items-center gap-2.5 text-[#15233E]">
-              <div className="w-7 h-7 rounded-full bg-[#8C6D46] text-[#FCFBF9] flex items-center justify-center shrink-0">
-                <CheckCircle2 className="w-4 h-4" />
-              </div>
-              <h3 className="font-semibold text-base">
-                {isSV
-                  ? 'Kan jag mata in mina egna bolagsuppgifter och aktieägare?'
-                  : 'Can I input my own company information and shareholders?'}
-              </h3>
-            </div>
-            <p className="text-xs sm:text-sm text-[#495264] leading-relaxed">
-              {isSV
-                ? 'Ja, absolut! Allt du ser i NordicCap är fullt redigerbart i realtid. Den förinlästa datan är bara ett realistiskt startexempel så att du inte möts av en tom skärm. Du kan fritt skapa, redigera och radera allt:'
-                : 'Yes, absolutely! Everything you see in NordicCap is fully interactive and customizable in real time. The pre-loaded data is simply a realistic starting template so you do not begin with an empty screen. You can customize everything:'}
-            </p>
+          {/* Section 1: The 3-Step Journey */}
+          <div>
+            <h3 className="font-semibold text-base text-[#15233E] mb-3">
+              {isSV ? 'Strukturen i 3 steg' : 'The 3-Step Structure'}
+            </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              <div className="bg-white/80 border border-[#D8D1C3] rounded-lg p-3 text-xs space-y-1">
-                <div className="flex items-center gap-1.5 font-semibold text-[#15233E]">
-                  <Plus className="w-3.5 h-3.5 text-[#8C6D46]" />
-                  <span>{isSV ? '1. Lägg till aktieägare & aktieslag' : '1. Add Shareholders & Classes'}</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Step 1 */}
+              <div className="bg-white border border-[#E5E0D5] rounded-xl p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="w-6 h-6 rounded-full bg-[#15233E] text-[#D8B98E] flex items-center justify-center font-mono font-bold text-xs">
+                    1
+                  </span>
+                  <span className="text-[10px] font-mono text-[#8C6D46] uppercase tracking-wider font-semibold">
+                    {isSV ? 'Start' : 'Starter'}
+                  </span>
                 </div>
-                <p className="text-[#5A6475]">
+                <h4 className="font-semibold text-xs text-[#15233E]">
+                  {isSV ? 'Startsida (Välj väg)' : 'Starter Page (Choose Path)'}
+                </h4>
+                <p className="text-[11px] text-[#5A6475] leading-relaxed">
                   {isSV
-                    ? 'Klicka på "+ Lägg till aktieägare", "Nytt aktieslag", "Ny konvertibel" eller "Nytt optionsprogram" i Aktieboken.'
-                    : 'Click "+ Add Shareholder", "Add Class", "Add K-lån Note", or "Add Warrant" in the Cap Table tab.'}
+                    ? 'Välj om du vill bygga din egen aktiebok från grunden eller se den 60s guidade demon.'
+                    : 'Choose whether you want to build your own cap table or watch the 60s guided demo.'}
                 </p>
               </div>
 
-              <div className="bg-white/80 border border-[#D8D1C3] rounded-lg p-3 text-xs space-y-1">
-                <div className="flex items-center gap-1.5 font-semibold text-[#15233E]">
-                  <Pencil className="w-3.5 h-3.5 text-[#8C6D46]" />
-                  <span>{isSV ? '2. Redigera befintliga värden' : '2. Edit Values In-Place'}</span>
+              {/* Step 2 */}
+              <div className="bg-[#F3EFE6] border-2 border-[#8C6D46] rounded-xl p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="w-6 h-6 rounded-full bg-[#8C6D46] text-[#FCFBF9] flex items-center justify-center font-mono font-bold text-xs">
+                    2
+                  </span>
+                  <span className="text-[10px] font-mono text-[#8C6D46] uppercase tracking-wider font-semibold">
+                    {isSV ? 'Inmatning' : 'Input Hub'}
+                  </span>
                 </div>
-                <p className="text-[#5A6475]">
+                <h4 className="font-semibold text-xs text-[#15233E]">
+                  {isSV ? 'Bolagsuppgifter (Sida 2)' : 'Company Setup (Page 2)'}
+                </h4>
+                <p className="text-[11px] text-[#5A6475] leading-relaxed">
                   {isSV
-                    ? 'Klicka på penn-ikonen bredvid bolagsnamn, aktiekapital, värdering eller klicka på pennan i aktieägarlistan.'
-                    : 'Click the pencil icon next to company name, share capital, or valuation, or click Edit in the shareholder list.'}
+                    ? 'Här matar du in all information: bolagsnamn, aktiekapital, Stam A/B och alla aktieägare.'
+                    : 'Where you add all info: company name, share capital, Class A/B, and shareholders.'}
                 </p>
               </div>
 
-              <div className="bg-white/80 border border-[#D8D1C3] rounded-lg p-3 text-xs space-y-1">
-                <div className="flex items-center gap-1.5 font-semibold text-[#15233E]">
-                  <Sliders className="w-3.5 h-3.5 text-[#8C6D46]" />
-                  <span>{isSV ? '3. Simulera och tillämpa emission' : '3. Simulate & Apply Rounds'}</span>
+              {/* Step 3 */}
+              <div className="bg-white border border-[#E5E0D5] rounded-xl p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="w-6 h-6 rounded-full bg-[#15233E] text-[#D8B98E] flex items-center justify-center font-mono font-bold text-xs">
+                    3
+                  </span>
+                  <span className="text-[10px] font-mono text-[#8C6D46] uppercase tracking-wider font-semibold">
+                    {isSV ? 'Analys' : 'Analytics'}
+                  </span>
                 </div>
-                <p className="text-[#5A6475]">
+                <h4 className="font-semibold text-xs text-[#15233E]">
+                  {isSV ? 'Aktiebok & Analys (Sida 3+)' : 'Cap Table & Analytics (Page 3+)'}
+                </h4>
+                <p className="text-[11px] text-[#5A6475] leading-relaxed">
                   {isSV
-                    ? 'I emissionssimulatorn skriver du in dina egna rundvillkor och klickar "Verkställ runda" för att uppdatera aktieboken.'
-                    : 'In the Round Simulator, input your round terms and click "Apply Round" to commit changes to the cap table.'}
-                </p>
-              </div>
-
-              <div className="bg-white/80 border border-[#D8D1C3] rounded-lg p-3 text-xs space-y-1">
-                <div className="flex items-center gap-1.5 font-semibold text-[#15233E]">
-                  <RefreshCw className="w-3.5 h-3.5 text-[#8C6D46]" />
-                  <span>{isSV ? '4. Starta från noll (Tom aktiebok)' : '4. Start From Scratch (Blank)'}</span>
-                </div>
-                <p className="text-[#5A6475]">
-                  {isSV
-                    ? 'Klicka på "Tom aktiebok" i sidhuvudet för att rensa exemplen och börja med ett rent 25 000 SEK-aktiebolag.'
-                    : 'Click "Blank / New" in the top bar to wipe the sample data and start fresh with a clean 25,000 SEK private AB.'}
+                    ? 'Granska lagstadgad aktiebok, simulera nyemissioner, testa exit-vattenfall och ABL-klausuler.'
+                    : 'Review the legal ledger, simulate funding rounds, drag the exit slider, and inspect ABL clauses.'}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Overview of the 4 Tabs */}
+          {/* Section 2: How to Add Your Own Information */}
+          <div className="bg-white border border-[#E5E0D5] rounded-xl p-5 shadow-xs space-y-3">
+            <div className="flex items-center gap-2.5 text-[#15233E]">
+              <div className="w-7 h-7 rounded-full bg-[#8C6D46] text-[#FCFBF9] flex items-center justify-center shrink-0">
+                <CheckCircle2 className="w-4 h-4" />
+              </div>
+              <h3 className="font-semibold text-sm">
+                {isSV
+                  ? 'Hur lägger jag in mitt eget bolag och mina aktieägare?'
+                  : 'How do I input my own company and shareholders?'}
+              </h3>
+            </div>
+
+            <div className="space-y-2.5 text-xs text-[#495264] leading-relaxed">
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#15233E]/10 text-[#15233E] font-bold font-mono text-[11px] flex items-center justify-center shrink-0 mt-0.5">
+                  1
+                </span>
+                <div>
+                  <strong className="text-[#15233E]">
+                    {isSV ? 'Gå till "Bolagsuppgifter" (Sida 2)' : 'Go to "Company Setup" (Page 2)'}
+                  </strong>
+                  : {isSV
+                    ? 'Klicka på "Bolagsuppgifter" i toppmenyn eller på startsidan. Skriv in ditt bolagsnamn, organisationsnummer och aktiekapital (minst 25 000 SEK enligt ABL 1:5).'
+                    : 'Click "Company Setup" in the top bar or starter page. Enter your company legal name, org number, and share capital (min 25,000 SEK per ABL 1:5).'}
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#15233E]/10 text-[#15233E] font-bold font-mono text-[11px] flex items-center justify-center shrink-0 mt-0.5">
+                  2
+                </span>
+                <div>
+                  <strong className="text-[#15233E]">
+                    {isSV ? 'Klicka på "+ Lägg till aktieägare"' : 'Click "+ Add Shareholder"'}
+                  </strong>
+                  : {isSV
+                    ? 'Lägg till grundare, anställda, ängelinvesterare eller VC. Välj aktieslag (t.ex. Stam A med 10 röster eller Stam B med 1 röst), antal aktier och investerat kapital.'
+                    : 'Add founders, employees, angel investors, or VC funds. Choose their share class (Class A 10 votes, Class B 1 vote), share count, and invested capital.'}
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#15233E]/10 text-[#15233E] font-bold font-mono text-[11px] flex items-center justify-center shrink-0 mt-0.5">
+                  3
+                </span>
+                <div>
+                  <strong className="text-[#15233E]">
+                    {isSV ? 'Klicka på "Gå till aktiebok & analys"' : 'Click "Proceed to Cap Table & Analytics"'}
+                  </strong>
+                  : {isSV
+                    ? 'När dina uppgifter är inlagda navigerar du vidare till analyssidorna för att se ägarandelar, exportera CSV eller skriva ut ett färdigt transaktions-PM.'
+                    : 'Once your details are entered, proceed to the analysis views to review ownership, export an Excel CSV, or print a transaction memo.'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 3: The 4 Analytics Views (Page 3 and beyond) */}
           <div>
             <h3 className="font-semibold text-base text-[#15233E] mb-3">
-              {isSV ? 'Översikt över de 4 flikarna' : 'How the 4 Workspace Tabs Work'}
+              {isSV ? 'Översikt över analysflikarna (Sida 3+)' : 'Overview of Analytics Tabs (Page 3 and beyond)'}
             </h3>
 
             <div className="space-y-3">
@@ -172,12 +234,12 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                 </div>
                 <div className="space-y-1">
                   <h4 className="font-semibold text-xs text-[#15233E]">
-                    {isSV ? '1. Aktiebok & Ägande (Cap Table)' : '1. Cap Table & Ownership (Aktiebok)'}
+                    {isSV ? '1. Aktiebok & Ägande (Share Register)' : '1. Cap Table & Ownership (Aktiebok)'}
                   </h4>
                   <p className="text-xs text-[#5A6475] leading-relaxed">
                     {isSV
-                      ? 'Den officiella aktieboken enligt 5 kap. ABL. Hanterar Stam A (10 röster/aktie) och Stam B (1 röst), aktiva konvertibellån (K-lån) och optionsprogram (ESOP). Kontrollerar kontinuerligt att röstvärdesskillnaden inte överstiger lagens tak på 10:1 (4 kap. 5 § ABL) och att aktiekapitalet är minst 25 000 SEK.'
-                      : 'The statutory share register under Chapter 5 ABL. Manages Class A shares (10 votes/share) vs Class B shares (1 vote), active convertible notes (K-lån), and employee option pools. Validates the 10:1 statutory voting ceiling (4:5 ABL) and minimum 25,000 SEK share capital.'}
+                      ? 'Den officiella aktieboken enligt 5 kap. ABL. Visar kapitalandel vs. röstandel, kontrollerar 10:1-röstvärdestaket (4 kap. 5 § ABL), exporterar till CSV och skapar utskriftsanpassat transaktions-PM.'
+                      : 'The statutory share register under Chapter 5 ABL. Compares economic ownership vs. voting control, validates the 10:1 voting ratio ceiling, and generates CSV / PDF exports.'}
                   </p>
                 </div>
               </div>
@@ -193,8 +255,8 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                   </h4>
                   <p className="text-xs text-[#5A6475] leading-relaxed">
                     {isSV
-                      ? 'Modellerar en nyemission (såsom Serie A). Löser cirkulär matematik för optionspool-top-up (pre-money ESOP shuffle) med en 40-iterationers numerisk lösare, konverterar utestående K-lån till lägsta av rabattkurs och värderingstak, och bevarar lagstadgat kvotvärde.'
-                      : 'Models primary financing rounds (e.g. Seed, Series A). Resolves the circular pre-money option pool expansion (ESOP shuffle) using a 40-iteration fixed-point solver, converts bridge notes at min(Discount, Cap), and preserves statutory quota value.'}
+                      ? 'Modellerar en investeringsrunda (t.ex. Seed eller Serie A). Löser cirkulär pre-money optionspool-top-up, konverterar K-lån och låter dig verkställa rundan direkt in i aktieboken.'
+                      : 'Models financing rounds (Seed, Series A). Solves circular pre-money ESOP shuffle math, converts convertible notes, and lets you commit the round to the cap table.'}
                   </p>
                 </div>
               </div>
@@ -210,8 +272,8 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                   </h4>
                   <p className="text-xs text-[#5A6475] leading-relaxed">
                     {isSV
-                      ? 'Simulerar exakt vem som får vad vid en bolagsförsäljning (M&A). Dra reglaget från 0 till 300+ MSEK: motorn tillämpar senioritetsordning, 1x/2x preferenskapital, deltagandetak (participating caps) och beräknar den rationella brytpunkten där preferensaktier konverterar till stamaktier.'
-                      : 'Simulates who gets paid what in an M&A exit. Drag the valuation slider from 0 to 300+ MSEK: the engine computes seniority tiers, 1x/2x preference returns, participating caps, and the rational threshold where preferred stock converts into common shares.'}
+                      ? 'Simulerar vem som får vad vid försäljning av bolaget. Dra exit-reglaget från 0 till 300+ MSEK för att se senioritetsordning, 1x preferensutdelning och brytpunkten för konvertering.'
+                      : 'Simulates who gets paid what in an acquisition. Drag the exit slider from 0 to 300+ MSEK to see seniority tiers, 1x preference returns, and the common conversion point.'}
                   </p>
                 </div>
               </div>
@@ -227,8 +289,8 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                   </h4>
                   <p className="text-xs text-[#5A6475] leading-relaxed">
                     {isSV
-                      ? 'Kontrollerar skarpa bolagsrättsliga krav, inklusive Leo-lagen (16 kap. ABL) med 9/10 kvalificerad majoritet för personaloptioner. Genererar Bolagsverkets 6-delade registreringsdossier och skriver färdiga avtalsklausuler för aktieägaravtal (SHA) och bolagsordning.'
-                      : 'Enforces strict Swedish statutory compliance, including Leo-lagen (Ch. 16 ABL) requiring a 90% supermajority for employee warrants. Generates the 6-document Bolagsverket filing dossier and live-drafts contractual clauses for your SHA.'}
+                      ? 'Kontrollerar Leo-lagen (16 kap. ABL, 90% majoritet för personaloptioner), sammanställer Bolagsverkets 6 registreringsdokument och live-skriver aktieägaravtalets klausuler.'
+                      : 'Enforces Leo-lagen (Ch. 16 ABL, 90% voting supermajority for employee options), prepares the 6-document Bolagsverket filing package, and drafts SHA clauses.'}
                   </p>
                 </div>
               </div>
@@ -243,12 +305,12 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
               type="button"
               onClick={() => {
                 dispatch({ type: 'LOAD_SCENARIO', payload: createBlankScenario() });
-                dispatch({ type: 'SET_TAB', payload: 'cap_table' });
+                dispatch({ type: 'SET_TAB', payload: 'setup' });
                 onClose();
               }}
-              className="px-3 py-1.5 text-xs font-medium text-[#15233E] bg-white border border-[#D8D1C3] hover:bg-[#ECE7DC] rounded-md transition-colors"
+              className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#15233E] hover:bg-[#1E3156] rounded-md transition-colors"
             >
-              {isSV ? 'Skapa tom aktiebok (Börja från noll)' : 'Start Blank Cap Table'}
+              {isSV ? 'Gå till inmatning (Sida 2)' : 'Go to Company Setup (Page 2)'}
             </button>
             <button
               type="button"
@@ -257,9 +319,9 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                 dispatch({ type: 'SET_TAB', payload: 'cap_table' });
                 onClose();
               }}
-              className="px-3 py-1.5 text-xs font-medium text-[#5A6475] hover:text-[#15233E] hover:bg-white/80 rounded-md transition-colors"
+              className="px-3 py-1.5 text-xs font-medium text-[#5A6475] hover:text-[#15233E] hover:bg-white rounded-md transition-colors"
             >
-              {isSV ? 'Återställ Pre-Serie A-exempel' : 'Reset Pre-Series A Example'}
+              {isSV ? 'Ladda exempelbolag' : 'Load Sample Venture'}
             </button>
           </div>
 

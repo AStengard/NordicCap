@@ -191,7 +191,7 @@ export function RecruiterDemoProvider({ children }: { children: React.ReactNode 
 
   const [isDemoActive, setIsDemoActive] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isStepReady, setIsStepReady] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [demoRunId, setDemoRunId] = useState(0);
@@ -218,7 +218,7 @@ export function RecruiterDemoProvider({ children }: { children: React.ReactNode 
     setIsCompleted(false);
     setIsDemoActive(true);
     setCurrentStepIndex(0);
-    setIsPlaying(true);
+    setIsPlaying(false);
     setIsStepReady(false);
     setDemoRunId((id) => id + 1);
     navigateForStep(0);
