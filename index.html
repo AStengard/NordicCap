@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NordicCap — Swedish Cap Table & VC Waterfall Engine</title>
+    <meta
+      name="description"
+      content="Swedish corporate law (Aktiebolagslagen 2005:551) compliant equity & waterfall modeling platform for Nordic ventures and venture capital funds."
+    />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2260%22%20height%3D%2260%22%20rx%3D%2214%22%20fill%3D%22%2315233E%22%2F%3E%3Crect%20x%3D%222.75%22%20y%3D%222.75%22%20width%3D%2258.5%22%20height%3D%2258.5%22%20rx%3D%2213.25%22%20stroke%3D%22%238C6D46%22%20stroke-opacity%3D%220.45%22%20stroke-width%3D%221.5%22%2F%3E%3Crect%20x%3D%2215%22%20y%3D%2237%22%20width%3D%228%22%20height%3D%2214%22%20rx%3D%221.5%22%20fill%3D%22%23F6F4EF%22%20fill-opacity%3D%220.45%22%2F%3E%3Crect%20x%3D%2228%22%20y%3D%2226%22%20width%3D%228%22%20height%3D%2225%22%20rx%3D%221.5%22%20fill%3D%22%23F6F4EF%22%20fill-opacity%3D%220.82%22%2F%3E%3Crect%20x%3D%2241%22%20y%3D%2214%22%20width%3D%228%22%20height%3D%2237%22%20rx%3D%221.5%22%20fill%3D%22%238C6D46%22%2F%3E%3Cline%20x1%3D%2213%22%20y1%3D%2253%22%20x2%3D%2251%22%20y2%3D%2253%22%20stroke%3D%22%23F6F4EF%22%20stroke-opacity%3D%220.35%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E" />
+    
+    <!-- Google Fonts: Inter & Cormorant Garamond -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+            colors: {
+              nordic: {
+                dark: '#0D1F18',
+                card: '#18221E',
+                parchment: '#F6F4EF',
+                sand: '#EDE8DF',
+                brass: '#8C6D46',
+                gold: '#C5A059',
+                muted: '#B5AEA0',
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        margin: 0;
+        background-color: #0D1F18;
+        color: #F6F4EF;
+        font-family: 'Inter', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      @media print {
+        body {
+          background-color: #ffffff !important;
+          color: #111827 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
