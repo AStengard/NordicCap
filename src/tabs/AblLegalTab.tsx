@@ -169,11 +169,12 @@ export function AblLegalTab() {
 
       {/* SUB-PAGE 1: ABL Majority & Bolagsverket Checklist */}
       {subPage === 'governance' && (
-        <DemoSpotlight
-          stepIndex={4}
-          badgeText={isSV ? DEMO_STEPS[4].badgeSV : DEMO_STEPS[4].badgeEN}
-          className="space-y-6"
-        >
+        <div className="space-y-6">
+          <DemoSpotlight
+            stepIndex={4}
+            badgeText={isSV ? DEMO_STEPS[4].badgeSV : DEMO_STEPS[4].badgeEN}
+            className="space-y-6"
+          >
         {/* ABL Rules Grid */}
         <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-5">
           <div className="flex items-center justify-between border-b border-[#E5E0D5] pb-3 mb-4">

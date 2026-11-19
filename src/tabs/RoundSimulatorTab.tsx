@@ -580,7 +580,10 @@ export function RoundSimulatorTab() {
                 </p>
               </div>
             </div>
+          </div>
 
+          {/* RIGHT COLUMN: Liquidation Preference & Commit Action */}
+          <div className="space-y-5">
             {/* Liquidation Preference Card */}
             <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-5 space-y-4">
               <div className="flex items-center justify-between border-b border-[#E5E0D5] pb-3">
@@ -697,7 +700,8 @@ export function RoundSimulatorTab() {
             </div>
           </div>
         </div>
-      )}
+      </div>
+    )}
 
       {/* SUB-PAGE 2: Real-Time Dilution Impact, Chart & History */}
       {subPage === 'dilution' && (
