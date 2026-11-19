@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { TrendingUp } from 'lucide-react';
+import { FileText, TrendingUp } from 'lucide-react';
 import {
   Area,
   AreaChart,
@@ -75,11 +75,13 @@ export function WaterfallTab() {
   const [exitValuation, setExitValuation] = useState<number>(50_000_000);
   const [includeWarrants, setIncludeWarrants] = useState<boolean>(true);
   const [chartMode, setChartMode] = useState<'line' | 'area'>('line');
+  const [subPage, setSubPage] = useState<'curves' | 'payouts'>('curves');
 
   // Synthetic Interaction Engine — Step 3 (Sweep exit valuation: 15M -> 50M -> 120M)
   useEffect(() => {
     if (!demo.isDemoActive || demo.currentStepIndex !== 3) return;
 
+    setSubPage('curves');
     let cancelled = false;
     const timers: number[] = [];
     const schedule = (fn: () => void, ms: number) => {
@@ -122,6 +124,53 @@ export function WaterfallTab() {
 
   return (
     <div className="space-y-6">
+      {/* Sub-Page Navigation Switcher for Step 3.3 */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#FCFBF9] border border-[#E5E0D5] rounded-xl p-2.5 shadow-2xs">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <button
+            type="button"
+            onClick={() => setSubPage('curves')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              subPage === 'curves'
+                ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
+                : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+            }`}
+          >
+            <TrendingUp className="w-4 h-4 text-[#D8B98E]" strokeWidth={1.8} />
+            <span>{t.wfSubCurves}</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              subPage === 'curves' ? 'bg-white/15 text-white' : 'bg-[#E5E0D5] text-[#5A6475]'
+            }`}>
+              {formatSEK(exitValuation, true)}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSubPage('payouts')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              subPage === 'payouts'
+                ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
+                : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+            }`}
+          >
+            <FileText className="w-4 h-4 text-[#8C6D46]" strokeWidth={1.8} />
+            <span>{t.wfSubPayouts}</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              subPage === 'payouts' ? 'bg-white/15 text-white' : 'bg-[#E5E0D5] text-[#5A6475]'
+            }`}>
+              {waterfallResult.payoutRows.length} poster
+            </span>
+          </button>
+        </div>
+
+        <div className="hidden sm:flex items-center gap-2 text-xs text-[#667085]">
+          <span className="font-mono text-[11px] bg-[#F6F4EF] px-2 py-0.5 rounded border border-[#E5E0D5]">
+            {state.language === 'SV' ? 'Kapitel 3.3 av 3.4' : 'Chapter 3.3 of 3.4'}
+          </span>
+        </div>
+      </div>
+
       {/* Title & Presets Header Strip */}
       <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg px-5 py-4 flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -286,8 +335,11 @@ export function WaterfallTab() {
         badgeText={state.language === 'SV' ? DEMO_STEPS[3].badgeSV : DEMO_STEPS[3].badgeEN}
         className="space-y-6"
       >
-        {/* Waterfall Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* SUB-PAGE 1: Exit Breakpoint Curves & Proceeds Breakdown */}
+        {subPage === 'curves' && (
+          <div className="space-y-6">
+            {/* Waterfall Charts Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Breakpoint Curve Chart */}
           <div className="lg:col-span-8 bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-5">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
@@ -469,8 +521,26 @@ export function WaterfallTab() {
           </div>
         </div>
 
-        {/* Detailed Stakeholder Payout & MOIC Table */}
-        <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg overflow-hidden">
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => {
+                  setSubPage('payouts');
+                  window.scrollTo({ top: 300, behavior: 'smooth' });
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#15233E] bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#D8D1C3] rounded-lg transition-colors cursor-pointer shadow-2xs"
+              >
+                <span>{state.language === 'SV' ? 'Visa detaljerad utbetalning & MOIC per ägare →' : 'View Detailed Stakeholder Payout & MOIC Schedule →'}</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* SUB-PAGE 2: Detailed Stakeholder Payout & Audit Trace */}
+        {subPage === 'payouts' && (
+          <div className="space-y-6">
+            {/* Detailed Stakeholder Payout & MOIC Table */}
+            <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg overflow-hidden">
           <div className="px-5 py-4 border-b border-[#E5E0D5] flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-base font-medium text-[#15233E]" style={{ fontFamily: "'Newsreader', Georgia, serif" }}>
               {t.wfPayoutTableTitle}
@@ -632,7 +702,38 @@ export function WaterfallTab() {
             })}
           </div>
         </div>
-      </DemoSpotlight>
+      </div>
+    )}
+  </DemoSpotlight>
+
+  {/* Chapter 3.3 Footer Navigation */}
+  <div className="pt-4 border-t border-[#E5E0D5] flex flex-wrap items-center justify-between gap-3">
+    <button
+      type="button"
+      onClick={() => {
+        dispatch({ type: 'SET_TAB', payload: 'round_sim' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }}
+      className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-[#5A6475] hover:text-[#15233E] bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#D8D1C3] rounded-lg transition-colors cursor-pointer"
+    >
+      {t.navBackToRoundSim}
+    </button>
+
+    <div className="text-xs text-[#7A8291] font-mono">
+      {state.language === 'SV' ? 'Kapitel 3.3 Exit Waterfall → 3.4 ABL Juridik' : 'Chapter 3.3 Waterfall → 3.4 ABL Legal'}
+    </div>
+
+    <button
+      type="button"
+      onClick={() => {
+        dispatch({ type: 'SET_TAB', payload: 'abl_legal' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }}
+      className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#FCFBF9] bg-[#15233E] hover:bg-[#1E3156] rounded-lg transition-colors cursor-pointer shadow-xs"
+    >
+      {t.navToAblLegal}
+    </button>
+  </div>
     </div>
   );
 }

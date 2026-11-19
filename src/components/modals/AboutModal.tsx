@@ -28,7 +28,6 @@ import {
 } from 'lucide-react';
 import { useCapTable } from '../../context/CapTableContext';
 import { useRecruiterDemo } from '../../context/RecruiterDemoContext';
-import { createBlankScenario, createPreSeriesAScenario } from '../../constants/scenarios';
 import { WorkspaceTab } from '../../types';
 import { BrandEmblem } from '../ui/BrandEmblem';
 
@@ -92,11 +91,6 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                   ABL 2005:551
                 </span>
               </div>
-              <p className="text-xs text-[#D8D1C3] mt-0.5">
-                {isSV
-                  ? 'Steg-för-steg-guide: Klicka på valfri sida nedan för att hoppa direkt till den vyn i appen'
-                  : 'Interactive user guide: Click any step below to jump directly to that page in NordicCap'}
-              </p>
             </div>
           </div>
           <button
@@ -141,10 +135,6 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
               );
             })}
           </div>
-
-          <div className="text-[11px] text-[#D8D1C3] font-mono hidden md:block">
-            {isSV ? 'Klicka på ett kort för att gå till sidan' : 'Click any card to open that view'}
-          </div>
         </div>
 
         {/* Modal Body with Tabbed Content */}
@@ -157,9 +147,6 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                   <h3 className="font-semibold text-base text-[#15233E]">
                     {isSV ? 'De 3 stegen i NordicCap' : 'The 3 Main Steps in NordicCap'}
                   </h3>
-                  <span className="text-xs text-[#8C6D46] font-medium">
-                    {isSV ? 'Klicka på en ruta för att öppna den sidan' : 'Click any box to jump directly to that page'}
-                  </span>
                 </div>
                 <p className="text-xs text-[#5A6475] mb-4">
                   {isSV
@@ -171,7 +158,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Step 1 Card */}
                   <div
-                    onClick={() => navigateToTab('starter')}
+                    onClick={() => setActiveGuideTab('step1')}
                     className="bg-white border-2 border-[#E5E0D5] hover:border-[#15233E] rounded-xl p-5 space-y-3 cursor-pointer transition-all hover:shadow-md group flex flex-col justify-between"
                   >
                     <div className="space-y-2.5">
@@ -195,18 +182,11 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                     </div>
 
                     <div className="pt-3 border-t border-[#E5E0D5]/70 flex items-center justify-between">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveGuideTab('step1');
-                        }}
-                        className="text-[11px] text-[#8C6D46] hover:underline font-medium"
-                      >
-                        {isSV ? 'Läs guide →' : 'Read guide →'}
-                      </button>
+                      <span className="text-[11px] text-[#8C6D46] font-medium">
+                        {isSV ? 'Läs guide' : 'Read guide'}
+                      </span>
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-[#15233E] text-white rounded group-hover:bg-[#1E3156] transition-colors">
-                        <span>{isSV ? 'Öppna Sida 1' : 'Open Page 1'}</span>
+                        <span>{isSV ? 'Visa Sida 1' : 'View Page 1'}</span>
                         <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
@@ -214,7 +194,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
 
                   {/* Step 2 Card */}
                   <div
-                    onClick={() => navigateToTab('setup')}
+                    onClick={() => setActiveGuideTab('step2')}
                     className="bg-[#FCFAF6] border-2 border-[#8C6D46] rounded-xl p-5 space-y-3 cursor-pointer transition-all hover:shadow-md group flex flex-col justify-between"
                   >
                     <div className="space-y-2.5">
@@ -238,18 +218,11 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                     </div>
 
                     <div className="pt-3 border-t border-[#8C6D46]/20 flex items-center justify-between">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveGuideTab('step2');
-                        }}
-                        className="text-[11px] text-[#8C6D46] hover:underline font-medium"
-                      >
-                        {isSV ? 'Läs guide →' : 'Read guide →'}
-                      </button>
+                      <span className="text-[11px] text-[#8C6D46] font-medium">
+                        {isSV ? 'Läs guide' : 'Read guide'}
+                      </span>
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-[#8C6D46] text-white rounded group-hover:bg-[#A38054] transition-colors">
-                        <span>{isSV ? 'Öppna Sida 2' : 'Open Page 2'}</span>
+                        <span>{isSV ? 'Visa Sida 2' : 'View Page 2'}</span>
                         <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
@@ -257,7 +230,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
 
                   {/* Step 3 Card */}
                   <div
-                    onClick={() => navigateToTab('cap_table')}
+                    onClick={() => setActiveGuideTab('step3')}
                     className="bg-white border-2 border-[#E5E0D5] hover:border-[#15233E] rounded-xl p-5 space-y-3 cursor-pointer transition-all hover:shadow-md group flex flex-col justify-between"
                   >
                     <div className="space-y-2.5">
@@ -281,18 +254,11 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                     </div>
 
                     <div className="pt-3 border-t border-[#E5E0D5]/70 flex items-center justify-between">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveGuideTab('step3');
-                        }}
-                        className="text-[11px] text-[#8C6D46] hover:underline font-medium"
-                      >
-                        {isSV ? 'Läs guide →' : 'Read guide →'}
-                      </button>
+                      <span className="text-[11px] text-[#8C6D46] font-medium">
+                        {isSV ? 'Läs guide' : 'Read guide'}
+                      </span>
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-[#15233E] text-white rounded group-hover:bg-[#1E3156] transition-colors">
-                        <span>{isSV ? 'Öppna Sida 3' : 'Open Page 3'}</span>
+                        <span>{isSV ? 'Visa Sida 3' : 'View Page 3'}</span>
                         <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
@@ -305,17 +271,17 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                 <div className="flex items-center justify-between">
                   <h4 className="font-semibold text-sm text-[#15233E] flex items-center gap-2">
                     <Layers className="w-4 h-4 text-[#8C6D46]" />
-                    <span>{isSV ? 'Direktlänkar till analysflikarna (Sida 3+)' : 'Direct links to Analytics tabs (Page 3+)'}</span>
+                    <span>{isSV ? 'Analysverktygen i Steg 3' : 'Analytics Tools in Step 3'}</span>
                   </h4>
                   <span className="text-[11px] text-[#5A6475]">
-                    {isSV ? 'Klicka på en flik för att öppna direkt' : 'Click to jump directly into the tool'}
+                    {isSV ? 'Klicka på en modul för att läsa om den' : 'Click any module to read its guide'}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     type="button"
-                    onClick={() => navigateToTab('cap_table')}
+                    onClick={() => setActiveGuideTab('step3')}
                     className="p-3 bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#E5E0D5] hover:border-[#15233E] rounded-lg text-left transition-all flex items-start gap-3 group cursor-pointer"
                   >
                     <Layers className="w-5 h-5 text-[#15233E] mt-0.5 shrink-0" />
@@ -332,7 +298,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
 
                   <button
                     type="button"
-                    onClick={() => navigateToTab('round_sim')}
+                    onClick={() => setActiveGuideTab('step3')}
                     className="p-3 bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#E5E0D5] hover:border-[#15233E] rounded-lg text-left transition-all flex items-start gap-3 group cursor-pointer"
                   >
                     <Sliders className="w-5 h-5 text-[#8C6D46] mt-0.5 shrink-0" />
@@ -349,7 +315,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
 
                   <button
                     type="button"
-                    onClick={() => navigateToTab('waterfall')}
+                    onClick={() => setActiveGuideTab('step3')}
                     className="p-3 bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#E5E0D5] hover:border-[#15233E] rounded-lg text-left transition-all flex items-start gap-3 group cursor-pointer"
                   >
                     <TrendingUp className="w-5 h-5 text-[#3B5984] mt-0.5 shrink-0" />
@@ -366,7 +332,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
 
                   <button
                     type="button"
-                    onClick={() => navigateToTab('abl_legal')}
+                    onClick={() => setActiveGuideTab('step3')}
                     className="p-3 bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#E5E0D5] hover:border-[#15233E] rounded-lg text-left transition-all flex items-start gap-3 group cursor-pointer"
                   >
                     <Scale className="w-5 h-5 text-[#5C6F68] mt-0.5 shrink-0" />
@@ -735,50 +701,25 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
         </div>
 
         {/* Modal Bottom Action Footer */}
-        <div className="bg-[#F6F4EF] border-t border-[#E5E0D5] px-6 py-3.5 flex flex-wrap items-center justify-between gap-3 shrink-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                dispatch({ type: 'LOAD_SCENARIO', payload: createBlankScenario() });
-                navigateToTab('setup');
-              }}
-              className="px-3 py-1.5 text-xs font-semibold text-white bg-[#15233E] hover:bg-[#1E3156] rounded-md transition-colors cursor-pointer"
-            >
-              {isSV ? 'Börja mata in (Sida 2)' : 'Start Setup (Page 2)'}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() });
-                navigateToTab('cap_table');
-              }}
-              className="px-3 py-1.5 text-xs font-medium text-[#5A6475] hover:text-[#15233E] hover:bg-white rounded-md transition-colors cursor-pointer"
-            >
-              {isSV ? 'Ladda exempelbolag (Sida 3)' : 'Load Sample Venture (Page 3)'}
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                demo.startDemo();
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-[#8C6D46] hover:bg-[#A38054] text-white transition-colors cursor-pointer"
-            >
-              <Play className="w-3.5 h-3.5 fill-current" strokeWidth={0} />
-              <span>{isSV ? 'Starta 60s Demo' : 'Launch 60s Tour'}</span>
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-3.5 py-1.5 text-xs font-medium text-[#15233E] bg-[#E5E0D5] hover:bg-[#D8D1C3] rounded-md transition-colors cursor-pointer"
-            >
-              {isSV ? 'Stäng' : 'Close'}
-            </button>
-          </div>
+        <div className="bg-[#F6F4EF] border-t border-[#E5E0D5] px-6 py-3.5 flex items-center justify-end gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              demo.startDemo();
+            }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-[#8C6D46] hover:bg-[#A38054] text-white transition-colors cursor-pointer"
+          >
+            <Play className="w-3.5 h-3.5 fill-current" strokeWidth={0} />
+            <span>{isSV ? 'Starta 60s Demo' : 'Launch 60s Tour'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-3.5 py-1.5 text-xs font-medium text-[#15233E] bg-[#E5E0D5] hover:bg-[#D8D1C3] rounded-md transition-colors cursor-pointer"
+          >
+            {isSV ? 'Stäng' : 'Close'}
+          </button>
         </div>
       </div>
     </div>

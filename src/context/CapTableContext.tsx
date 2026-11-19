@@ -65,11 +65,19 @@ export function capTableReducer(state: CapTableState, action: CapTableAction): C
       };
     }
     case 'DELETE_SHARE_CLASS': {
-      const inUse =
-        state.shareholders.some((s) => s.shareClassId === action.payload) ||
-        state.warrantPrograms.some((w) => w.targetShareClassId === action.payload);
-      if (inUse) return state;
-      return { ...state, shareClasses: state.shareClasses.filter((c) => c.id !== action.payload) };
+      if (state.shareClasses.length <= 1) return state; // Keep at least one statutory share class
+      const remainingClasses = state.shareClasses.filter((c) => c.id !== action.payload);
+      const fallbackClassId = remainingClasses[0].id;
+      return {
+        ...state,
+        shareClasses: remainingClasses,
+        shareholders: state.shareholders.map((s) =>
+          s.shareClassId === action.payload ? { ...s, shareClassId: fallbackClassId } : s
+        ),
+        warrantPrograms: state.warrantPrograms.map((w) =>
+          w.targetShareClassId === action.payload ? { ...w, targetShareClassId: fallbackClassId } : w
+        ),
+      };
     }
     case 'UPSERT_SHAREHOLDER': {
       const exists = state.shareholders.some((s) => s.id === action.payload.id);

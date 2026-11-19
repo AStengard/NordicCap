@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, ChevronLeft, ChevronRight, Loader2, Pause, Play, X } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Pause, Play, X } from 'lucide-react';
 import { useCapTable } from '../../context/CapTableContext';
 import { DEMO_STEPS, useRecruiterDemo } from '../../context/RecruiterDemoContext';
 
@@ -72,16 +72,18 @@ export function DemoPlayerBar() {
         <button
           type="button"
           onClick={nextStep}
-          className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 shrink-0 ${
+          className={`inline-flex items-center transition-all duration-200 shrink-0 cursor-pointer ${
             isStepReady
-              ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-950/40'
-              : 'bg-[#FCFBF9]/12 hover:bg-[#FCFBF9]/20 text-[#D8D1C3]'
+              ? 'gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-full bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-950/40'
+              : 'gap-1 px-2.5 py-1.5 text-xs font-medium rounded-full text-[#E5E0D5] hover:bg-[#FCFBF9]/10'
           }`}
         >
-          {!isStepReady && <Loader2 className="w-3 h-3 animate-spin" strokeWidth={2} />}
           <span>{isLastStep ? t.demoFinish : t.demoNext}</span>
-          {isStepReady &&
-            (isLastStep ? <Check className="w-3.5 h-3.5" strokeWidth={2.2} /> : <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.2} />)}
+          {isStepReady && isLastStep ? (
+            <Check className="w-3.5 h-3.5" strokeWidth={2.2} />
+          ) : (
+            <ChevronRight className="w-3.5 h-3.5" strokeWidth={2} />
+          )}
         </button>
 
         <button

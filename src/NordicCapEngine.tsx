@@ -88,7 +88,8 @@ export function NordicCapEngine() {
       <div className="print:hidden">
         {/* Top Editorial Header */}
         <header className="bg-[#15233E] text-[#FCFBF9] border-b border-[#8C6D46]/30 shadow-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5 flex items-center justify-between gap-3 overflow-x-auto">
+            {/* Logo & Site Name */}
             <button
               type="button"
               onClick={() => {
@@ -96,35 +97,36 @@ export function NordicCapEngine() {
                 if (demo.isDemoActive) demo.exitDemo();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none"
+              className="flex items-center gap-2.5 text-left group cursor-pointer focus:outline-none shrink-0"
               title="NordicCap Home (Starter Page)"
             >
-              <BrandEmblem className="w-8 h-8 shrink-0 transition-transform group-hover:scale-105" />
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1
-                    className="text-xl font-bold tracking-tight text-[#FCFBF9] group-hover:text-[#D8B98E] transition-colors"
-                    style={{ fontFamily: "'Newsreader', Georgia, serif" }}
-                  >
-                    NordicCap
-                  </h1>
-                  <span className="px-1.5 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded bg-[#8C6D46]/30 text-[#D8B98E] border border-[#8C6D46]/50">
-                    ABL 2005:551
-                  </span>
-                </div>
-                <p className="text-xs text-[#D8D1C3] hidden sm:block mt-0.5">{t.appSubtitle}</p>
+              <BrandEmblem className="w-7 h-7 shrink-0 transition-transform group-hover:scale-105" />
+              <div className="flex items-center gap-2">
+                <h1
+                  className="text-lg sm:text-xl font-bold tracking-tight text-[#FCFBF9] group-hover:text-[#D8B98E] transition-colors leading-none"
+                  style={{ fontFamily: "'Newsreader', Georgia, serif" }}
+                >
+                  NordicCap
+                </h1>
+                <span className="px-1.5 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded bg-[#8C6D46]/30 text-[#D8B98E] border border-[#8C6D46]/50 shrink-0">
+                  ABL 2005:551
+                </span>
+                <span className="hidden 2xl:inline text-xs text-[#D8D1C3] border-l border-[#8C6D46]/40 pl-2 font-sans font-normal">
+                  {t.appSubtitle}
+                </span>
               </div>
             </button>
 
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            {/* Top Navigation Menu (Aligned higher up directly next to logo & title) */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               {/* About & Instructions Modal Launcher */}
               <button
                 type="button"
                 onClick={() => setIsAboutOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#D8B98E] hover:text-white border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#D8B98E] hover:text-white border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap"
                 title={t.howItWorksTitle}
               >
-                <HelpCircle className="w-3.5 h-3.5" />
+                <HelpCircle className="w-3.5 h-3.5 shrink-0" />
                 <span>{t.howItWorks}</span>
               </button>
 
@@ -137,15 +139,15 @@ export function NordicCapEngine() {
                   if (demo.isDemoActive) demo.exitDemo();
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#FCFBF9] hover:text-[#D8B98E] border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#FCFBF9] hover:text-[#D8B98E] border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap"
                 title={t.startOverTooltip}
               >
-                <RotateCcw className="w-3.5 h-3.5 text-[#D8B98E]" />
+                <RotateCcw className="w-3.5 h-3.5 text-[#D8B98E] shrink-0" />
                 <span>{t.startOver}</span>
               </button>
 
               {/* Clear Sample Scenarios Group */}
-              <div className="hidden lg:flex items-center gap-1.5 bg-[#1F2F4E] p-1 rounded-md border border-[#8C6D46]/30">
+              <div className="hidden lg:flex items-center gap-1 bg-[#1F2F4E] p-0.5 px-1.5 rounded-full border border-[#8C6D46]/30">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-[#D8B98E] px-1 font-semibold">
                   {t.samplesLabel}
                 </span>
@@ -157,11 +159,12 @@ export function NordicCapEngine() {
                     if (demo.isDemoActive) demo.exitDemo();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="px-2.5 py-1 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10 transition-colors cursor-pointer"
+                  className="px-2 py-0.5 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10 transition-colors cursor-pointer whitespace-nowrap"
                   title={t.sampleSeedTooltip}
                 >
                   {t.sampleSeed}
                 </button>
+                <span className="text-[#8C6D46]/50 text-xs">|</span>
                 <button
                   type="button"
                   onClick={() => {
@@ -170,7 +173,7 @@ export function NordicCapEngine() {
                     if (demo.isDemoActive) demo.exitDemo();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="px-2.5 py-1 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10 transition-colors cursor-pointer"
+                  className="px-2 py-0.5 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10 transition-colors cursor-pointer whitespace-nowrap"
                   title={t.sampleSeriesATooltip}
                 >
                   {t.sampleSeriesA}
@@ -181,22 +184,22 @@ export function NordicCapEngine() {
               <button
                 type="button"
                 onClick={demo.startDemo}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap ${
                   demo.isDemoActive
                     ? 'bg-[#8C6D46] text-[#FCFBF9] ring-2 ring-[#D8B98E]'
                     : 'bg-[#D8B98E] hover:bg-[#C9A676] text-[#15233E]'
                 }`}
               >
-                <Play className="w-3.5 h-3.5 fill-current" strokeWidth={0} />
+                <Play className="w-3.5 h-3.5 fill-current shrink-0" strokeWidth={0} />
                 <span>{demo.isDemoActive ? t.demoLauncherActive : t.demoLauncher}</span>
               </button>
 
               {/* Language Switcher */}
-              <div className="inline-flex rounded-md border border-[#8C6D46]/40 p-0.5 bg-[#1F2F4E]">
+              <div className="inline-flex rounded-full border border-[#8C6D46]/40 p-0.5 bg-[#1F2F4E]">
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'EN' })}
-                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded transition-colors cursor-pointer ${
+                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${
                     state.language === 'EN' ? 'bg-[#8C6D46] text-white' : 'text-[#D8D1C3] hover:text-white'
                   }`}
                 >
@@ -205,7 +208,7 @@ export function NordicCapEngine() {
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'SV' })}
-                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded transition-colors cursor-pointer ${
+                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${
                     state.language === 'SV' ? 'bg-[#8C6D46] text-white' : 'text-[#D8D1C3] hover:text-white'
                   }`}
                 >
@@ -219,34 +222,64 @@ export function NordicCapEngine() {
         {/* Workspace Navigation Bar */}
         <nav className="bg-[#FCFBF9] border-b border-[#E5E0D5] sticky top-0 z-30 shadow-xs">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between overflow-x-auto">
-            <div className="flex space-x-1 sm:space-x-2 py-2">
-              {[
-                { id: 'starter', label: t.tabStarter, icon: Compass },
-                { id: 'setup', label: t.tabSetup, icon: Users },
-                { id: 'cap_table', label: t.tabCapTable, icon: Layers },
-                { id: 'round_sim', label: t.tabRoundSim, icon: Sliders },
-                { id: 'waterfall', label: t.tabWaterfall, icon: TrendingUp },
-                { id: 'abl_legal', label: t.tabAblLegal, icon: Scale },
-              ].map((tab) => {
-                const Icon = tab.icon;
-                const isActive = state.activeTab === tab.id;
+            <div className="flex items-center space-x-1 sm:space-x-1.5 py-2">
+              {/* Step 1 & Step 2 */}
+              <button
+                type="button"
+                onClick={() => dispatch({ type: 'SET_TAB', payload: 'starter' })}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${
+                  state.activeTab === 'starter'
+                    ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
+                    : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5" strokeWidth={1.8} />
+                <span>{t.tabStarter}</span>
+              </button>
 
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => dispatch({ type: 'SET_TAB', payload: tab.id as WorkspaceTab })}
-                    className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors ${
-                      isActive
-                        ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
-                        : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
-                    }`}
-                  >
-                    <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
+              <button
+                type="button"
+                onClick={() => dispatch({ type: 'SET_TAB', payload: 'setup' })}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${
+                  state.activeTab === 'setup'
+                    ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
+                    : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+                }`}
+              >
+                <Users className="w-3.5 h-3.5" strokeWidth={1.8} />
+                <span>{t.tabSetup}</span>
+              </button>
+
+              <div className="h-4 w-px bg-[#E5E0D5] mx-1 shrink-0" />
+
+              {/* Step 3 Analytics Suite Group */}
+              <div className="flex items-center bg-[#F6F4EF] p-0.5 rounded-lg border border-[#E5E0D5] space-x-0.5 sm:space-x-1">
+                {[
+                  { id: 'cap_table', label: t.tabCapTable, icon: Layers },
+                  { id: 'round_sim', label: t.tabRoundSim, icon: Sliders },
+                  { id: 'waterfall', label: t.tabWaterfall, icon: TrendingUp },
+                  { id: 'abl_legal', label: t.tabAblLegal, icon: Scale },
+                ].map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = state.activeTab === tab.id;
+
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => dispatch({ type: 'SET_TAB', payload: tab.id as WorkspaceTab })}
+                      className={`inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap transition-all cursor-pointer ${
+                        isActive
+                          ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
+                          : 'text-[#5A6475] hover:text-[#15233E] hover:bg-white/60'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="hidden md:flex items-center gap-3 text-xs font-mono text-[#5A6475] py-2 shrink-0">

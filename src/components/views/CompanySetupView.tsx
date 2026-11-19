@@ -47,6 +47,7 @@ export function CompanySetupView() {
   const [shareCap, setShareCap] = useState(String(state.company.shareCapital));
   const [postVal, setPostVal] = useState(String(state.company.postMoneyValuation));
   const [isSavedToast, setIsSavedToast] = useState(false);
+  const [classToast, setClassToast] = useState<string | null>(null);
 
   // Sync state if scenario changes externally
   useEffect(() => {
@@ -180,7 +181,7 @@ export function CompanySetupView() {
   }, [demo.isDemoActive, demo.currentStepIndex, demo.demoRunId, demo.markStepReady, dispatch, state.shareClasses]);
 
   useEffect(() => {
-    if (!shClassId && state.shareClasses.length > 0) {
+    if ((!shClassId || !state.shareClasses.some((c) => c.id === shClassId)) && state.shareClasses.length > 0) {
       setShClassId(state.shareClasses[0].id);
     }
   }, [state.shareClasses, shClassId]);
@@ -395,14 +396,22 @@ export function CompanySetupView() {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setDrawer({ type: 'share_class' })}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-white border border-[#8C6D46] text-[#15233E] hover:bg-[#F6F4EF] rounded-md shadow-2xs transition-colors cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5 text-[#8C6D46]" />
-            <span>{isSV ? 'Lägg till aktieslag' : 'Add Share Class'}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            {classToast && (
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                {classToast}
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={() => setDrawer({ type: 'share_class' })}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-white border border-[#8C6D46] text-[#15233E] hover:bg-[#F6F4EF] rounded-md shadow-2xs transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5 text-[#8C6D46]" />
+              <span>{isSV ? 'Lägg till aktieslag' : 'Add Share Class'}</span>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
@@ -427,9 +436,13 @@ export function CompanySetupView() {
                   {state.shareClasses.length > 1 && (
                     <button
                       type="button"
-                      onClick={() => dispatch({ type: 'DELETE_SHARE_CLASS', payload: cls.id })}
+                      onClick={() => {
+                        dispatch({ type: 'DELETE_SHARE_CLASS', payload: cls.id });
+                        setClassToast(isSV ? `Aktieslag ${cls.name} togs bort` : `Share class ${cls.name} removed`);
+                        setTimeout(() => setClassToast(null), 2500);
+                      }}
                       className="p-1 text-[#5A6475] hover:text-[#9A342D] rounded cursor-pointer"
-                      title="Delete share class"
+                      title={isSV ? `Ta bort ${cls.name}` : `Delete ${cls.name}`}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

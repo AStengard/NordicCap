@@ -31,6 +31,7 @@ export function AblLegalTab() {
   });
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [showMethodology, setShowMethodology] = useState<boolean>(false);
+  const [subPage, setSubPage] = useState<'governance' | 'clauses'>('governance');
 
   useEffect(() => {
     const pref = state.shareClasses.find((c) => c.isPreferred);
@@ -43,10 +44,12 @@ export function AblLegalTab() {
   useEffect(() => {
     if (!demo.isDemoActive) return;
     if (demo.currentStepIndex === 4) {
+      setSubPage('governance');
       const timer = window.setTimeout(() => demo.markStepReady(4), 2400);
       return () => window.clearTimeout(timer);
     }
     if (demo.currentStepIndex === 5) {
+      setSubPage('clauses');
       const timer = window.setTimeout(() => demo.markStepReady(5), 2400);
       return () => window.clearTimeout(timer);
     }
@@ -88,6 +91,53 @@ export function AblLegalTab() {
 
   return (
     <div className="space-y-6">
+      {/* Sub-Page Navigation Switcher for Step 3.4 */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#FCFBF9] border border-[#E5E0D5] rounded-xl p-2.5 shadow-2xs">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <button
+            type="button"
+            onClick={() => setSubPage('governance')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              subPage === 'governance'
+                ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
+                : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+            }`}
+          >
+            <Scale className="w-4 h-4 text-[#D8B98E]" strokeWidth={1.8} />
+            <span>{t.ablSubGovernance}</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              subPage === 'governance' ? 'bg-white/15 text-white' : 'bg-[#E5E0D5] text-[#5A6475]'
+            }`}>
+              {rules.length} kontroller
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSubPage('clauses')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              subPage === 'clauses'
+                ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
+                : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+            }`}
+          >
+            <FileText className="w-4 h-4 text-[#8C6D46]" strokeWidth={1.8} />
+            <span>{t.ablSubClauses}</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              subPage === 'clauses' ? 'bg-white/15 text-white' : 'bg-[#E5E0D5] text-[#5A6475]'
+            }`}>
+              {clauses.length} klausuler
+            </span>
+          </button>
+        </div>
+
+        <div className="hidden sm:flex items-center gap-2 text-xs text-[#667085]">
+          <span className="font-mono text-[11px] bg-[#F6F4EF] px-2 py-0.5 rounded border border-[#E5E0D5]">
+            {state.language === 'SV' ? 'Kapitel 3.4 av 3.4' : 'Chapter 3.4 of 3.4'}
+          </span>
+        </div>
+      </div>
+
       {/* Title & Action Strip */}
       <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg px-5 py-4 flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -117,12 +167,13 @@ export function AblLegalTab() {
         </div>
       </div>
 
-      {/* Spotlight Step 4: ABL Majority & Bolagsverket Checklist */}
-      <DemoSpotlight
-        stepIndex={4}
-        badgeText={isSV ? DEMO_STEPS[4].badgeSV : DEMO_STEPS[4].badgeEN}
-        className="space-y-6"
-      >
+      {/* SUB-PAGE 1: ABL Majority & Bolagsverket Checklist */}
+      {subPage === 'governance' && (
+        <DemoSpotlight
+          stepIndex={4}
+          badgeText={isSV ? DEMO_STEPS[4].badgeSV : DEMO_STEPS[4].badgeEN}
+          className="space-y-6"
+        >
         {/* ABL Rules Grid */}
         <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-5">
           <div className="flex items-center justify-between border-b border-[#E5E0D5] pb-3 mb-4">
@@ -233,12 +284,28 @@ export function AblLegalTab() {
         </div>
       </DemoSpotlight>
 
-      {/* Spotlight Step 5: Live Clause-to-Math Preview */}
-      <DemoSpotlight
-        stepIndex={5}
-        badgeText={isSV ? DEMO_STEPS[5].badgeSV : DEMO_STEPS[5].badgeEN}
-        className="space-y-5"
-      >
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => {
+            setSubPage('clauses');
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+          }}
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-[#15233E] bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#D8D1C3] rounded-lg transition-colors cursor-pointer shadow-2xs"
+        >
+          <span>{state.language === 'SV' ? 'Visa avtalsklausuler & PM-villkor →' : 'View Legal Clauses & SHA Preview →'}</span>
+        </button>
+      </div>
+    </div>
+  )}
+
+  {/* SUB-PAGE 2: Dynamic Legal Clauses & SHA Preview */}
+  {subPage === 'clauses' && (
+    <DemoSpotlight
+      stepIndex={5}
+      badgeText={isSV ? DEMO_STEPS[5].badgeSV : DEMO_STEPS[5].badgeEN}
+      className="space-y-5"
+    >
         <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-5 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D5] pb-4">
             <div>
@@ -354,6 +421,36 @@ export function AblLegalTab() {
           </div>
         </div>
       </DemoSpotlight>
+    )}
+
+      {/* Chapter 3.4 Footer Navigation */}
+      <div className="pt-4 border-t border-[#E5E0D5] flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            dispatch({ type: 'SET_TAB', payload: 'waterfall' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-[#5A6475] hover:text-[#15233E] bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#D8D1C3] rounded-lg transition-colors cursor-pointer"
+        >
+          {t.navBackToWaterfall}
+        </button>
+
+        <div className="text-xs text-[#7A8291] font-mono">
+          {state.language === 'SV' ? 'Kapitel 3.4 ABL Juridik & Klausuler' : 'Chapter 3.4 ABL Legal & Governance'}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            dispatch({ type: 'SET_TAB', payload: 'cap_table' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#FCFBF9] bg-[#15233E] hover:bg-[#1E3156] rounded-lg transition-colors cursor-pointer shadow-xs"
+        >
+          <span>{state.language === 'SV' ? '↺ Tillbaka till 3.1 Aktiebok' : '↺ Back to 3.1 Cap Table'}</span>
+        </button>
+      </div>
 
       {/* Methodology & Legal Disclaimer Modal */}
       {showMethodology && (

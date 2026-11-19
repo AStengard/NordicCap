@@ -106,12 +106,14 @@ export function RoundSimulatorTab() {
   });
 
   const [justAppliedToast, setJustAppliedToast] = useState<string | null>(null);
+  const [subPage, setSubPage] = useState<'terms' | 'dilution'>('terms');
   const simulation = useMemo(() => simulateFinancingRound(state, inputs), [state, inputs]);
 
   // Synthetic Interaction Engine — Step 2 (Auto-type Series A terms & commit round)
   useEffect(() => {
     if (!demo.isDemoActive || demo.currentStepIndex !== 2) return;
 
+    setSubPage('terms');
     let cancelled = false;
     const timers: number[] = [];
     const schedule = (fn: () => void, ms: number) => {
@@ -186,6 +188,7 @@ export function RoundSimulatorTab() {
             payload: { inputs: finalInputs, simulation: simResult },
           });
           setJustAppliedToast(targetRound);
+          setSubPage('dilution');
         }
       }
       demo.markStepReady(2);
@@ -206,6 +209,7 @@ export function RoundSimulatorTab() {
     const appliedName = inputs.roundName;
     dispatch({ type: 'APPLY_SIMULATED_ROUND', payload: { inputs, simulation } });
     setJustAppliedToast(appliedName);
+    setSubPage('dilution');
 
     const nextRoundName =
       appliedName === 'Series A'
@@ -251,6 +255,55 @@ export function RoundSimulatorTab() {
 
   return (
     <div className="space-y-6">
+      {/* Sub-Page Navigation Switcher for Step 3.2 */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#FCFBF9] border border-[#E5E0D5] rounded-xl p-2.5 shadow-2xs">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <button
+            type="button"
+            onClick={() => setSubPage('terms')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              subPage === 'terms'
+                ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
+                : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+            }`}
+          >
+            <Sliders className="w-4 h-4 text-[#D8B98E]" strokeWidth={1.8} />
+            <span>{t.simSubTerms}</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              subPage === 'terms' ? 'bg-white/15 text-white' : 'bg-[#E5E0D5] text-[#5A6475]'
+            }`}>
+              {formatSEK(inputs.investmentAmount, true)}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSubPage('dilution')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              subPage === 'dilution'
+                ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
+                : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+            }`}
+          >
+            <Calculator className="w-4 h-4 text-[#8C6D46]" strokeWidth={1.8} />
+            <span>{t.simSubDilution}</span>
+            {state.appliedRounds.length > 0 && (
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                subPage === 'dilution' ? 'bg-white/15 text-white' : 'bg-[#3B5B4A]/20 text-[#3B5B4A]'
+              }`}>
+                {state.appliedRounds.length}
+              </span>
+            )}
+          </button>
+        </div>
+
+        <div className="hidden sm:flex items-center gap-2 text-xs text-[#667085]">
+          <span className="font-mono text-[11px] bg-[#F6F4EF] px-2 py-0.5 rounded border border-[#E5E0D5]">
+            {state.language === 'SV' ? 'Kapitel 3.2 av 3.4' : 'Chapter 3.2 of 3.4'}
+          </span>
+        </div>
+      </div>
+
       <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg px-5 py-4 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-medium text-[#15233E]" style={{ fontFamily: "'Newsreader', Georgia, serif" }}>
@@ -267,7 +320,7 @@ export function RoundSimulatorTab() {
                 dispatch({ type: 'UNDO_LAST_ROUND' });
                 setJustAppliedToast(null);
               }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-[#FCFBF9] text-[#15233E] border border-[#D8D1C3] rounded-md hover:bg-[#F6F4EF]"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-[#FCFBF9] text-[#15233E] border border-[#D8D1C3] rounded-md hover:bg-[#F6F4EF] cursor-pointer"
             >
               <Undo2 className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.7} />
               {t.simUndoBtn} ({state.history.length})
@@ -276,7 +329,7 @@ export function RoundSimulatorTab() {
           <button
             type="button"
             onClick={resetInputsToSeriesA}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#5A6475] hover:text-[#15233E] border border-transparent hover:border-[#E5E0D5] rounded-md"
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#5A6475] hover:text-[#15233E] border border-transparent hover:border-[#E5E0D5] rounded-md cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5" strokeWidth={1.6} />
             Reset Inputs
@@ -285,7 +338,7 @@ export function RoundSimulatorTab() {
             type="button"
             disabled={!simulation.valid}
             onClick={handleApplyRound}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] rounded-md hover:bg-[#1E3156] disabled:opacity-40"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] rounded-md hover:bg-[#1E3156] disabled:opacity-40 cursor-pointer shadow-xs"
           >
             <Check className="w-3.5 h-3.5 text-[#D8B98E]" strokeWidth={2} />
             {t.simApplyBtn}
@@ -324,9 +377,33 @@ export function RoundSimulatorTab() {
         stepIndex={2}
         badgeText={state.language === 'SV' ? DEMO_STEPS[2].badgeSV : DEMO_STEPS[2].badgeEN}
       >
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
-          {/* LEFT PANEL: Financing Round Controls */}
-          <div className="xl:col-span-5 space-y-5">
+        {/* Real-time Pricing Metric strip (always visible) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-4">
+            <div className="text-[11px] uppercase tracking-wider text-[#667085] font-medium">{t.simSharePrice}</div>
+            <div className="mt-2 text-2xl font-semibold text-[#15233E] font-mono tabular-nums">{formatPriceSEK(simulation.sharePrice)}</div>
+            <div className="mt-1 text-[11px] font-mono text-[#667085]">Pre-Money Base: {formatInt(simulation.preMoneySharesEffective)} sh</div>
+          </div>
+          <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-4">
+            <div className="text-[11px] uppercase tracking-wider text-[#667085] font-medium">{t.simPostMoneyVal}</div>
+            <div className="mt-2 text-2xl font-semibold text-[#15233E] font-mono tabular-nums">{formatSEK(simulation.postMoneyValuation, true)}</div>
+            <div className="mt-1 text-[11px] font-mono text-[#667085]">{formatSEK(simulation.postMoneyValuation)}</div>
+          </div>
+          <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-4">
+            <div className="text-[11px] uppercase tracking-wider text-[#667085] font-medium">{t.simNewSharesIssued}</div>
+            <div className="mt-2 text-2xl font-semibold text-[#8C6D46] font-mono tabular-nums">{formatInt(simulation.newInvestorShares)}</div>
+            <div className="mt-1 text-[11px] font-mono text-[#667085]">
+              New Investor: {formatPct(simulation.newInvestorOwnershipPct)} FD
+              {simulation.totalConvertedNoteShares > 0 && ` (+${formatInt(simulation.totalConvertedNoteShares)} K-lan)`}
+            </div>
+          </div>
+        </div>
+
+        {subPage === 'terms' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+              {/* LEFT PANEL: Financing Round Controls */}
+              <div className="space-y-5">
             <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-5 space-y-4">
               <div className="flex items-center justify-between border-b border-[#E5E0D5] pb-3">
                 <h3 className="text-base font-medium text-[#15233E] flex items-center gap-2" style={{ fontFamily: "'Newsreader', Georgia, serif" }}>
@@ -586,30 +663,45 @@ export function RoundSimulatorTab() {
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* RIGHT PANEL: Real-Time Dilution Impact */}
-          <div className="xl:col-span-7 space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-4">
-                <div className="text-[11px] uppercase tracking-wider text-[#667085] font-medium">{t.simSharePrice}</div>
-                <div className="mt-2 text-2xl font-semibold text-[#15233E] font-mono tabular-nums">{formatPriceSEK(simulation.sharePrice)}</div>
-                <div className="mt-1 text-[11px] font-mono text-[#667085]">Pre-Money Base: {formatInt(simulation.preMoneySharesEffective)} sh</div>
+            {/* Commit Round Action Card */}
+            <div className="bg-[#15233E] text-[#FCFBF9] rounded-lg p-5 flex flex-col justify-between space-y-3 shadow-md">
+              <div>
+                <h4 className="text-base font-semibold text-[#FCFBF9]" style={{ fontFamily: "'Newsreader', Georgia, serif" }}>
+                  {state.language === 'SV' ? `Verkställ ${inputs.roundName} i aktieboken` : `Commit ${inputs.roundName} to Cap Table`}
+                </h4>
+                <p className="text-xs text-[#D8D1C3] mt-1 leading-relaxed">
+                  {state.language === 'SV'
+                    ? `Emitterar ${formatInt(simulation.newInvestorShares)} st ${inputs.newShareClassName}-aktier till kurs ${formatPriceSEK(simulation.sharePrice)}. Uppdaterar automatiskt aktiekapital och preferensvillkor.`
+                    : `Issues ${formatInt(simulation.newInvestorShares)} ${inputs.newShareClassName} shares at ${formatPriceSEK(simulation.sharePrice)}. Updates share capital and preference terms.`}
+                </p>
               </div>
-              <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-4">
-                <div className="text-[11px] uppercase tracking-wider text-[#667085] font-medium">{t.simPostMoneyVal}</div>
-                <div className="mt-2 text-2xl font-semibold text-[#15233E] font-mono tabular-nums">{formatSEK(simulation.postMoneyValuation, true)}</div>
-                <div className="mt-1 text-[11px] font-mono text-[#667085]">{formatSEK(simulation.postMoneyValuation)}</div>
-              </div>
-              <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-4">
-                <div className="text-[11px] uppercase tracking-wider text-[#667085] font-medium">{t.simNewSharesIssued}</div>
-                <div className="mt-2 text-2xl font-semibold text-[#8C6D46] font-mono tabular-nums">{formatInt(simulation.newInvestorShares)}</div>
-                <div className="mt-1 text-[11px] font-mono text-[#667085]">
-                  New Investor: {formatPct(simulation.newInvestorOwnershipPct)} FD
-                  {simulation.totalConvertedNoteShares > 0 && ` (+${formatInt(simulation.totalConvertedNoteShares)} K-lan)`}
-                </div>
+              <div className="pt-2 flex items-center justify-between">
+                <button
+                  type="button"
+                  disabled={!simulation.valid}
+                  onClick={handleApplyRound}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold bg-[#D8B98E] text-[#15233E] hover:bg-[#C9A676] rounded-md transition-colors disabled:opacity-40 cursor-pointer shadow-xs"
+                >
+                  <Check className="w-4 h-4" strokeWidth={2.2} />
+                  <span>{t.simApplyBtn}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSubPage('dilution')}
+                  className="text-xs text-[#D8B98E] hover:underline cursor-pointer"
+                >
+                  {state.language === 'SV' ? 'Visa utspädningsanalys →' : 'View Dilution Analysis →'}
+                </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUB-PAGE 2: Real-Time Dilution Impact, Chart & History */}
+      {subPage === 'dilution' && (
+        <div className="space-y-6">
 
             {simulation.convertedNotes.length > 0 && (
               <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg overflow-hidden">
@@ -741,8 +833,37 @@ export function RoundSimulatorTab() {
               </div>
             </div>
           </div>
-        </div>
+        )}
       </DemoSpotlight>
+
+      {/* Chapter 3.2 Footer Navigation */}
+      <div className="pt-4 border-t border-[#E5E0D5] flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            dispatch({ type: 'SET_TAB', payload: 'cap_table' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-[#5A6475] hover:text-[#15233E] bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#D8D1C3] rounded-lg transition-colors cursor-pointer"
+        >
+          {t.navBackToCapTable}
+        </button>
+
+        <div className="text-xs text-[#7A8291] font-mono">
+          {state.language === 'SV' ? 'Kapitel 3.2 Nyemission → 3.3 Exit Waterfall' : 'Chapter 3.2 Round Sim → 3.3 Waterfall'}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            dispatch({ type: 'SET_TAB', payload: 'waterfall' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#FCFBF9] bg-[#15233E] hover:bg-[#1E3156] rounded-lg transition-colors cursor-pointer shadow-xs"
+        >
+          {t.navToWaterfall}
+        </button>
+      </div>
     </div>
   );
 }

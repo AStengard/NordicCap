@@ -45,6 +45,13 @@ export function CapTableTab() {
   const [editingValuation, setEditingValuation] = useState(false);
   const [valDraft, setValDraft] = useState(String(state.company.postMoneyValuation));
   const [capDraft, setCapDraft] = useState(String(state.company.shareCapital));
+  const [subPage, setSubPage] = useState<'ledger' | 'instruments'>('ledger');
+
+  useEffect(() => {
+    if (demo.isDemoActive && demo.currentStepIndex === 1) {
+      setSubPage('ledger');
+    }
+  }, [demo.isDemoActive, demo.currentStepIndex]);
 
   useEffect(() => {
     setValDraft(String(state.company.postMoneyValuation));
@@ -108,6 +115,53 @@ export function CapTableTab() {
 
   return (
     <div className="space-y-6">
+      {/* Sub-Page Navigation Switcher for Step 3.1 */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#FCFBF9] border border-[#E5E0D5] rounded-xl p-2.5 shadow-2xs">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <button
+            type="button"
+            onClick={() => setSubPage('ledger')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              subPage === 'ledger'
+                ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
+                : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+            }`}
+          >
+            <Users className="w-4 h-4 text-[#D8B98E]" strokeWidth={1.8} />
+            <span>{t.capSubLedger}</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              subPage === 'ledger' ? 'bg-white/15 text-white' : 'bg-[#E5E0D5] text-[#5A6475]'
+            }`}>
+              {state.shareholders.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSubPage('instruments')}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              subPage === 'instruments'
+                ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs'
+                : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+            }`}
+          >
+            <Layers className="w-4 h-4 text-[#8C6D46]" strokeWidth={1.8} />
+            <span>{t.capSubInstruments}</span>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+              subPage === 'instruments' ? 'bg-white/15 text-white' : 'bg-[#E5E0D5] text-[#5A6475]'
+            }`}>
+              {state.shareClasses.length} klasser
+            </span>
+          </button>
+        </div>
+
+        <div className="hidden sm:flex items-center gap-2 text-xs text-[#667085]">
+          <span className="font-mono text-[11px] bg-[#F6F4EF] px-2 py-0.5 rounded border border-[#E5E0D5]">
+            {state.language === 'SV' ? 'Kapitel 3.1 av 3.4' : 'Chapter 3.1 of 3.4'}
+          </span>
+        </div>
+      </div>
+
       {/* ABL Compliance Strip */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg px-4 py-3">
         <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-[#15233E]">
@@ -135,7 +189,10 @@ export function CapTableTab() {
         </div>
       </div>
 
-      {/* KPI Summary Cards */}
+      {/* SUB-PAGE 1: Shareholder Register & Voting Control */}
+      {subPage === 'ledger' && (
+        <div className="space-y-6">
+          {/* KPI Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-5">
           <div className="flex items-center justify-between text-xs uppercase tracking-wider text-[#667085] font-medium">
@@ -515,9 +572,54 @@ export function CapTableTab() {
           </div>
         </div>
       </DemoSpotlight>
+        </div>
+      )}
 
-      {/* Instruments Grid: Share Classes, Convertible Notes, Warrant Programs */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      {/* SUB-PAGE 2: Share Classes, Convertible Notes & Warrants */}
+      {subPage === 'instruments' && (
+        <div className="space-y-6">
+          <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-medium text-[#15233E]" style={{ fontFamily: "'Newsreader', Georgia, serif" }}>
+                {state.language === 'SV' ? 'Aktieslag, Konvertibler & Optionsprogram' : 'Share Classes, Convertibles & Warrant Programs'}
+              </h2>
+              <p className="text-xs text-[#5A6475] mt-1 max-w-2xl">
+                {state.language === 'SV'
+                  ? 'Hantera bolagets stam- och preferensaktier (ABL 4 kap.), aktiva konvertibellån med ränta och tak (ABL 15 kap.), samt incitamentsprogram/ESOP för anställda.'
+                  : 'Manage common and preferred share classes (ABL Ch. 4), active convertible notes with interest and caps (ABL Ch. 15), and employee warrant / ESOP pools.'}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setDrawer({ type: 'share_class' })}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] rounded-md hover:bg-[#1E3156] transition-colors cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" strokeWidth={1.8} />
+                <span>{state.language === 'SV' ? '+ Nytt aktieslag' : '+ Share Class'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDrawer({ type: 'note' })}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#15233E] bg-white border border-[#D8D1C3] hover:bg-[#F6F4EF] rounded-md transition-colors cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.8} />
+                <span>{state.language === 'SV' ? '+ K-lån' : '+ K-lan Note'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDrawer({ type: 'warrant' })}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#15233E] bg-white border border-[#D8D1C3] hover:bg-[#F6F4EF] rounded-md transition-colors cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.8} />
+                <span>{state.language === 'SV' ? '+ Optioner' : '+ Warrants'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Instruments Grid: Share Classes, Convertible Notes, Warrant Programs */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Share Classes */}
         <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg flex flex-col">
           <div className="px-5 py-4 border-b border-[#E5E0D5] flex items-center justify-between">
@@ -566,11 +668,12 @@ export function CapTableTab() {
                     >
                       <Pencil className="w-3.5 h-3.5" strokeWidth={1.6} />
                     </button>
-                    {!inUse && (
+                    {state.shareClasses.length > 1 && (
                       <button
                         type="button"
                         onClick={() => dispatch({ type: 'DELETE_SHARE_CLASS', payload: cls.id })}
                         className="p-1 text-[#5A6475] hover:text-[#9A342D]"
+                        title="Delete share class"
                       >
                         <Trash2 className="w-3.5 h-3.5" strokeWidth={1.6} />
                       </button>
@@ -701,6 +804,35 @@ export function CapTableTab() {
             )}
           </div>
         </div>
+      )}
+
+      {/* Chapter 3.1 Footer Navigation */}
+      <div className="pt-4 border-t border-[#E5E0D5] flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            dispatch({ type: 'SET_TAB', payload: 'setup' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-[#5A6475] hover:text-[#15233E] bg-[#FCFBF9] hover:bg-[#F6F4EF] border border-[#D8D1C3] rounded-lg transition-colors cursor-pointer"
+        >
+          {t.navBackToSetup}
+        </button>
+
+        <div className="text-xs text-[#7A8291] font-mono">
+          {state.language === 'SV' ? 'Kapitel 3.1 Aktiebok → 3.2 Nyemission' : 'Chapter 3.1 Cap Table → 3.2 Round Sim'}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            dispatch({ type: 'SET_TAB', payload: 'round_sim' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#FCFBF9] bg-[#15233E] hover:bg-[#1E3156] rounded-lg transition-colors cursor-pointer shadow-xs"
+        >
+          {t.navToRoundSim}
+        </button>
       </div>
 
       {/* Slide-Over CRUD Drawers */}
