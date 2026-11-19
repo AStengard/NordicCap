@@ -1,6 +1,7 @@
 {
   "name": "nordiccap",
   "version": "1.0.0",
+  "type": "module",
   "description": "Swedish Cap Table & VC Waterfall Engine compliant with Aktiebolagslagen (2005:551)",
   "main": "src/index.ts",
   "scripts": {

@@ -21,28 +21,30 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-              sans: ['Inter', 'system-ui', 'sans-serif'],
-              mono: ['"JetBrains Mono"', 'monospace'],
-            },
-            colors: {
-              nordic: {
-                dark: '#0D1F18',
-                card: '#18221E',
-                parchment: '#F6F4EF',
-                sand: '#EDE8DF',
-                brass: '#8C6D46',
-                gold: '#C5A059',
-                muted: '#B5AEA0',
+      if (typeof tailwind !== 'undefined') {
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                sans: ['Inter', 'system-ui', 'sans-serif'],
+                mono: ['"JetBrains Mono"', 'monospace'],
+              },
+              colors: {
+                nordic: {
+                  dark: '#0D1F18',
+                  card: '#18221E',
+                  parchment: '#F6F4EF',
+                  sand: '#EDE8DF',
+                  brass: '#8C6D46',
+                  gold: '#C5A059',
+                  muted: '#B5AEA0',
+                },
               },
             },
           },
-        },
-      };
+        };
+      }
     </script>
 
     <style>
@@ -63,6 +65,39 @@
         }
       }
     </style>
+
+    <!-- On-screen Startup Diagnostic Listener -->
+    <script>
+      window.addEventListener('error', function(event) {
+        var root = document.getElementById('root');
+        if (!root || root.children.length > 0) return;
+
+        var isScriptLoadError = event.target && event.target.tagName === 'SCRIPT';
+        var src = isScriptLoadError ? event.target.src : (event.filename || '');
+        var isTsx = src && src.indexOf('.tsx') !== -1;
+
+        var msg = isTsx
+          ? 'GitHub Pages is currently serving raw uncompiled TypeScript (' + src + ') because Source is set to "Deploy from a branch" instead of "GitHub Actions".'
+          : (event.message || event.error || 'Failed to initialize script');
+
+        root.innerHTML =
+          '<div style="max-width: 620px; margin: 3rem auto; padding: 2rem; background: #18221E; color: #FCFBF9; border: 1px solid #8C6D46; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); font-family: Inter, system-ui, sans-serif;">' +
+          '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">' +
+          '<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #EF4444;"></span>' +
+          '<h2 style="margin: 0; font-size: 18px; color: #FCFBF9; font-weight: 600;">NordicCap Startup Notice</h2>' +
+          '</div>' +
+          '<p style="color: #D8D1C3; font-size: 13px; line-height: 1.5; margin: 0 0 12px 0;">' + msg + '</p>' +
+          (isTsx
+            ? '<div style="background: #0D1F18; padding: 12px; border-radius: 6px; border: 1px solid #8C6D46/40; font-size: 12px; color: #D8B98E; line-height: 1.6;">' +
+              '<strong>How to resolve:</strong><br/>' +
+              '1. Go to your GitHub repo &rarr; <strong>Settings</strong> &rarr; <strong>Pages</strong>.<br/>' +
+              '2. Change <strong>Source</strong> from <em>Deploy from a branch</em> to <strong>GitHub Actions</strong>.<br/>' +
+              '3. Push changes or trigger the workflow under the <strong>Actions</strong> tab.' +
+              '</div>'
+            : '<pre style="background: #0D1F18; padding: 10px; border-radius: 6px; color: #FCA5A5; font-size: 11px; overflow-x: auto; margin: 0;">' + (event.error ? event.error.stack || event.error : msg) + '</pre>') +
+          '</div>';
+      }, true);
+    </script>
   </head>
   <body>
     <div id="root"></div>
