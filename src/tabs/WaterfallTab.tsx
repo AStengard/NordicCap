@@ -542,6 +542,24 @@ export function WaterfallTab() {
                     </tr>
                   );
                 })}
+
+                {waterfallResult.payoutRows.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="py-10 text-center text-[#5A6475]">
+                      <div className="max-w-sm mx-auto space-y-2">
+                        <TrendingUp className="w-7 h-7 text-[#8C6D46] mx-auto opacity-60" />
+                        <div className="font-medium text-[#15233E]">
+                          {state.language === 'SV' ? 'Inga aktieägare att fördela likvid till' : 'No shareholders registered yet'}
+                        </div>
+                        <p className="text-xs text-[#7A8291]">
+                          {state.language === 'SV'
+                            ? 'Lägg till aktieägare i Aktieboken för att se waterfall-utfall.'
+                            : 'Add shareholders in the Cap Table tab to view exit payouts.'}
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                )}
               </tbody>
               <tfoot>
                 <tr className="border-t-2 border-[#E5E0D5] bg-[#F6F4EF]/80 text-xs font-semibold text-[#15233E]">

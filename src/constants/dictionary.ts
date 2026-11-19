@@ -5,6 +5,9 @@
 export const DICTIONARY = {
   EN: {
     appSubtitle: 'Swedish Cap Table & VC Waterfall Engine',
+    howItWorks: 'How It Works',
+    howItWorksTitle: 'About NordicCap & User Guide',
+    blankScenario: 'Blank / New',
     loadRecruiterDemo: 'Load Series A Demo',
     resetPreSeriesA: 'Reset Pre-Series A',
     exportCsv: 'Export CSV',
@@ -141,6 +144,9 @@ export const DICTIONARY = {
   },
   SV: {
     appSubtitle: 'Svensk aktiebok, emissions- & waterfallmotor',
+    howItWorks: 'Så fungerar det',
+    howItWorksTitle: 'Om NordicCap & Användarguide',
+    blankScenario: 'Tom aktiebok',
     loadRecruiterDemo: 'Ladda Serie A Demo',
     resetPreSeriesA: 'Aterstall Pre-Serie A',
     exportCsv: 'Exportera CSV',

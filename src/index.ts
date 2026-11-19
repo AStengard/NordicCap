@@ -20,6 +20,7 @@ export * from './components/demo/DemoSpotlight';
 export * from './components/demo/DemoNarratorBox';
 export * from './components/demo/DemoPlayerBar';
 export * from './components/demo/DemoCompletionModal';
+export * from './components/modals/AboutModal';
 export * from './components/memo/ExecutiveTransactionMemo';
 export * from './tabs/CapTableTab';
 export * from './tabs/RoundSimulatorTab';

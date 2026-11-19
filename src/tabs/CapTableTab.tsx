@@ -427,6 +427,34 @@ export function CapTableTab() {
                   );
                 })}
 
+                {filteredShareholders.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="py-12 text-center text-[#5A6475]">
+                      <div className="max-w-sm mx-auto space-y-3">
+                        <Users className="w-8 h-8 text-[#8C6D46] mx-auto opacity-60" />
+                        <div className="font-medium text-[#15233E]">
+                          {searchQuery || categoryFilter !== 'ALL'
+                            ? (state.language === 'SV' ? 'Inga aktieägare matchar filtreringen' : 'No shareholders match filter')
+                            : (state.language === 'SV' ? 'Inga aktieägare registrerade än' : 'No shareholders registered yet')}
+                        </div>
+                        <p className="text-xs text-[#7A8291]">
+                          {state.language === 'SV'
+                            ? 'Aktieboken är tom. Klicka på knappen nedan för att lägga till din första grundare eller investerare.'
+                            : 'The cap table is empty. Click the button below to add your first founder or investor.'}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setDrawer({ type: 'shareholder' })}
+                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] rounded-md hover:bg-[#1E3156] transition-colors shadow-xs"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>{t.addShareholder}</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+
                 {metrics.totalWarrants > 0 && categoryFilter === 'ALL' && !searchQuery.trim() && (
                   <tr className="bg-[#F6F4EF]/35">
                     <td className="py-3.5 px-5">

@@ -15,7 +15,7 @@ import {
   WorkspaceTab,
 } from '../types';
 import { DICTIONARY } from '../constants/dictionary';
-import { createPreSeriesAScenario } from '../constants/scenarios';
+import { createBlankScenario, createPreSeriesAScenario } from '../constants/scenarios';
 import { generateId } from '../utils/formatters';
 
 export type CapTableAction =
@@ -247,7 +247,7 @@ interface CapTableContextValue {
 const CapTableContext = createContext<CapTableContextValue | null>(null);
 
 export function CapTableProvider({ children }: { children: React.ReactNode }) {
-  const initialScenario = useMemo(() => createPreSeriesAScenario(), []);
+  const initialScenario = useMemo(() => createBlankScenario(), []);
   const [state, dispatch] = useReducer(capTableReducer, {
     ...initialScenario,
     language: 'EN',

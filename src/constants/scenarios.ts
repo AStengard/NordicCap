@@ -1,5 +1,51 @@
 import { CapTableSnapshot } from '../types';
 
+export function createBlankScenario(): CapTableSnapshot {
+  return {
+    company: {
+      name: 'Mitt Nya Bolag AB',
+      orgNumber: '559000-0000',
+      shareCapital: 25_000,
+      postMoneyValuation: 0,
+      scenarioLabel: 'Blank Cap Table',
+    },
+    shareClasses: [
+      {
+        id: 'cls_common_a',
+        name: 'Stam A',
+        code: 'A',
+        isPreferred: false,
+        votesPerShare: 10,
+        issuePrice: 1.0,
+        liquidationMultiple: 0,
+        liquidationType: 'non_participating',
+        participationCap: null,
+        seniority: 'pari_passu',
+        seniorityRank: 0,
+        antiDilution: 'none',
+      },
+      {
+        id: 'cls_common_b',
+        name: 'Stam B',
+        code: 'B',
+        isPreferred: false,
+        votesPerShare: 1,
+        issuePrice: 1.0,
+        liquidationMultiple: 0,
+        liquidationType: 'non_participating',
+        participationCap: null,
+        seniority: 'pari_passu',
+        seniorityRank: 0,
+        antiDilution: 'none',
+      },
+    ],
+    shareholders: [],
+    convertibleNotes: [],
+    warrantPrograms: [],
+    appliedRounds: [],
+  };
+}
+
 export function createPreSeriesAScenario(): CapTableSnapshot {
   return {
     company: {

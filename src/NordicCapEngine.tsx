@@ -1,9 +1,13 @@
-import React, { useEffect, useMemo } from 'react';
-import { Download, Layers, Play, Printer, Scale, Sliders, TrendingUp } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Download, HelpCircle, Layers, Play, Printer, Scale, Sliders, TrendingUp } from 'lucide-react';
 import { WorkspaceTab } from './types';
 import { useCapTable, useCapTableMetrics } from './context/CapTableContext';
 import { useRecruiterDemo } from './context/RecruiterDemoContext';
-import { createPreSeriesAScenario, createSeriesARecruiterDemoScenario } from './constants/scenarios';
+import {
+  createBlankScenario,
+  createPreSeriesAScenario,
+  createSeriesARecruiterDemoScenario,
+} from './constants/scenarios';
 import { FAVICON_SVG_DATA_URI } from './constants/brand';
 import { formatSEK } from './utils/formatters';
 import { exportCapTableToCSV } from './utils/csvExport';
@@ -13,6 +17,7 @@ import { BrandEmblem } from './components/ui/BrandEmblem';
 import { DemoNarratorBox } from './components/demo/DemoNarratorBox';
 import { DemoPlayerBar } from './components/demo/DemoPlayerBar';
 import { DemoCompletionModal } from './components/demo/DemoCompletionModal';
+import { AboutModal } from './components/modals/AboutModal';
 import { ExecutiveTransactionMemo } from './components/memo/ExecutiveTransactionMemo';
 import { CapTableTab } from './tabs/CapTableTab';
 import { RoundSimulatorTab } from './tabs/RoundSimulatorTab';
@@ -23,6 +28,7 @@ export function NordicCapEngine() {
   const { state, dispatch, t } = useCapTable();
   const metrics = useCapTableMetrics();
   const demo = useRecruiterDemo();
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -68,12 +74,21 @@ export function NordicCapEngine() {
         {/* Top Editorial Header */}
         <header className="bg-[#15233E] text-[#FCFBF9] border-b border-[#8C6D46]/30 shadow-md">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <BrandEmblem className="w-8 h-8 shrink-0" />
+            <button
+              type="button"
+              onClick={() => {
+                dispatch({ type: 'SET_TAB', payload: 'cap_table' });
+                if (demo.isDemoActive) demo.exitDemo();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none"
+              title="NordicCap Home (Cap Table)"
+            >
+              <BrandEmblem className="w-8 h-8 shrink-0 transition-transform group-hover:scale-105" />
               <div>
                 <div className="flex items-center gap-2">
                   <h1
-                    className="text-xl font-bold tracking-tight text-[#FCFBF9]"
+                    className="text-xl font-bold tracking-tight text-[#FCFBF9] group-hover:text-[#D8B98E] transition-colors"
                     style={{ fontFamily: "'Newsreader', Georgia, serif" }}
                   >
                     NordicCap
@@ -84,9 +99,20 @@ export function NordicCapEngine() {
                 </div>
                 <p className="text-xs text-[#D8D1C3] hidden sm:block mt-0.5">{t.appSubtitle}</p>
               </div>
-            </div>
+            </button>
 
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              {/* About & Instructions Modal Launcher */}
+              <button
+                type="button"
+                onClick={() => setIsAboutOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#D8B98E] hover:text-white border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer"
+                title={t.howItWorksTitle}
+              >
+                <HelpCircle className="w-3.5 h-3.5" />
+                <span>{t.howItWorks}</span>
+              </button>
+
               {/* Recruiter Demo Launcher */}
               <button
                 type="button"
@@ -103,6 +129,17 @@ export function NordicCapEngine() {
 
               {/* Scenario Quick Loaders */}
               <div className="hidden lg:flex items-center gap-1.5 bg-[#1F2F4E] p-1 rounded-md border border-[#8C6D46]/30">
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatch({ type: 'LOAD_SCENARIO', payload: createBlankScenario() });
+                    dispatch({ type: 'SET_TAB', payload: 'cap_table' });
+                  }}
+                  className="px-2.5 py-1 text-[11px] text-[#D8B98E] hover:text-white rounded hover:bg-[#FCFBF9]/10 font-medium"
+                  title="Start with a clean blank 25,000 SEK private AB"
+                >
+                  + {t.blankScenario}
+                </button>
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() })}
@@ -213,10 +250,11 @@ export function NordicCapEngine() {
           {state.activeTab === 'abl_legal' && <AblLegalTab />}
         </main>
 
-        {/* Global Demo Overlays */}
+        {/* Global Demo & About Overlays */}
         <DemoNarratorBox />
         <DemoPlayerBar />
         <DemoCompletionModal />
+        <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
       </div>
     </div>
   );

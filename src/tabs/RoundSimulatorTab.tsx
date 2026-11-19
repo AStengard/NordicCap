@@ -307,6 +307,19 @@ export function RoundSimulatorTab() {
         </div>
       )}
 
+      {!simulation.valid && (
+        <div className="bg-[#8C6D46]/10 border border-[#8C6D46]/40 rounded-lg p-4 flex items-center gap-3 text-xs text-[#15233E]">
+          <Sliders className="w-4 h-4 text-[#8C6D46] shrink-0" />
+          <span>
+            {state.shareholders.length === 0
+              ? (state.language === 'SV'
+                  ? 'Aktieboken är tom. Lägg till minst en aktieägare i flik 1 (Aktiebok) innan du kan simulera en nyemission.'
+                  : 'The cap table is empty. Please add at least one shareholder in Tab 1 (Cap Table) before simulating a new financing round.')
+              : simulation.errorMessage}
+          </span>
+        </div>
+      )}
+
       <DemoSpotlight
         stepIndex={1}
         badgeText={state.language === 'SV' ? DEMO_STEPS[1].badgeSV : DEMO_STEPS[1].badgeEN}
