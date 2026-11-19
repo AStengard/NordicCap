@@ -1,15 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>NordicCap — Redirecting...</title>
-    <script>
-      // Single Page App redirect for GitHub Pages
-      sessionStorage.redirect = location.href;
-      location.replace(location.pathname.split('/').slice(0, 2).join('/') + '/');
-    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NordicCap — Page Not Found</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #0D1F18;
+        color: #F6F4EF;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 1.5rem;
+      }
+      .card {
+        background: #18221E;
+        border: 1px solid #8C6D46;
+        border-radius: 12px;
+        padding: 2.5rem;
+        max-width: 440px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      }
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-family: monospace;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        background: rgba(140, 109, 70, 0.2);
+        color: #D8B98E;
+        border: 1px solid rgba(140, 109, 70, 0.4);
+        border-radius: 9999px;
+        margin-bottom: 1rem;
+      }
+      h1 {
+        color: #FCFBF9;
+        font-size: 1.75rem;
+        margin: 0 0 0.5rem 0;
+        font-weight: 600;
+      }
+      p {
+        color: #B5AEA0;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin: 0 0 1.5rem 0;
+      }
+      a {
+        display: inline-block;
+        background-color: #8C6D46;
+        color: #FCFBF9;
+        text-decoration: none;
+        padding: 0.65rem 1.25rem;
+        border-radius: 6px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        transition: background-color 0.15s ease;
+      }
+      a:hover {
+        background-color: #A38054;
+      }
+    </style>
   </head>
   <body>
-    <p>Redirecting to <a href="./">NordicCap</a>...</p>
+    <div class="card">
+      <span class="badge">404 Error</span>
+      <h1>Page Not Found</h1>
+      <p>The page you requested does not exist or has been moved.</p>
+      <a href="./">Return to NordicCap</a>
+    </div>
   </body>
 </html>

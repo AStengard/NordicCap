@@ -48,10 +48,13 @@
     <style>
       body {
         margin: 0;
-        background-color: #0D1F18;
-        color: #F6F4EF;
+        background-color: #F6F4EF;
+        color: #15233E;
         font-family: 'Inter', system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
+      }
+      #root {
+        min-height: 100vh;
       }
       @media print {
         body {
@@ -63,6 +66,12 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <noscript>
+      <div style="padding: 2rem; font-family: sans-serif; text-align: center; color: #15233E;">
+        <h2>JavaScript Required</h2>
+        <p>NordicCap requires JavaScript to run the equity waterfall engine.</p>
+      </div>
+    </noscript>
+    <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>
