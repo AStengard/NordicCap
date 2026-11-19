@@ -108,9 +108,9 @@ export function RoundSimulatorTab() {
   const [justAppliedToast, setJustAppliedToast] = useState<string | null>(null);
   const simulation = useMemo(() => simulateFinancingRound(state, inputs), [state, inputs]);
 
-  // Synthetic Interaction Engine — Step 1 (Auto-type Series A terms & commit round)
+  // Synthetic Interaction Engine — Step 2 (Auto-type Series A terms & commit round)
   useEffect(() => {
-    if (!demo.isDemoActive || demo.currentStepIndex !== 1) return;
+    if (!demo.isDemoActive || demo.currentStepIndex !== 2) return;
 
     let cancelled = false;
     const timers: number[] = [];
@@ -188,7 +188,7 @@ export function RoundSimulatorTab() {
           setJustAppliedToast(targetRound);
         }
       }
-      demo.markStepReady(1);
+      demo.markStepReady(2);
     }, cursorMs);
 
     return () => {
@@ -321,8 +321,8 @@ export function RoundSimulatorTab() {
       )}
 
       <DemoSpotlight
-        stepIndex={1}
-        badgeText={state.language === 'SV' ? DEMO_STEPS[1].badgeSV : DEMO_STEPS[1].badgeEN}
+        stepIndex={2}
+        badgeText={state.language === 'SV' ? DEMO_STEPS[2].badgeSV : DEMO_STEPS[2].badgeEN}
       >
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
           {/* LEFT PANEL: Financing Round Controls */}

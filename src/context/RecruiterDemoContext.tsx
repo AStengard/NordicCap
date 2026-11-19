@@ -9,52 +9,82 @@ import React, {
 } from 'react';
 import { DemoStepConfig } from '../types';
 import { useCapTable } from './CapTableContext';
-import { createPreSeriesAScenario, createSeriesARecruiterDemoScenario } from '../constants/scenarios';
+import { createBlankScenario, createPreSeriesAScenario, createSeriesARecruiterDemoScenario } from '../constants/scenarios';
 
 export const DEMO_STEPS: DemoStepConfig[] = [
   {
     index: 0,
-    targetTab: 'cap_table',
-    badgeEN: 'Dual-Class Aktiebok & ABL Guardrails',
-    badgeSV: 'Aktiebok & ABL-vaktare',
-    titleEN: '1. Swedish Dual-Class Equity & Live Ledger',
-    titleSV: '1. Svensk aktiebok & 10:1-rostvarde',
-    actionLabelEN: 'Filtering 10x Class A founder holdings in the Aktiebok...',
-    actionLabelSV: 'Filtrerar 10x A-aktier i aktieboken...',
+    targetTab: 'setup',
+    badgeEN: 'Page 2: Company Setup & Live Data Entry',
+    badgeSV: 'Sida 2: Bolagsregistrering & Inmatning',
+    titleEN: '1. Swedish Company Setup & Live Data Entry',
+    titleSV: '1. Bolagsregistrering & Snabb Inmatning',
+    actionLabelEN: 'Typing legal identity, share capital, and registering founders live...',
+    actionLabelSV: 'Fyller i bolagsuppgifter, aktiekapital och registrerar grundarna live...',
     bulletsEN: [
       {
         label: 'Architecture Decision',
-        text: 'Single normalized Context + Reducer state models Common A (10x votes), Common B, K-lan notes, and ESOP warrants with zero stale derived values.',
+        text: 'Reactive form writes directly into normalized company and shareholder records with immediate Kvotvärde derivation and validation.',
       },
       {
         label: 'Commercial & Legal Impact',
-        text: 'Continuously validates ABL 4 kap. 5 § (10:1 max voting ratio) and ABL 1 kap. 5 § (25 000 SEK minimum Aktiekapital) in real time.',
+        text: 'Enforces ABL 1:5 minimum 25,000 SEK capital, calculates quota value automatically, and sets up Stam A (10 votes) & Stam B (1 vote).',
       },
     ],
     bulletsSV: [
       {
         label: 'Arkitekturval',
-        text: 'Centraliserad Context + Reducer-motor hanterar Stam A (10x roster), Stam B, K-lan och teckningsoptioner utan redundanta berakningar.',
+        text: 'Reaktivt inmatningscenter uppdaterar bolagets aktiebok direkt med omedelbar kvotvärdesberäkning och fältvalidering.',
       },
       {
         label: 'Kommersiell & juridisk nytta',
-        text: 'Kontrollerar ABL 4 kap. 5 § (max 10:1 rostvardesskillnad) och ABL 1 kap. 5 § (min 25 000 SEK aktiekapital) i realtid.',
+        text: 'Uppfyller ABL 1:5 om minst 25 000 SEK aktiekapital och förbereder grundarallokering med Stam A (10 röster) och Stam B (1 röst).',
       },
     ],
   },
   {
     index: 1,
-    targetTab: 'round_sim',
-    badgeEN: 'Series A & K-lan Conversion Engine',
-    badgeSV: 'Serie A & K-lan-konvertering',
-    titleEN: '2. Primary Round Modeling & Pool Shuffle',
-    titleSV: '2. Nyemissionssimulering & Optionspool',
-    actionLabelEN: 'Typing Series A terms, solving Pre-Money ESOP shuffle & applying round...',
-    actionLabelSV: 'Skriver in Serie A-villkor, beraknar ESOP-top-up & verkstaller runda...',
+    targetTab: 'cap_table',
+    badgeEN: 'Dual-Class Aktiebok & ABL Guardrails',
+    badgeSV: 'Aktiebok & ABL-vaktare',
+    titleEN: '2. Swedish Dual-Class Equity & Live Ledger',
+    titleSV: '2. Svensk aktiebok & 10:1-röstvärde',
+    actionLabelEN: 'Filtering 10x Class A founder holdings and verifying ABL 4:5 10:1 limit...',
+    actionLabelSV: 'Filtrerar 10x A-aktier i aktieboken och kontrollerar 10:1-gränsen...',
     bulletsEN: [
       {
         label: 'Architecture Decision',
-        text: 'Iterative fixed-point solver resolves circular pre-money Option Pool Shuffle math alongside min(Discount, Cap) K-lan conversion while preserving Swedish Kvotvarde.',
+        text: 'Single normalized Context + Reducer state models Common A (10x votes), Common B, K-lån notes, and ESOP warrants with zero stale derived values.',
+      },
+      {
+        label: 'Commercial & Legal Impact',
+        text: 'Continuously validates ABL 4 kap. 5 § (10:1 max voting ratio) and hosts one-click Excel CSV export and law-firm PDF memo printing.',
+      },
+    ],
+    bulletsSV: [
+      {
+        label: 'Arkitekturval',
+        text: 'Centraliserad Context + Reducer-motor hanterar Stam A (10x röster), Stam B, K-lån och teckningsoptioner utan redundanta beräkningar.',
+      },
+      {
+        label: 'Kommersiell & juridisk nytta',
+        text: 'Kontrollerar ABL 4 kap. 5 § (max 10:1 röstvärdesskillnad) och erbjuder direkt export till Excel CSV samt utskriftsanpassat transaktions-PM.',
+      },
+    ],
+  },
+  {
+    index: 2,
+    targetTab: 'round_sim',
+    badgeEN: 'Series A & K-lån Conversion Engine',
+    badgeSV: 'Serie A & K-lån-konvertering',
+    titleEN: '3. Primary Round Modeling & Pool Shuffle',
+    titleSV: '3. Nyemissionssimulering & Optionspool',
+    actionLabelEN: 'Typing Series A terms, solving Pre-Money ESOP shuffle & applying round...',
+    actionLabelSV: 'Skriver in Serie A-villkor, beräknar ESOP-top-up & verkställer runda...',
+    bulletsEN: [
+      {
+        label: 'Architecture Decision',
+        text: 'Iterative fixed-point solver resolves circular pre-money Option Pool Shuffle math alongside min(Discount, Cap) K-lån conversion while preserving Swedish Kvotvärde.',
       },
       {
         label: 'Commercial & Legal Impact',
@@ -64,23 +94,23 @@ export const DEMO_STEPS: DemoStepConfig[] = [
     bulletsSV: [
       {
         label: 'Arkitekturval',
-        text: 'Iterativ fixpunktslosare beraknar cirkular Pre-Money Option Pool Shuffle samt lagsta kurs (rabatt/tak) for K-lan med bibehallet kvotvarde.',
+        text: 'Iterativ fixpunktslösare beräknar cirkulär Pre-Money Option Pool Shuffle samt lägsta kurs (rabatt/tak) för K-lån med bibehållet kvotvärde.',
       },
       {
         label: 'Kommersiell & juridisk nytta',
-        text: 'Verkstalld runda uppdaterar aktieboken med full angra-historik och matar direkt Exit Waterfall samt ABL-modulen.',
+        text: 'Verkställd runda uppdaterar aktieboken med full ångra-historik och matar direkt Exit Waterfall samt ABL-modulen.',
       },
     ],
   },
   {
-    index: 2,
+    index: 3,
     targetTab: 'waterfall',
     badgeEN: 'Equilibrium VC Waterfall Engine',
-    badgeSV: 'Jamviktsbaserad Exit Waterfall',
-    titleEN: '3. Liquidation Preferences & Exit Breakpoints',
-    titleSV: '3. Likvidationspreferenser & Brytpunkter',
+    badgeSV: 'Jämviktsbaserad Exit Waterfall',
+    titleEN: '4. Liquidation Preferences & Exit Breakpoints',
+    titleSV: '4. Likvidationspreferenser & Brytpunkter',
     actionLabelEN: 'Sweeping Exit Valuation: 15 MSEK -> 50 MSEK -> 120 MSEK...',
-    actionLabelSV: 'Sveper exit-vardering: 15 MSEK -> 50 MSEK -> 120 MSEK...',
+    actionLabelSV: 'Sveper exit-värdering: 15 MSEK -> 50 MSEK -> 120 MSEK...',
     bulletsEN: [
       {
         label: 'Architecture Decision',
@@ -94,21 +124,21 @@ export const DEMO_STEPS: DemoStepConfig[] = [
     bulletsSV: [
       {
         label: 'Arkitekturval',
-        text: 'Ren TypeScript-motor utan UI-beroenden laser prioritetsordningar, konverteringsbrytpunkter och in-the-money-optionslosen simultant.',
+        text: 'Ren TypeScript-motor utan UI-beroenden löser prioritetsordningar, konverteringsbrytpunkter och in-the-money-optionslösen simultant.',
       },
       {
         label: 'Kommersiell & juridisk nytta',
-        text: 'Ersatter felbenagna kalkylark med visuella brytpunktskurvor, steg-for-steg-sparning och exakt MOIC per aktieagare.',
+        text: 'Ersätter felbenägna kalkylark med visuella brytpunktskurvor, steg-för-steg-spårning och exakt MOIC per aktieägare.',
       },
     ],
   },
   {
-    index: 3,
+    index: 4,
     targetTab: 'abl_legal',
     badgeEN: 'ABL Majority & Leo-lagen Rules Engine',
     badgeSV: 'ABL Majoritets- & Leo-lagen-motor',
-    titleEN: '4. Swedish Companies Act (ABL) Formalia Check',
-    titleSV: '4. ABL Majoritetskrav & Bolagsverket',
+    titleEN: '5. Swedish Companies Act (ABL) Formalia Check',
+    titleSV: '5. ABL Majoritetskrav & Bolagsverket',
     actionLabelEN: 'Flagging 16 kap. ABL (Leo-lagen 9/10) & verifying Bolagsverket dossier...',
     actionLabelSV: 'Flaggar 16 kap. ABL (Leo-lagen 9/10) & kontrollerar Bolagsverkets handlingar...',
     bulletsEN: [
@@ -124,21 +154,21 @@ export const DEMO_STEPS: DemoStepConfig[] = [
     bulletsSV: [
       {
         label: 'Arkitekturval',
-        text: 'Regelmotorn granskar optionsmottagare och riktade emissioner for att automatiskt larma vid 9/10 Leo-lagen (16 kap. ABL) och 2/3-krav.',
+        text: 'Regelmotorn granskar optionsmottagare och riktade emissioner för att automatiskt larma vid 9/10 Leo-lagen (16 kap. ABL) och 2/3-krav.',
       },
       {
         label: 'Kommersiell & juridisk nytta',
-        text: 'Forhindrar ogiltiga stammobeslut och avslag hos Bolagsverket genom att koppla lagkraven direkt till bolagets faktiska rostfordelning.',
+        text: 'Förhindrar ogiltiga stämmobeslut och avslag hos Bolagsverket genom att koppla lagkraven direkt till bolagets faktiska röstfördelning.',
       },
     ],
   },
   {
-    index: 4,
+    index: 5,
     targetTab: 'abl_legal',
     badgeEN: 'Live Clause-to-Math & Executive Memo',
     badgeSV: 'Klausul-till-matematik & PDF-PM',
-    titleEN: '5. Dynamic SHA Clauses & Law-Firm PDF Export',
-    titleSV: '5. Dynamiska klausuler & Transaktions-PM',
+    titleEN: '6. Dynamic SHA Clauses & Law-Firm PDF Export',
+    titleSV: '6. Dynamiska klausuler & Transaktions-PM',
     actionLabelEN: 'Syncing Drag-Along & Liquidation Preference clauses to live math...',
     actionLabelSV: 'Synkar Drag-Along- och preferensklausuler mot aktuella nyckeltal...',
     bulletsEN: [
@@ -154,11 +184,11 @@ export const DEMO_STEPS: DemoStepConfig[] = [
     bulletsSV: [
       {
         label: 'Arkitekturval',
-        text: 'Reaktiva klausulmallar binder aktieslagens parametrar direkt till tvasprakiga avtals- och bolagsordningstexter samt utskriftsanpassat A4-PM.',
+        text: 'Reaktiva klausulmallar binder aktieslagens parametrar direkt till tvåspråkiga avtals- och bolagsordningstexter samt utskriftsanpassat A4-PM.',
       },
       {
         label: 'Kommersiell & juridisk nytta',
-        text: 'Forenar bolagsjurister och VC-team med ett-klicks-export till Excel-kompatibel CSV och fardigt transaktions-PM i PDF.',
+        text: 'Förenar bolagsjurister och VC-team med ett-klicks-export till Excel-kompatibel CSV och färdigt transaktions-PM i PDF.',
       },
     ],
   },
@@ -202,10 +232,18 @@ export function RecruiterDemoProvider({ children }: { children: React.ReactNode 
       if (!step) return;
 
       if (stepIdx === 0) {
+        // Step 0: Page 2 live filling starts with clean blank setup
+        dispatch({ type: 'LOAD_SCENARIO', payload: createBlankScenario() });
+      } else if (stepIdx === 1) {
+        // Step 1: Cap table view
+        if (stateRef.current.shareholders.length < 2) {
+          dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() });
+        }
+      } else if (stepIdx === 2 && stateRef.current.appliedRounds.length > 0) {
+        // Step 2: Round simulator reset
         dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() });
-      } else if (stepIdx === 1 && stateRef.current.appliedRounds.length > 0) {
-        dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() });
-      } else if (stepIdx >= 2 && stateRef.current.appliedRounds.length === 0) {
+      } else if (stepIdx >= 3 && stateRef.current.appliedRounds.length === 0) {
+        // Steps 3, 4, 5: Series A VC scenario active for Waterfall and ABL
         dispatch({ type: 'LOAD_SCENARIO', payload: createSeriesARecruiterDemoScenario() });
       }
 

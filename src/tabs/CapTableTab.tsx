@@ -4,10 +4,12 @@ import {
   Award,
   Briefcase,
   Building2,
+  Download,
   FileText,
   Layers,
   Pencil,
   Plus,
+  Printer,
   Search,
   ShieldCheck,
   Trash2,
@@ -17,6 +19,7 @@ import { ShareClass, Shareholder, StakeholderCategory } from '../types';
 import { useCapTable, useCapTableMetrics } from '../context/CapTableContext';
 import { DEMO_STEPS, useRecruiterDemo } from '../context/RecruiterDemoContext';
 import { formatInt, formatPct, formatPriceSEK, formatSEK } from '../utils/formatters';
+import { exportCapTableToCSV } from '../utils/csvExport';
 import { CategoryBadge } from '../components/ui/CategoryBadge';
 import { DemoSpotlight } from '../components/demo/DemoSpotlight';
 import { ShareholderDrawer } from '../components/drawers/ShareholderDrawer';
@@ -48,9 +51,9 @@ export function CapTableTab() {
     setCapDraft(String(state.company.shareCapital));
   }, [state.company.postMoneyValuation, state.company.shareCapital]);
 
-  // Synthetic Interaction Engine — Step 0 (Typewriter filter in Aktiebok)
+  // Synthetic Interaction Engine — Step 1 (Typewriter filter in Aktiebok)
   useEffect(() => {
-    if (!demo.isDemoActive || demo.currentStepIndex !== 0) return;
+    if (!demo.isDemoActive || demo.currentStepIndex !== 1) return;
 
     let cancelled = false;
     const timers: number[] = [];
@@ -69,7 +72,7 @@ export function CapTableTab() {
       schedule(() => setSearchQuery(sampleQuery.slice(0, i)), 450 + i * 115);
     }
     schedule(() => setSearchQuery(''), 2300);
-    schedule(() => demo.markStepReady(0), 2750);
+    schedule(() => demo.markStepReady(1), 2750);
 
     return () => {
       cancelled = true;
@@ -238,10 +241,10 @@ export function CapTableTab() {
         </div>
       </div>
 
-      {/* Spotlight Step 0: Voting Control Strip & Shareholder Register */}
+      {/* Spotlight Step 1: Voting Control Strip & Shareholder Register */}
       <DemoSpotlight
-        stepIndex={0}
-        badgeText={state.language === 'SV' ? DEMO_STEPS[0].badgeSV : DEMO_STEPS[0].badgeEN}
+        stepIndex={1}
+        badgeText={state.language === 'SV' ? DEMO_STEPS[1].badgeSV : DEMO_STEPS[1].badgeEN}
         className="space-y-6"
       >
         {/* Capital vs Voting Control Comparison Strip */}
@@ -344,11 +347,32 @@ export function CapTableTab() {
               <button
                 type="button"
                 onClick={() => setDrawer({ type: 'shareholder' })}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-[#15233E] text-[#FCFBF9] rounded-md hover:bg-[#1E3156]"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] rounded-md hover:bg-[#1E3156] transition-colors cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" strokeWidth={1.8} />
                 {t.addShareholder}
               </button>
+
+              <div className="flex items-center gap-1.5 pl-1.5 border-l border-[#E5E0D5]">
+                <button
+                  type="button"
+                  onClick={() => exportCapTableToCSV(state, metrics)}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[#15233E] bg-white border border-[#D8D1C3] hover:bg-[#F6F4EF] rounded-md transition-colors cursor-pointer shadow-2xs"
+                  title={t.exportCsv}
+                >
+                  <Download className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.8} />
+                  <span>{t.exportCsv}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-[#15233E] bg-white border border-[#D8D1C3] hover:bg-[#F6F4EF] rounded-md transition-colors cursor-pointer shadow-2xs"
+                  title={t.printMemo}
+                >
+                  <Printer className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.8} />
+                  <span>{t.printMemo}</span>
+                </button>
+              </div>
             </div>
           </div>
 

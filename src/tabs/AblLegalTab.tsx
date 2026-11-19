@@ -39,15 +39,15 @@ export function AblLegalTab() {
     }
   }, [state.shareClasses, selectedPrefClassId]);
 
-  // Synthetic Interaction Engine — Steps 3 & 4
+  // Synthetic Interaction Engine — Steps 4 & 5
   useEffect(() => {
     if (!demo.isDemoActive) return;
-    if (demo.currentStepIndex === 3) {
-      const timer = window.setTimeout(() => demo.markStepReady(3), 2400);
-      return () => window.clearTimeout(timer);
-    }
     if (demo.currentStepIndex === 4) {
       const timer = window.setTimeout(() => demo.markStepReady(4), 2400);
+      return () => window.clearTimeout(timer);
+    }
+    if (demo.currentStepIndex === 5) {
+      const timer = window.setTimeout(() => demo.markStepReady(5), 2400);
       return () => window.clearTimeout(timer);
     }
   }, [demo.isDemoActive, demo.currentStepIndex, demo.demoRunId, demo.markStepReady]);
@@ -117,10 +117,10 @@ export function AblLegalTab() {
         </div>
       </div>
 
-      {/* Spotlight Step 3: ABL Majority & Bolagsverket Checklist */}
+      {/* Spotlight Step 4: ABL Majority & Bolagsverket Checklist */}
       <DemoSpotlight
-        stepIndex={3}
-        badgeText={isSV ? DEMO_STEPS[3].badgeSV : DEMO_STEPS[3].badgeEN}
+        stepIndex={4}
+        badgeText={isSV ? DEMO_STEPS[4].badgeSV : DEMO_STEPS[4].badgeEN}
         className="space-y-6"
       >
         {/* ABL Rules Grid */}
@@ -233,10 +233,10 @@ export function AblLegalTab() {
         </div>
       </DemoSpotlight>
 
-      {/* Spotlight Step 4: Live Clause-to-Math Preview */}
+      {/* Spotlight Step 5: Live Clause-to-Math Preview */}
       <DemoSpotlight
-        stepIndex={4}
-        badgeText={isSV ? DEMO_STEPS[4].badgeSV : DEMO_STEPS[4].badgeEN}
+        stepIndex={5}
+        badgeText={isSV ? DEMO_STEPS[5].badgeSV : DEMO_STEPS[5].badgeEN}
         className="space-y-5"
       >
         <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-lg p-5 space-y-5">

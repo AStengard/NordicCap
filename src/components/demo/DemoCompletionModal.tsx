@@ -13,18 +13,20 @@ export function DemoCompletionModal() {
 
   const achievements = isSV
     ? [
+        'Sida 2: Bolagsregistrering (25k+ SEK aktiekapital) och direkt inmatning av grundare och aktieslag verifierad.',
         'Aktiebok (10:1 Stam A/B), aktiva K-lan och ESOP-pool verifierade enligt ABL 4 kap. 5 §.',
-        'Serie A (45 MSEK pre-money / 15 MSEK investering) simulerad med Pre-Money ESOP-top-up och K-lan-konvertering.',
+        'Serie A-emission simulerad med cirkular Pre-Money ESOP-top-up och K-lan-konvertering.',
         'Exit Waterfall utvarderad over 15–120 MSEK med automatisk preferenskonvertering och in-the-money-optioner.',
         '16 kap. ABL (Leo-lagen 9/10-majoritet) och Bolagsverkets registreringshandlingar kontrollerade.',
-        'Dynamiska klausuler (SHA & Bolagsordning), CSV-export och A4 PDF-transaktions-PM verifierade.',
+        'Dynamiska klausuler (SHA & Bolagsordning), Excel CSV-export och juridiskt transaktions-PM bekraftade.',
       ]
     : [
+        'Page 2: Swedish company registration (25k+ SEK capital) and live founder data entry verified.',
         'Dual-class Aktiebok (10:1 Class A/B), K-lan notes, and ESOP warrants validated under ABL 4 kap. 5 §.',
-        'Series A (45 MSEK pre-money / 15 MSEK raise) modeled with Pre-Money ESOP shuffle and K-lan conversion.',
+        'Series A round modeled with circular Pre-Money ESOP shuffle and K-lan conversion.',
         'Equilibrium Exit Waterfall swept across 15–120 MSEK showing rational preferred conversion and ITM warrants.',
         '16 kap. ABL (Leo-lagen 9/10 majority) and Bolagsverket corporate filing dossier verified live.',
-        'Live Clause-to-Math SHA/Bolagsordning drafting, CSV ledger export, and A4 PDF brief confirmed.',
+        'Live Clause-to-Math SHA/Bolagsordning drafting, Excel CSV export, and PDF transaction brief confirmed.',
       ];
 
   return (

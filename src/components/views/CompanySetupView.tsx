@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ArrowRight,
   Building2,
@@ -13,11 +13,14 @@ import {
   Trash2,
   TrendingUp,
   Users,
+  X,
 } from 'lucide-react';
 import { ShareClass, Shareholder, StakeholderCategory } from '../../types';
 import { useCapTable, useCapTableMetrics } from '../../context/CapTableContext';
-import { formatInt, formatPct, formatSEK } from '../../utils/formatters';
+import { DEMO_STEPS, useRecruiterDemo } from '../../context/RecruiterDemoContext';
+import { formatInt, formatPct, formatSEK, generateId } from '../../utils/formatters';
 import { CategoryBadge } from '../ui/CategoryBadge';
+import { DemoSpotlight } from '../demo/DemoSpotlight';
 import { ShareholderDrawer } from '../drawers/ShareholderDrawer';
 import { ShareClassDrawer } from '../drawers/ShareClassDrawer';
 import { NoteDrawer } from '../drawers/NoteDrawer';
@@ -33,6 +36,7 @@ type DrawerMode =
 export function CompanySetupView() {
   const { state, dispatch, t } = useCapTable();
   const metrics = useCapTableMetrics();
+  const demo = useRecruiterDemo();
   const isSV = state.language === 'SV';
 
   const [drawer, setDrawer] = useState<DrawerMode>({ type: 'none' });
@@ -43,6 +47,143 @@ export function CompanySetupView() {
   const [shareCap, setShareCap] = useState(String(state.company.shareCapital));
   const [postVal, setPostVal] = useState(String(state.company.postMoneyValuation));
   const [isSavedToast, setIsSavedToast] = useState(false);
+
+  // Sync state if scenario changes externally
+  useEffect(() => {
+    setCompName(state.company.name);
+    setOrgNum(state.company.orgNumber);
+    setShareCap(String(state.company.shareCapital));
+    setPostVal(String(state.company.postMoneyValuation));
+  }, [state.company]);
+
+  // Inline Quick-Add Shareholder state
+  const [showInlineShareholder, setShowInlineShareholder] = useState(state.shareholders.length === 0);
+  const [shName, setShName] = useState('');
+  const [shCategory, setShCategory] = useState<StakeholderCategory>('Founder');
+  const [shClassId, setShClassId] = useState(state.shareClasses[0]?.id ?? '');
+  const [shShares, setShShares] = useState('25000');
+  const [shInvested, setShInvested] = useState('25000');
+
+  // Synthetic Interaction Engine — Step 0 (Live fill-in on Page 2)
+  useEffect(() => {
+    if (!demo.isDemoActive || demo.currentStepIndex !== 0) return;
+
+    let cancelled = false;
+    const timers: number[] = [];
+    const schedule = (fn: () => void, ms: number) => {
+      const id = window.setTimeout(() => {
+        if (!cancelled) fn();
+      }, ms);
+      timers.push(id);
+    };
+
+    // Reset local state to empty/initial for live typing demonstration
+    setCompName('');
+    setOrgNum('');
+    setShareCap('25000');
+    setPostVal('0');
+    setShowInlineShareholder(true);
+    setShName('');
+
+    // Phase 1: Type company name
+    const targetName = 'NordicTech Health AB';
+    for (let i = 1; i <= targetName.length; i++) {
+      schedule(() => setCompName(targetName.slice(0, i)), 150 + i * 35);
+    }
+
+    // Phase 2: Type org number
+    const targetOrg = '559123-4567';
+    const orgStartMs = 150 + targetName.length * 35 + 80;
+    for (let i = 1; i <= targetOrg.length; i++) {
+      schedule(() => setOrgNum(targetOrg.slice(0, i)), orgStartMs + i * 40);
+    }
+
+    // Phase 3: Set share capital & valuation and save company
+    const saveCompMs = orgStartMs + targetOrg.length * 40 + 120;
+    schedule(() => {
+      setShareCap('50000');
+      setPostVal('12000000');
+      dispatch({
+        type: 'UPDATE_COMPANY',
+        payload: {
+          name: 'NordicTech Health AB',
+          orgNumber: '559123-4567',
+          shareCapital: 50000,
+          postMoneyValuation: 12000000,
+        },
+      });
+      setIsSavedToast(true);
+    }, saveCompMs);
+
+    schedule(() => setIsSavedToast(false), saveCompMs + 1800);
+
+    // Phase 4: Type first founder in inline quick-add form
+    const f1StartMs = saveCompMs + 300;
+    const f1Name = 'Astrid Lindgren (Grundare)';
+    for (let i = 1; i <= f1Name.length; i++) {
+      schedule(() => setShName(f1Name.slice(0, i)), f1StartMs + i * 30);
+    }
+    const f1CommitMs = f1StartMs + f1Name.length * 30 + 150;
+    schedule(() => {
+      setShShares('60000');
+      setShInvested('30000');
+      setShCategory('Founder');
+      const classAId = state.shareClasses[0]?.id || 'cls_common_a';
+      setShClassId(classAId);
+      dispatch({
+        type: 'UPSERT_SHAREHOLDER',
+        payload: {
+          id: 'sh_founder_1',
+          name: 'Astrid Lindgren (Grundare)',
+          category: 'Founder',
+          shareClassId: classAId,
+          shares: 60000,
+          investedAmount: 30000,
+        },
+      });
+      setShName('');
+    }, f1CommitMs);
+
+    // Phase 5: Type second founder in inline quick-add form
+    const f2StartMs = f1CommitMs + 300;
+    const f2Name = 'Erik Karlsson (Grundare)';
+    for (let i = 1; i <= f2Name.length; i++) {
+      schedule(() => setShName(f2Name.slice(0, i)), f2StartMs + i * 30);
+    }
+    const f2CommitMs = f2StartMs + f2Name.length * 30 + 150;
+    schedule(() => {
+      setShShares('40000');
+      setShInvested('20000');
+      setShCategory('Founder');
+      const classB = state.shareClasses.find((c) => !c.isPreferred && c.id !== (state.shareClasses[0]?.id || 'cls_common_a')) || state.shareClasses[1];
+      const classBId = classB?.id || 'cls_common_b';
+      setShClassId(classBId);
+      dispatch({
+        type: 'UPSERT_SHAREHOLDER',
+        payload: {
+          id: 'sh_founder_2',
+          name: 'Erik Karlsson (Grundare)',
+          category: 'Founder',
+          shareClassId: classBId,
+          shares: 40000,
+          investedAmount: 20000,
+        },
+      });
+      setShName('');
+      demo.markStepReady(0);
+    }, f2CommitMs);
+
+    return () => {
+      cancelled = true;
+      timers.forEach((id) => window.clearTimeout(id));
+    };
+  }, [demo.isDemoActive, demo.currentStepIndex, demo.demoRunId, demo.markStepReady, dispatch, state.shareClasses]);
+
+  useEffect(() => {
+    if (!shClassId && state.shareClasses.length > 0) {
+      setShClassId(state.shareClasses[0].id);
+    }
+  }, [state.shareClasses, shClassId]);
 
   const handleSaveCompany = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +198,32 @@ export function CompanySetupView() {
     });
     setIsSavedToast(true);
     setTimeout(() => setIsSavedToast(false), 2400);
+  };
+
+  const handleQuickAddShareholder = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!shName.trim()) return;
+
+    const chosenClassId = shClassId || state.shareClasses[0]?.id || 'cls_common_a';
+    const numShares = Math.max(1, Math.round(Number(shShares) || 25000));
+    const numInvested = Math.max(0, Math.round(Number(shInvested) || 25000));
+
+    dispatch({
+      type: 'UPSERT_SHAREHOLDER',
+      payload: {
+        id: generateId('sh'),
+        name: shName.trim(),
+        category: shCategory,
+        shareClassId: chosenClassId,
+        shares: numShares,
+        investedAmount: numInvested,
+      },
+    });
+
+    // Reset inputs for fast next entry
+    setShName('');
+    setShShares('25000');
+    setShInvested('25000');
   };
 
   const handleProceedToCapTable = () => {
@@ -112,8 +279,14 @@ export function CompanySetupView() {
         </div>
       </div>
 
-      {/* SECTION 1: Company Profile Form */}
-      <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-2xl p-6 shadow-xs space-y-4">
+      {/* Spotlight Step 0: Company Setup & Live Data Entry */}
+      <DemoSpotlight
+        stepIndex={0}
+        badgeText={isSV ? DEMO_STEPS[0].badgeSV : DEMO_STEPS[0].badgeEN}
+        className="space-y-8"
+      >
+        {/* SECTION 1: Company Profile Form */}
+        <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-2xl p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between border-b border-[#E5E0D5] pb-3">
           <div className="flex items-center gap-2.5">
             <span className="w-7 h-7 rounded-lg bg-[#15233E] text-[#FCFBF9] flex items-center justify-center text-xs font-bold font-mono">
@@ -195,7 +368,7 @@ export function CompanySetupView() {
           <div className="sm:col-span-2 md:col-span-4 flex justify-end">
             <button
               type="submit"
-              className="px-4 py-2 text-xs font-semibold bg-[#15233E] hover:bg-[#1E3156] text-[#FCFBF9] rounded-md transition-colors"
+              className="px-4 py-2 text-xs font-semibold bg-[#15233E] hover:bg-[#1E3156] text-[#FCFBF9] rounded-md transition-colors cursor-pointer"
             >
               {isSV ? 'Spara bolagsuppgifter' : 'Save Company Details'}
             </button>
@@ -225,7 +398,7 @@ export function CompanySetupView() {
           <button
             type="button"
             onClick={() => setDrawer({ type: 'share_class' })}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-[#D8D1C3] text-[#15233E] hover:bg-[#F6F4EF] rounded-md shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-white border border-[#8C6D46] text-[#15233E] hover:bg-[#F6F4EF] rounded-md shadow-2xs transition-colors cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 text-[#8C6D46]" />
             <span>{isSV ? 'Lägg till aktieslag' : 'Add Share Class'}</span>
@@ -242,14 +415,26 @@ export function CompanySetupView() {
                   </span>
                   <span className="font-semibold text-xs text-[#15233E]">{cls.name}</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setDrawer({ type: 'share_class', item: cls })}
-                  className="p-1 text-[#5A6475] hover:text-[#15233E] rounded"
-                  title="Edit share class"
-                >
-                  <Pencil className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setDrawer({ type: 'share_class', item: cls })}
+                    className="p-1 text-[#5A6475] hover:text-[#15233E] rounded cursor-pointer"
+                    title="Edit share class"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                  {state.shareClasses.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => dispatch({ type: 'DELETE_SHARE_CLASS', payload: cls.id })}
+                      className="p-1 text-[#5A6475] hover:text-[#9A342D] rounded cursor-pointer"
+                      title="Delete share class"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-[11px] text-[#5A6475] font-mono pt-1 border-t border-[#E5E0D5]/60">
@@ -263,8 +448,8 @@ export function CompanySetupView() {
         </div>
       </div>
 
-      {/* SECTION 3: Shareholders & Founders (Where you add people) */}
-      <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-2xl p-6 shadow-xs space-y-4">
+      {/* SECTION 3: Shareholders & Founders */}
+      <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-2xl p-6 shadow-xs space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E5E0D5] pb-3">
           <div className="flex items-center gap-2.5">
             <span className="w-7 h-7 rounded-lg bg-[#3B5984] text-[#FCFBF9] flex items-center justify-center text-xs font-bold font-mono">
@@ -282,31 +467,157 @@ export function CompanySetupView() {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setDrawer({ type: 'shareholder' })}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] hover:bg-[#1E3156] rounded-md shadow-xs transition-colors"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>{isSV ? '+ Lägg till aktieägare' : '+ Add Shareholder'}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowInlineShareholder((prev) => !prev)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-[#D8D1C3] text-[#15233E] hover:bg-[#F6F4EF] rounded-md shadow-2xs transition-colors cursor-pointer"
+            >
+              {showInlineShareholder ? (
+                <>
+                  <X className="w-3.5 h-3.5" />
+                  <span>{isSV ? 'Dölj snabbformulär' : 'Hide Quick Form'}</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="w-3.5 h-3.5 text-[#8C6D46]" />
+                  <span>{isSV ? 'Öppna snabbformulär' : 'Quick Form'}</span>
+                </>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setDrawer({ type: 'shareholder' })}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] hover:bg-[#1E3156] rounded-md shadow-xs transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>{isSV ? 'Fullständig dialog' : 'Full Drawer Form'}</span>
+            </button>
+          </div>
         </div>
 
+        {/* INLINE QUICK-ADD FORM */}
+        {showInlineShareholder && (
+          <form
+            onSubmit={handleQuickAddShareholder}
+            className="bg-white border-2 border-[#8C6D46]/40 rounded-xl p-4 sm:p-5 shadow-xs space-y-3"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-[#15233E] uppercase tracking-wider font-mono">
+                {isSV ? '+ Lägg till aktieägare (Snabbformulär)' : '+ Add Shareholder (Fast Input)'}
+              </span>
+              <span className="text-[11px] text-[#7A8291]">
+                {isSV ? 'Fyll i och klicka spara' : 'Fill in and click save'}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+              <div className="md:col-span-2">
+                <label className="block text-[11px] font-medium text-[#15233E] mb-1">
+                  {isSV ? 'Aktieägarens namn / Bolag' : 'Shareholder Name / Entity'} *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={shName}
+                  onChange={(e) => setShName(e.target.value)}
+                  placeholder={isSV ? 't.ex. Astrid Lindholm (VD)' : 'e.g. Astrid Lindholm (CEO)'}
+                  className="w-full px-3 py-1.5 text-xs bg-[#FCFBF9] border border-[#D8D1C3] rounded-md focus:ring-2 focus:ring-[#8C6D46] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-medium text-[#15233E] mb-1">
+                  {isSV ? 'Kategori' : 'Category'}
+                </label>
+                <select
+                  value={shCategory}
+                  onChange={(e) => setShCategory(e.target.value as StakeholderCategory)}
+                  className="w-full px-2.5 py-1.5 text-xs bg-[#FCFBF9] border border-[#D8D1C3] rounded-md focus:ring-2 focus:ring-[#8C6D46] focus:outline-none"
+                >
+                  <option value="Founder">Founder</option>
+                  <option value="Angel">Angel</option>
+                  <option value="VC">VC</option>
+                  <option value="ESOP">ESOP</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-medium text-[#15233E] mb-1">
+                  {isSV ? 'Aktieslag' : 'Share Class'}
+                </label>
+                <select
+                  value={shClassId}
+                  onChange={(e) => setShClassId(e.target.value)}
+                  className="w-full px-2.5 py-1.5 text-xs bg-[#FCFBF9] border border-[#D8D1C3] rounded-md focus:ring-2 focus:ring-[#8C6D46] focus:outline-none"
+                >
+                  {state.shareClasses.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({c.votesPerShare}x {isSV ? 'röster' : 'votes'})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-medium text-[#15233E] mb-1">
+                  {isSV ? 'Antal aktier' : 'Share Count'}
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  step={1000}
+                  value={shShares}
+                  onChange={(e) => setShShares(e.target.value)}
+                  className="w-full px-3 py-1.5 text-xs font-mono tabular-nums bg-[#FCFBF9] border border-[#D8D1C3] rounded-md focus:ring-2 focus:ring-[#8C6D46] focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+              <div className="w-48">
+                <label className="block text-[10px] text-[#5A6475] mb-0.5">
+                  {isSV ? 'Investerat belopp (SEK)' : 'Invested Amount (SEK)'}
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  step={5000}
+                  value={shInvested}
+                  onChange={(e) => setShInvested(e.target.value)}
+                  className="w-full px-2.5 py-1 text-xs font-mono tabular-nums bg-[#FCFBF9] border border-[#D8D1C3] rounded-md"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="px-4 py-2 text-xs font-semibold bg-[#8C6D46] hover:bg-[#A38054] text-white rounded-md transition-colors shadow-xs cursor-pointer"
+              >
+                + {isSV ? 'Spara och lägg till i aktieboken' : 'Save & Add Shareholder'}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* SHAREHOLDERS TABLE */}
         {state.shareholders.length === 0 ? (
-          <div className="py-12 text-center bg-white border border-dashed border-[#D8D1C3] rounded-xl p-6 space-y-3">
+          <div className="py-10 text-center bg-white border border-dashed border-[#D8D1C3] rounded-xl p-6 space-y-3">
             <Users className="w-8 h-8 text-[#8C6D46] mx-auto opacity-70" />
             <div className="font-semibold text-sm text-[#15233E]">
               {isSV ? 'Inga aktieägare inlagda än' : 'No shareholders added yet'}
             </div>
             <p className="text-xs text-[#7A8291] max-w-sm mx-auto">
               {isSV
-                ? 'Börja med att lägga till grundarna och deras aktier (t.ex. 25 000 Stam A-aktier).'
-                : 'Start by adding your founders and their shareholdings (e.g. 25,000 Class A shares).'}
+                ? 'Använd snabbformuläret ovan eller klicka på knappen för att registrera grundarna.'
+                : 'Use the quick form above or click below to register your founders.'}
             </p>
             <button
               type="button"
-              onClick={() => setDrawer({ type: 'shareholder' })}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] hover:bg-[#1E3156] rounded-md shadow-xs transition-colors"
+              onClick={() => {
+                setShowInlineShareholder(true);
+                setDrawer({ type: 'shareholder' });
+              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] hover:bg-[#1E3156] rounded-md shadow-xs transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>{isSV ? 'Lägg till grundare' : 'Add First Founder'}</span>
@@ -359,7 +670,7 @@ export function CompanySetupView() {
                           <button
                             type="button"
                             onClick={() => setDrawer({ type: 'shareholder', item: sh })}
-                            className="p-1 text-[#5A6475] hover:text-[#15233E] rounded"
+                            className="p-1 text-[#5A6475] hover:text-[#15233E] rounded cursor-pointer"
                             title="Edit"
                           >
                             <Pencil className="w-3.5 h-3.5" />
@@ -367,7 +678,7 @@ export function CompanySetupView() {
                           <button
                             type="button"
                             onClick={() => dispatch({ type: 'DELETE_SHAREHOLDER', payload: sh.id })}
-                            className="p-1 text-[#5A6475] hover:text-[#9A342D] rounded"
+                            className="p-1 text-[#5A6475] hover:text-[#9A342D] rounded cursor-pointer"
                             title="Delete"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -382,6 +693,7 @@ export function CompanySetupView() {
           </div>
         )}
       </div>
+      </DemoSpotlight>
 
       {/* SECTION 4: Optional Convertible Notes & Warrants */}
       <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-2xl p-6 shadow-xs space-y-4">
@@ -412,7 +724,7 @@ export function CompanySetupView() {
             <button
               type="button"
               onClick={() => setDrawer({ type: 'note' })}
-              className="px-3 py-1.5 text-xs font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] rounded-md transition-colors"
+              className="px-3 py-1.5 text-xs font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] rounded-md transition-colors cursor-pointer"
             >
               + {isSV ? 'Lägg till lån' : 'Add Note'}
             </button>
@@ -430,7 +742,7 @@ export function CompanySetupView() {
             <button
               type="button"
               onClick={() => setDrawer({ type: 'warrant' })}
-              className="px-3 py-1.5 text-xs font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] rounded-md transition-colors"
+              className="px-3 py-1.5 text-xs font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] rounded-md transition-colors cursor-pointer"
             >
               + {isSV ? 'Lägg till optioner' : 'Add Warrants'}
             </button>
@@ -455,33 +767,33 @@ export function CompanySetupView() {
         <button
           type="button"
           onClick={handleProceedToCapTable}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#8C6D46] hover:bg-[#A38054] text-white font-semibold text-sm shadow-md transition-all group"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#8C6D46] hover:bg-[#A38054] text-white font-semibold text-sm shadow-md transition-all group cursor-pointer"
         >
           <span>{isSV ? 'Gå till aktiebok & analys (Sida 3)' : 'Proceed to Cap Table & Analytics (Page 3)'}</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
 
-      {/* Drawers */}
+      {/* Slide-Over Drawers with CORRECT open and initial props */}
       <ShareholderDrawer
-        isOpen={drawer.type === 'shareholder'}
+        open={drawer.type === 'shareholder'}
+        initial={drawer.type === 'shareholder' ? drawer.item : undefined}
         onClose={() => setDrawer({ type: 'none' })}
-        item={drawer.type === 'shareholder' ? drawer.item : undefined}
       />
       <ShareClassDrawer
-        isOpen={drawer.type === 'share_class'}
+        open={drawer.type === 'share_class'}
+        initial={drawer.type === 'share_class' ? drawer.item : undefined}
         onClose={() => setDrawer({ type: 'none' })}
-        item={drawer.type === 'share_class' ? drawer.item : undefined}
       />
       <NoteDrawer
-        isOpen={drawer.type === 'note'}
+        open={drawer.type === 'note'}
+        initial={drawer.type === 'note' ? drawer.item : undefined}
         onClose={() => setDrawer({ type: 'none' })}
-        item={drawer.type === 'note' ? drawer.item : undefined}
       />
       <WarrantDrawer
-        isOpen={drawer.type === 'warrant'}
+        open={drawer.type === 'warrant'}
+        initial={drawer.type === 'warrant' ? drawer.item : undefined}
         onClose={() => setDrawer({ type: 'none' })}
-        item={drawer.type === 'warrant' ? drawer.item : undefined}
       />
     </div>
   );

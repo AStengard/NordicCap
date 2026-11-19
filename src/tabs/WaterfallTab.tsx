@@ -76,9 +76,9 @@ export function WaterfallTab() {
   const [includeWarrants, setIncludeWarrants] = useState<boolean>(true);
   const [chartMode, setChartMode] = useState<'line' | 'area'>('line');
 
-  // Synthetic Interaction Engine — Step 2 (Sweep exit valuation: 15M -> 50M -> 120M)
+  // Synthetic Interaction Engine — Step 3 (Sweep exit valuation: 15M -> 50M -> 120M)
   useEffect(() => {
-    if (!demo.isDemoActive || demo.currentStepIndex !== 2) return;
+    if (!demo.isDemoActive || demo.currentStepIndex !== 3) return;
 
     let cancelled = false;
     const timers: number[] = [];
@@ -93,7 +93,7 @@ export function WaterfallTab() {
     schedule(() => setExitValuation(15_000_000), 200);
     schedule(() => setExitValuation(50_000_000), 1600);
     schedule(() => setExitValuation(120_000_000), 3000);
-    schedule(() => demo.markStepReady(2), 3700);
+    schedule(() => demo.markStepReady(3), 3700);
 
     return () => {
       cancelled = true;
@@ -280,10 +280,10 @@ export function WaterfallTab() {
         </div>
       </div>
 
-      {/* Spotlight Step 2: Exit Curve & Stakeholder Proceeds */}
+      {/* Spotlight Step 3: Exit Curve & Stakeholder Proceeds */}
       <DemoSpotlight
-        stepIndex={2}
-        badgeText={state.language === 'SV' ? DEMO_STEPS[2].badgeSV : DEMO_STEPS[2].badgeEN}
+        stepIndex={3}
+        badgeText={state.language === 'SV' ? DEMO_STEPS[3].badgeSV : DEMO_STEPS[3].badgeEN}
         className="space-y-6"
       >
         {/* Waterfall Charts Grid */}

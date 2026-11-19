@@ -7,6 +7,7 @@ import {
   Layers,
   Play,
   Printer,
+  RotateCcw,
   Scale,
   Sliders,
   TrendingUp,
@@ -127,11 +128,60 @@ export function NordicCapEngine() {
                 <span>{t.howItWorks}</span>
               </button>
 
+              {/* Start Over Button (Goes back to Page 1 Starter with blank clean state) */}
+              <button
+                type="button"
+                onClick={() => {
+                  dispatch({ type: 'LOAD_SCENARIO', payload: createBlankScenario() });
+                  dispatch({ type: 'SET_TAB', payload: 'starter' });
+                  if (demo.isDemoActive) demo.exitDemo();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#FCFBF9] hover:text-[#D8B98E] border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer"
+                title={t.startOverTooltip}
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-[#D8B98E]" />
+                <span>{t.startOver}</span>
+              </button>
+
+              {/* Clear Sample Scenarios Group */}
+              <div className="hidden lg:flex items-center gap-1.5 bg-[#1F2F4E] p-1 rounded-md border border-[#8C6D46]/30">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#D8B98E] px-1 font-semibold">
+                  {t.samplesLabel}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() });
+                    dispatch({ type: 'SET_TAB', payload: 'cap_table' });
+                    if (demo.isDemoActive) demo.exitDemo();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="px-2.5 py-1 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10 transition-colors cursor-pointer"
+                  title={t.sampleSeedTooltip}
+                >
+                  {t.sampleSeed}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatch({ type: 'LOAD_SCENARIO', payload: createSeriesARecruiterDemoScenario() });
+                    dispatch({ type: 'SET_TAB', payload: 'cap_table' });
+                    if (demo.isDemoActive) demo.exitDemo();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="px-2.5 py-1 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10 transition-colors cursor-pointer"
+                  title={t.sampleSeriesATooltip}
+                >
+                  {t.sampleSeriesA}
+                </button>
+              </div>
+
               {/* Recruiter Demo Launcher */}
               <button
                 type="button"
                 onClick={demo.startDemo}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full shadow-md transition-all ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer ${
                   demo.isDemoActive
                     ? 'bg-[#8C6D46] text-[#FCFBF9] ring-2 ring-[#D8B98E]'
                     : 'bg-[#D8B98E] hover:bg-[#C9A676] text-[#15233E]'
@@ -141,41 +191,12 @@ export function NordicCapEngine() {
                 <span>{demo.isDemoActive ? t.demoLauncherActive : t.demoLauncher}</span>
               </button>
 
-              {/* Scenario Quick Loaders */}
-              <div className="hidden lg:flex items-center gap-1.5 bg-[#1F2F4E] p-1 rounded-md border border-[#8C6D46]/30">
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatch({ type: 'LOAD_SCENARIO', payload: createBlankScenario() });
-                    dispatch({ type: 'SET_TAB', payload: 'cap_table' });
-                  }}
-                  className="px-2.5 py-1 text-[11px] text-[#D8B98E] hover:text-white rounded hover:bg-[#FCFBF9]/10 font-medium"
-                  title="Start with a clean blank 25,000 SEK private AB"
-                >
-                  + {t.blankScenario}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() })}
-                  className="px-2.5 py-1 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10"
-                >
-                  {t.resetPreSeriesA}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => dispatch({ type: 'LOAD_SCENARIO', payload: createSeriesARecruiterDemoScenario() })}
-                  className="px-2.5 py-1 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10"
-                >
-                  {t.loadRecruiterDemo}
-                </button>
-              </div>
-
               {/* Language Switcher */}
               <div className="inline-flex rounded-md border border-[#8C6D46]/40 p-0.5 bg-[#1F2F4E]">
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'EN' })}
-                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded transition-colors ${
+                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded transition-colors cursor-pointer ${
                     state.language === 'EN' ? 'bg-[#8C6D46] text-white' : 'text-[#D8D1C3] hover:text-white'
                   }`}
                 >
@@ -184,33 +205,11 @@ export function NordicCapEngine() {
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'SV' })}
-                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded transition-colors ${
+                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded transition-colors cursor-pointer ${
                     state.language === 'SV' ? 'bg-[#8C6D46] text-white' : 'text-[#D8D1C3] hover:text-white'
                   }`}
                 >
                   SV
-                </button>
-              </div>
-
-              {/* CSV Export & Print */}
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => exportCapTableToCSV(state, metrics)}
-                  title={t.exportCsv}
-                  className="p-1.5 rounded text-[#D8D1C3] hover:text-white hover:bg-[#FCFBF9]/10 border border-[#8C6D46]/30"
-                  aria-label={t.exportCsv}
-                >
-                  <Download className="w-3.5 h-3.5" strokeWidth={1.8} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => window.print()}
-                  title={t.printMemo}
-                  className="p-1.5 rounded text-[#D8D1C3] hover:text-white hover:bg-[#FCFBF9]/10 border border-[#8C6D46]/30"
-                  aria-label={t.printMemo}
-                >
-                  <Printer className="w-3.5 h-3.5" strokeWidth={1.8} />
                 </button>
               </div>
             </div>
@@ -254,6 +253,30 @@ export function NordicCapEngine() {
               <span>{state.company.name}</span>
               <span className="text-[#D8D1C3]">|</span>
               <span>Aktiekapital: {formatSEK(state.company.shareCapital)}</span>
+
+              {/* Print and Export buttons shown on Step 3 and analytics tabs */}
+              {['cap_table', 'round_sim', 'waterfall', 'abl_legal'].includes(state.activeTab) && (
+                <div className="flex items-center gap-1.5 pl-3 border-l border-[#E5E0D5]">
+                  <button
+                    type="button"
+                    onClick={() => exportCapTableToCSV(state, metrics)}
+                    title={t.exportCsv}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.8} />
+                    <span>{t.exportCsv}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    title={t.printMemo}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer"
+                  >
+                    <Printer className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.8} />
+                    <span>{t.printMemo}</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </nav>

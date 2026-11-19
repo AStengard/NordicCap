@@ -16,8 +16,6 @@ import { useCapTable } from '../../context/CapTableContext';
 import { useRecruiterDemo } from '../../context/RecruiterDemoContext';
 import {
   createBlankScenario,
-  createPreSeriesAScenario,
-  createSeriesARecruiterDemoScenario,
 } from '../../constants/scenarios';
 import { BrandEmblem } from '../ui/BrandEmblem';
 
@@ -34,12 +32,6 @@ export function StarterView() {
 
   const handleStartDemo = () => {
     demo.startDemo();
-  };
-
-  const handleLoadSample = () => {
-    dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() });
-    dispatch({ type: 'SET_TAB', payload: 'cap_table' });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -146,19 +138,19 @@ export function StarterView() {
               </h2>
               <p className="text-xs sm:text-sm text-[#5A6475] mt-1.5 leading-relaxed">
                 {isSV
-                  ? 'Följ en automatiserad 5-stegs visning av en svensk Serie A-emission med VC-preferensaktier och exit-vattenfall.'
-                  : 'Experience an automated 5-step walkthrough of a live Series A financing round, convertible K-lån debt, and exit waterfall curves.'}
+                  ? 'Följ en automatiserad visning från inmatning av bolagsuppgifter och aktieägare till Serie A-emission och exit-vattenfall.'
+                  : 'Experience an automated walkthrough from entering company info and shareholders to Series A round modeling and exit waterfalls.'}
               </p>
             </div>
 
             <ul className="space-y-2.5 text-xs text-[#495264] border-t border-[#E5E0D5] pt-4">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#8C6D46] shrink-0" />
-                <span>{isSV ? 'Förinläst svenskt tillväxtbolag (NordicTech AB)' : 'Pre-loaded venture scenario (NordicTech AB)'}</span>
+                <span>{isSV ? 'Se bolagsuppgifter & grundare fyllas i live (Sida 2)' : 'Watch company setup & founders fill in live (Page 2)'}</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#8C6D46] shrink-0" />
-                <span>{isSV ? 'Se optionspool-top-up lösas numeriskt' : 'Watch pre-money ESOP shuffle solve live'}</span>
+                <span>{isSV ? 'Se optionspool-top-up & K-lån lösas numeriskt' : 'Watch pre-money ESOP shuffle solve live'}</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#8C6D46] shrink-0" />
@@ -178,33 +170,6 @@ export function StarterView() {
             </button>
           </div>
         </div>
-      </div>
-
-      {/* Secondary Fast Action: Inspect Template Directly */}
-      <div className="bg-[#EDE8DF]/60 border border-[#D8D1C3] rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-white border border-[#D8D1C3] text-[#15233E] flex items-center justify-center shrink-0">
-            <Layers className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="text-sm font-semibold text-[#15233E]">
-              {isSV ? 'Vill du bara utforska ett färdigt exempelbolag direkt?' : 'Want to inspect a pre-filled sample company right away?'}
-            </div>
-            <div className="text-xs text-[#5A6475]">
-              {isSV
-                ? 'Ladda Pre-Serie A-scenariot och hoppa direkt till aktieboken och diagrammen.'
-                : 'Loads the seed template with 2 founders and 2 angels and jumps straight to the live cap table.'}
-            </div>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleLoadSample}
-          className="px-4 py-2 text-xs font-semibold text-[#15233E] bg-white border border-[#D8D1C3] hover:bg-[#FCFBF9] rounded-lg transition-colors shadow-2xs whitespace-nowrap"
-        >
-          {isSV ? 'Utforska exempelbolag &rarr;' : 'Explore Pre-Series A Example &rarr;'}
-        </button>
       </div>
 
       {/* Trust & Legal Guardrails Strip */}
