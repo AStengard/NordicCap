@@ -804,7 +804,9 @@ export function CapTableTab() {
             )}
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  )}
 
       {/* Chapter 3.1 Footer Navigation */}
       <div className="pt-4 border-t border-[#E5E0D5] flex flex-wrap items-center justify-between gap-3">
