@@ -64,25 +64,25 @@
         transition: font-size 0.2s ease-in-out;
       }
 
-      /* Laptop & compact desktop viewports */
-      @media screen and (min-width: 1024px) and (max-width: 1536px),
-             screen and (min-width: 1024px) and (max-height: 900px) {
+      /* Laptop & compact desktop viewports (13"–16" laptops, high DPI scaled displays) */
+      @media screen and (min-width: 1024px) and (max-width: 1560px),
+             screen and (min-width: 1024px) and (max-height: 960px) {
         html:not([data-density="comfortable"]) {
-          font-size: 14px;
+          font-size: 12.6px;
         }
       }
 
       /* Compact / 13-inch laptops (e.g., 1366x768, 1280x800, or 150% Windows display scaling) */
       @media screen and (min-width: 1024px) and (max-width: 1366px),
-             screen and (min-width: 1024px) and (max-height: 780px) {
+             screen and (min-width: 1024px) and (max-height: 820px) {
         html:not([data-density="comfortable"]) {
-          font-size: 13.5px;
+          font-size: 12.2px;
         }
       }
 
       /* Manual user density overrides */
       html[data-density="compact"] {
-        font-size: 13.5px !important;
+        font-size: 12.6px !important;
       }
       html[data-density="comfortable"] {
         font-size: 16px !important;

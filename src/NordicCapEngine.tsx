@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Building2,
   Compass,
   Download,
   ExternalLink,
@@ -23,7 +22,6 @@ import {
   createBlankScenario,
 } from './constants/scenarios';
 import { FAVICON_SVG_DATA_URI } from './constants/brand';
-import { formatSEK } from './utils/formatters';
 import { exportCapTableToCSV } from './utils/csvExport';
 import { calculateExitWaterfall } from './engines/waterfallEngine';
 import { generateLegalClauses } from './engines/ablLegalEngine';
@@ -46,39 +44,6 @@ export function NordicCapEngine() {
   const demo = useRecruiterDemo();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const isSV = state.language === 'SV';
-
-  const [densityMode, setDensityMode] = useState<'auto' | 'monitor' | 'laptop'>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('nordiccap_density');
-      if (saved === 'monitor' || saved === 'laptop') return saved;
-    }
-    return 'auto';
-  });
-
-  const handleDensityChange = (mode: 'auto' | 'monitor' | 'laptop') => {
-    setDensityMode(mode);
-    if (typeof document !== 'undefined') {
-      if (mode === 'auto') {
-        document.documentElement.removeAttribute('data-density');
-        localStorage.removeItem('nordiccap_density');
-      } else if (mode === 'monitor') {
-        document.documentElement.setAttribute('data-density', 'comfortable');
-        localStorage.setItem('nordiccap_density', 'monitor');
-      } else if (mode === 'laptop') {
-        document.documentElement.setAttribute('data-density', 'compact');
-        localStorage.setItem('nordiccap_density', 'laptop');
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (typeof document !== 'undefined' && densityMode !== 'auto') {
-      document.documentElement.setAttribute(
-        'data-density',
-        densityMode === 'monitor' ? 'comfortable' : 'compact'
-      );
-    }
-  }, [densityMode]);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -121,187 +86,190 @@ export function NordicCapEngine() {
 
       {/* Screen View */}
       <div className="print:hidden">
-        {/* Top Editorial Header */}
-        <header className="bg-[#15233E] text-[#FCFBF9] border-b border-[#8C6D46]/30 shadow-md">
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5 flex flex-wrap items-center justify-between gap-y-2 gap-x-2 sm:gap-x-3">
-            {/* Logo & Site Name */}
-            <button
-              type="button"
-              onClick={() => {
-                dispatch({ type: 'SET_TAB', payload: 'starter' });
-                if (demo.isDemoActive) demo.exitDemo();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="flex items-center gap-2 group cursor-pointer focus:outline-none shrink-0"
-              title="NordicCap Home (Starter Page)"
-            >
-              <BrandEmblem className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 transition-transform group-hover:scale-105" />
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <span
-                  className="text-base sm:text-lg font-bold tracking-tight text-[#FCFBF9] group-hover:text-[#D8B98E] transition-colors leading-none"
-                  style={{ fontFamily: "'Newsreader', Georgia, serif" }}
-                >
-                  NordicCap
-                </span>
-                <span className="px-1.5 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded bg-[#8C6D46]/30 text-[#D8B98E] border border-[#8C6D46]/50 shrink-0">
-                  By Alfred Stengard
-                </span>
-              </div>
-            </button>
-
-            {/* Top Navigation Menu (Compact, uncluttered, visible on all screens with zero side-scroll) */}
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
-              {/* About & Instructions Modal Launcher */}
-              <button
-                type="button"
-                onClick={() => setIsAboutOpen(true)}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#D8B98E] hover:text-white border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
-                title={t.howItWorksTitle}
-              >
-                <HelpCircle className="w-3.5 h-3.5 shrink-0" />
-                <span>{t.guideBtn || 'Guide'}</span>
-              </button>
-
-              {/* Start Over Button (Goes back to Page 1 Starter with blank clean state) */}
+        {/* Sticky Header & Navigation Container (Keeps both Top Bar & Workspace Tabs visible on scroll) */}
+        <div className="sticky top-0 z-30 shadow-xs">
+          {/* Top Editorial Header */}
+          <header className="bg-[#15233E] text-[#FCFBF9] border-b border-[#8C6D46]/30 shadow-md">
+            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5 flex flex-wrap items-center justify-between gap-y-2 gap-x-2 sm:gap-x-3">
+              {/* Logo & Site Name */}
               <button
                 type="button"
                 onClick={() => {
-                  dispatch({ type: 'LOAD_SCENARIO', payload: createBlankScenario() });
                   dispatch({ type: 'SET_TAB', payload: 'starter' });
                   if (demo.isDemoActive) demo.exitDemo();
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#FCFBF9] hover:text-[#D8B98E] border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
-                title={t.startOverTooltip}
+                className="flex items-center gap-2 group cursor-pointer focus:outline-none shrink-0"
+                title="NordicCap Home (Starter Page)"
               >
-                <RotateCcw className="w-3.5 h-3.5 text-[#D8B98E] shrink-0" />
-                <span>{t.startOverBtn || 'Start Over'}</span>
+                <BrandEmblem className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 transition-transform group-hover:scale-105" />
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span
+                    className="text-base sm:text-lg font-bold tracking-tight text-[#FCFBF9] group-hover:text-[#D8B98E] transition-colors leading-none"
+                    style={{ fontFamily: "'Newsreader', Georgia, serif" }}
+                  >
+                    NordicCap
+                  </span>
+                  <span className="px-1.5 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded bg-[#8C6D46]/30 text-[#D8B98E] border border-[#8C6D46]/50 shrink-0">
+                    By Alfred Stengard
+                  </span>
+                </div>
               </button>
 
-              {/* Recruiter Demo Launcher */}
-              <button
-                type="button"
-                onClick={demo.startDemo}
-                className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${demo.isDemoActive
-                  ? 'bg-[#8C6D46] text-[#FCFBF9] ring-2 ring-[#D8B98E]'
-                  : 'bg-[#D8B98E] hover:bg-[#C9A676] text-[#15233E]'
-                  }`}
-                title={t.demoLauncher}
-              >
-                <Play className="w-3.5 h-3.5 fill-current shrink-0" strokeWidth={0} />
-                <span>{demo.isDemoActive ? (t.demoLauncherActiveShort || 'Demo Active') : (t.demoLauncherShort || '60s Demo')}</span>
-              </button>
+              {/* Top Navigation Menu (Compact, uncluttered, visible on all screens with zero side-scroll) */}
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
+                {/* About & Instructions Modal Launcher */}
+                <button
+                  type="button"
+                  onClick={() => setIsAboutOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#D8B98E] hover:text-white border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
+                  title={t.howItWorksTitle}
+                >
+                  <HelpCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{t.guideBtn || 'Guide'}</span>
+                </button>
 
-              {/* Language Switcher */}
-              <div className="inline-flex rounded-full border border-[#8C6D46]/40 p-0.5 bg-[#1F2F4E] shrink-0">
+                {/* Start Over Button (Goes back to Page 1 Starter with blank clean state) */}
                 <button
                   type="button"
-                  onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'EN' })}
-                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${state.language === 'EN' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
-                    }`}
+                  onClick={() => {
+                    dispatch({ type: 'LOAD_SCENARIO', payload: createBlankScenario() });
+                    dispatch({ type: 'SET_TAB', payload: 'starter' });
+                    if (demo.isDemoActive) demo.exitDemo();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#FCFBF9] hover:text-[#D8B98E] border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
+                  title={t.startOverTooltip}
                 >
-                  EN
+                  <RotateCcw className="w-3.5 h-3.5 text-[#D8B98E] shrink-0" />
+                  <span>{t.startOverBtn || 'Start Over'}</span>
                 </button>
+
+                {/* Recruiter Demo Launcher */}
                 <button
                   type="button"
-                  onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'SV' })}
-                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${state.language === 'SV' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
+                  onClick={demo.startDemo}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${demo.isDemoActive
+                    ? 'bg-[#8C6D46] text-[#FCFBF9] ring-2 ring-[#D8B98E]'
+                    : 'bg-[#D8B98E] hover:bg-[#C9A676] text-[#15233E]'
                     }`}
+                  title={t.demoLauncher}
                 >
-                  SV
+                  <Play className="w-3.5 h-3.5 fill-current shrink-0" strokeWidth={0} />
+                  <span>{demo.isDemoActive ? (t.demoLauncherActiveShort || 'Demo Active') : (t.demoLauncherShort || '60s Demo')}</span>
                 </button>
+
+                {/* Language Switcher */}
+                <div className="inline-flex rounded-full border border-[#8C6D46]/40 p-0.5 bg-[#1F2F4E] shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'EN' })}
+                    className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${state.language === 'EN' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
+                      }`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'SV' })}
+                    className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${state.language === 'SV' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
+                      }`}
+                  >
+                    SV
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        {/* Workspace Navigation Bar */}
-        <nav className="bg-[#FCFBF9] border-b border-[#E5E0D5] sticky top-0 z-30 shadow-xs">
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-y-2 gap-x-2 sm:gap-x-4 py-1.5 sm:py-2">
-            <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
-              {/* Step 1 & Step 2 */}
-              <button
-                type="button"
-                onClick={() => dispatch({ type: 'SET_TAB', payload: 'starter' })}
-                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${state.activeTab === 'starter'
-                  ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
-                  : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
-                  }`}
-                title={t.tabStarter}
-              >
-                <Compass className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
-                <span>{t.tabStarter}</span>
-              </button>
+          {/* Workspace Navigation Bar */}
+          <nav className="bg-[#FCFBF9] border-b border-[#E5E0D5]">
+            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-y-2 gap-x-2 sm:gap-x-4 py-1.5 sm:py-2">
+              <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
+                {/* Step 1 & Step 2 */}
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'SET_TAB', payload: 'starter' })}
+                  className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${state.activeTab === 'starter'
+                    ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
+                    : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+                    }`}
+                  title={t.tabStarter}
+                >
+                  <Compass className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
+                  <span>{t.tabStarter}</span>
+                </button>
 
-              <button
-                type="button"
-                onClick={() => dispatch({ type: 'SET_TAB', payload: 'setup' })}
-                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${state.activeTab === 'setup'
-                  ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
-                  : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
-                  }`}
-                title={isSV ? 'Sida 2: Bolagsuppgifter & Inmatning' : 'Page 2: Company Setup & Input'}
-              >
-                <Users className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
-                <span>{t.tabSetup}</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'SET_TAB', payload: 'setup' })}
+                  className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${state.activeTab === 'setup'
+                    ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
+                    : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+                    }`}
+                  title={isSV ? 'Sida 2: Bolagsuppgifter & Inmatning' : 'Page 2: Company Setup & Input'}
+                >
+                  <Users className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
+                  <span>{t.tabSetup}</span>
+                </button>
 
-              <div className="h-4 w-px bg-[#E5E0D5] mx-0.5 sm:mx-1 shrink-0" />
+                <div className="h-4 w-px bg-[#E5E0D5] mx-0.5 sm:mx-1 shrink-0" />
 
-              {/* Step 3 Analytics Suite Group */}
-              <div className="flex flex-wrap items-center bg-[#F6F4EF] p-0.5 rounded-lg border border-[#E5E0D5] gap-0.5 sm:gap-1">
-                {[
-                  { id: 'cap_table', label: t.tabCapTable, icon: Layers },
-                  { id: 'round_sim', label: t.tabRoundSim, icon: Sliders },
-                  { id: 'waterfall', label: t.tabWaterfall, icon: TrendingUp },
-                  { id: 'abl_legal', label: t.tabAblLegal, icon: Scale },
-                ].map((tab) => {
-                  const Icon = tab.icon;
-                  const isActive = state.activeTab === tab.id;
+                {/* Step 3 Analytics Suite Group */}
+                <div className="flex flex-wrap items-center bg-[#F6F4EF] p-0.5 rounded-lg border border-[#E5E0D5] gap-0.5 sm:gap-1">
+                  {[
+                    { id: 'cap_table', label: t.tabCapTable, icon: Layers },
+                    { id: 'round_sim', label: t.tabRoundSim, icon: Sliders },
+                    { id: 'waterfall', label: t.tabWaterfall, icon: TrendingUp },
+                    { id: 'abl_legal', label: t.tabAblLegal, icon: Scale },
+                  ].map((tab) => {
+                    const Icon = tab.icon;
+                    const isActive = state.activeTab === tab.id;
 
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => dispatch({ type: 'SET_TAB', payload: tab.id as WorkspaceTab })}
-                      className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap transition-all cursor-pointer ${isActive
-                        ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
-                        : 'text-[#5A6475] hover:text-[#15233E] hover:bg-white/60'
-                        }`}
-                    >
-                      <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
-                      <span>{tab.label}</span>
-                    </button>
-                  );
-                })}
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => dispatch({ type: 'SET_TAB', payload: tab.id as WorkspaceTab })}
+                        className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap transition-all cursor-pointer ${isActive
+                          ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
+                          : 'text-[#5A6475] hover:text-[#15233E] hover:bg-white/60'
+                          }`}
+                      >
+                        <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
+                        <span>{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* Right: Actions on Step 3 analytics views */}
+              {['cap_table', 'round_sim', 'waterfall', 'abl_legal'].includes(state.activeTab) && (
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => exportCapTableToCSV(state, metrics)}
+                    title={t.exportCsv}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
+                  >
+                    <Download className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
+                    <span>{t.exportCsvShort || 'CSV'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    title={t.printMemo}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
+                  >
+                    <Printer className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
+                    <span>{t.printMemoShort || 'Print'}</span>
+                  </button>
+                </div>
+              )}
             </div>
-
-            {/* Right: Actions on Step 3 analytics views */}
-            {['cap_table', 'round_sim', 'waterfall', 'abl_legal'].includes(state.activeTab) && (
-              <div className="flex items-center gap-1.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => exportCapTableToCSV(state, metrics)}
-                  title={t.exportCsv}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
-                >
-                  <Download className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
-                  <span>{t.exportCsvShort || 'CSV'}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => window.print()}
-                  title={t.printMemo}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
-                >
-                  <Printer className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
-                  <span>{t.printMemoShort || 'Print'}</span>
-                </button>
-              </div>
-            )}
-          </div>
-        </nav>
+          </nav>
+        </div>
 
         {/* Workspace Content Area */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-12">
@@ -424,25 +392,14 @@ export function NordicCapEngine() {
                 </ul>
               </div>
 
-              {/* Client-Side Privacy & Fast Links Column */}
+              {/* Navigation & Fast Links Column */}
               <div className="md:col-span-3 space-y-3">
                 <h4 className="text-xs font-mono uppercase tracking-wider text-[#D8B98E] font-semibold flex items-center gap-1.5">
                   <Compass className="w-4 h-4 text-[#D8B98E]" />
-                  <span>{isSV ? 'Integritet & Navigering' : 'Privacy & Navigation'}</span>
+                  <span>{isSV ? 'Navigering' : 'Navigation'}</span>
                 </h4>
-                <div className="p-3 rounded-lg bg-[#1F2F4E]/80 border border-[#8C6D46]/30 text-xs text-[#D8D1C3] space-y-1.5">
-                  <div className="font-semibold text-white flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                    <span>{isSV ? '100% Klientbaserat' : '100% Client-Side Privacy'}</span>
-                  </div>
-                  <p className="text-[11px] leading-relaxed text-[#A4ADC0]">
-                    {isSV
-                      ? 'All beräkning sker lokalt i din webbläsare. Ingen data överförs till eller lagras på extern server.'
-                      : 'All computation runs locally in your browser. No financial data is ever transmitted or stored on external servers.'}
-                  </p>
-                </div>
 
-                <div className="pt-1 flex flex-col gap-1.5 text-xs text-[#D8D1C3]">
+                <div className="flex flex-col gap-2 text-xs text-[#D8D1C3]">
                   <button
                     type="button"
                     onClick={() => setIsAboutOpen(true)}
@@ -459,19 +416,11 @@ export function NordicCapEngine() {
                     <Play className="w-3.5 h-3.5 text-[#D8B98E]" />
                     <span>{isSV ? 'Starta 60s rekryteringsdemo' : 'Start 60s Guided Demo'}</span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => window.print()}
-                    className="inline-flex items-center gap-1.5 text-left hover:text-[#D8B98E] transition-colors cursor-pointer"
-                  >
-                    <Printer className="w-3.5 h-3.5 text-[#D8B98E]" />
-                    <span>{isSV ? 'Skriv ut transaktions-PM' : 'Print Executive Transaction PM'}</span>
-                  </button>
                 </div>
               </div>
             </div>
 
-            {/* Bottom Disclaimer, Display Scaling & Copyright */}
+            {/* Bottom Disclaimer & Copyright */}
             <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#A4ADC0]">
               <div className="flex flex-wrap items-center gap-2 text-center md:text-left">
                 <span>© {new Date().getFullYear()} NordicCap.</span>
@@ -483,48 +432,6 @@ export function NordicCapEngine() {
                     ? 'Byggd för svenska tillväxtbolag & VC-transaktioner'
                     : 'Built for Swedish venture transactions'}
                 </span>
-              </div>
-
-              {/* Display Density Switcher */}
-              <div className="flex items-center gap-1.5 bg-[#1F2F4E] border border-[#8C6D46]/40 rounded-full px-2.5 py-1 text-[11px] font-mono shrink-0 shadow-2xs">
-                <Sliders className="w-3 h-3 text-[#D8B98E] shrink-0" strokeWidth={2} />
-                <span className="text-[#D8D1C3] pr-0.5">{isSV ? 'Skärmläge:' : 'Display:'}</span>
-                <button
-                  type="button"
-                  onClick={() => handleDensityChange('auto')}
-                  title={isSV ? 'Anpassar automatiskt mellan laptop och extern skärm' : 'Adapts automatically between laptop and external monitor'}
-                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
-                    densityMode === 'auto'
-                      ? 'bg-[#8C6D46] text-white font-semibold shadow-xs'
-                      : 'text-[#D8D1C3] hover:text-white'
-                  }`}
-                >
-                  Auto
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDensityChange('monitor')}
-                  title={isSV ? 'Fast monitorläge (100% standard)' : 'Fixed monitor mode (100% standard)'}
-                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
-                    densityMode === 'monitor'
-                      ? 'bg-[#8C6D46] text-white font-semibold shadow-xs'
-                      : 'text-[#D8D1C3] hover:text-white'
-                  }`}
-                >
-                  Monitor
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDensityChange('laptop')}
-                  title={isSV ? 'Fast laptopläge (kompakt skala, optimal för bärbar dator)' : 'Fixed laptop mode (compact scale, optimal for laptops)'}
-                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
-                    densityMode === 'laptop'
-                      ? 'bg-[#8C6D46] text-white font-semibold shadow-xs'
-                      : 'text-[#D8D1C3] hover:text-white'
-                  }`}
-                >
-                  Laptop
-                </button>
               </div>
 
               <div className="text-[11px] font-mono text-[#7A8291]">
