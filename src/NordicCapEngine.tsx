@@ -42,6 +42,7 @@ export function NordicCapEngine() {
   const metrics = useCapTableMetrics();
   const demo = useRecruiterDemo();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const isSV = state.language === 'SV';
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
