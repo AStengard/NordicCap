@@ -88,7 +88,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                   {isSV ? 'Hur du använder NordicCap' : 'How to use NordicCap'}
                 </h2>
                 <span className="px-2 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded bg-[#8C6D46]/30 text-[#D8B98E] border border-[#8C6D46]/50">
-                  ABL 2005:551
+                  By Alfred Stengard
                 </span>
               </div>
             </div>
@@ -111,7 +111,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
             </span>
 
             {[
-              { id: 'overview', label: isSV ? 'Översikt (Alla 3 steg)' : 'Overview (All 3 Steps)', icon: BookOpen },
+              { id: 'overview', label: isSV ? 'Översikt' : 'Overview', icon: BookOpen },
               { id: 'step1', label: isSV ? 'Sida 1: Startsida' : 'Page 1: Starter', icon: Compass },
               { id: 'step2', label: isSV ? 'Sida 2: Bolagsuppgifter' : 'Page 2: Company Setup', icon: Users },
               { id: 'step3', label: isSV ? 'Sida 3: Aktiebok & Analys' : 'Page 3: Cap Table & Analytics', icon: Layers },
@@ -123,11 +123,10 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveGuideTab(tab.id as GuideTab)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-[#8C6D46] text-white shadow-xs font-semibold'
-                      : 'text-[#D8D1C3] hover:text-white hover:bg-white/10'
-                  }`}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer ${isActive
+                    ? 'bg-[#8C6D46] text-white shadow-xs font-semibold'
+                    : 'text-[#D8D1C3] hover:text-white hover:bg-white/10'
+                    }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
                   <span>{tab.label}</span>
@@ -186,7 +185,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                         {isSV ? 'Läs guide' : 'Read guide'}
                       </span>
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-[#15233E] text-white rounded group-hover:bg-[#1E3156] transition-colors">
-                        <span>{isSV ? 'Visa Sida 1' : 'View Page 1'}</span>
+                        <span>{isSV ? 'Visa mer' : 'Show more'}</span>
                         <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
@@ -195,11 +194,11 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                   {/* Step 2 Card */}
                   <div
                     onClick={() => setActiveGuideTab('step2')}
-                    className="bg-[#FCFAF6] border-2 border-[#8C6D46] rounded-xl p-5 space-y-3 cursor-pointer transition-all hover:shadow-md group flex flex-col justify-between"
+                    className="bg-white border-2 border-[#E5E0D5] hover:border-[#15233E] rounded-xl p-5 space-y-3 cursor-pointer transition-all hover:shadow-md group flex flex-col justify-between"
                   >
                     <div className="space-y-2.5">
                       <div className="flex items-center justify-between">
-                        <span className="w-7 h-7 rounded-full bg-[#8C6D46] text-white flex items-center justify-center font-mono font-bold text-xs shadow-xs">
+                        <span className="w-7 h-7 rounded-full bg-[#15233E] text-[#D8B98E] flex items-center justify-center font-mono font-bold text-xs">
                           2
                         </span>
                         <span className="text-[10px] font-mono text-[#8C6D46] uppercase tracking-wider font-semibold">
@@ -217,12 +216,12 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                       </p>
                     </div>
 
-                    <div className="pt-3 border-t border-[#8C6D46]/20 flex items-center justify-between">
+                    <div className="pt-3 border-t border-[#E5E0D5]/70 flex items-center justify-between">
                       <span className="text-[11px] text-[#8C6D46] font-medium">
                         {isSV ? 'Läs guide' : 'Read guide'}
                       </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-[#8C6D46] text-white rounded group-hover:bg-[#A38054] transition-colors">
-                        <span>{isSV ? 'Visa Sida 2' : 'View Page 2'}</span>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-[#15233E] text-white rounded group-hover:bg-[#1E3156] transition-colors">
+                        <span>{isSV ? 'Visa mer' : 'Show more'}</span>
                         <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
@@ -258,7 +257,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                         {isSV ? 'Läs guide' : 'Read guide'}
                       </span>
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-[#15233E] text-white rounded group-hover:bg-[#1E3156] transition-colors">
-                        <span>{isSV ? 'Visa Sida 3' : 'View Page 3'}</span>
+                        <span>{isSV ? 'Visa mer' : 'Show more'}</span>
                         <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>

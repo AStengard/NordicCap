@@ -3,12 +3,15 @@ import {
   Building2,
   Compass,
   Download,
+  ExternalLink,
+  FileText,
   HelpCircle,
   Layers,
   Play,
   Printer,
   RotateCcw,
   Scale,
+  ShieldCheck,
   Sliders,
   TrendingUp,
   Users,
@@ -147,8 +150,8 @@ export function NordicCapEngine() {
                 type="button"
                 onClick={demo.startDemo}
                 className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${demo.isDemoActive
-                    ? 'bg-[#8C6D46] text-[#FCFBF9] ring-2 ring-[#D8B98E]'
-                    : 'bg-[#D8B98E] hover:bg-[#C9A676] text-[#15233E]'
+                  ? 'bg-[#8C6D46] text-[#FCFBF9] ring-2 ring-[#D8B98E]'
+                  : 'bg-[#D8B98E] hover:bg-[#C9A676] text-[#15233E]'
                   }`}
                 title={t.demoLauncher}
               >
@@ -188,8 +191,8 @@ export function NordicCapEngine() {
                 type="button"
                 onClick={() => dispatch({ type: 'SET_TAB', payload: 'starter' })}
                 className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${state.activeTab === 'starter'
-                    ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
-                    : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+                  ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
+                  : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
                   }`}
                 title={t.tabStarter}
               >
@@ -201,8 +204,8 @@ export function NordicCapEngine() {
                 type="button"
                 onClick={() => dispatch({ type: 'SET_TAB', payload: 'setup' })}
                 className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${state.activeTab === 'setup'
-                    ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
-                    : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
+                  ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
+                  : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
                   }`}
                 title={isSV ? 'Sida 2: Bolagsuppgifter & Inmatning' : 'Page 2: Company Setup & Input'}
               >
@@ -229,8 +232,8 @@ export function NordicCapEngine() {
                       type="button"
                       onClick={() => dispatch({ type: 'SET_TAB', payload: tab.id as WorkspaceTab })}
                       className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap transition-all cursor-pointer ${isActive
-                          ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
-                          : 'text-[#5A6475] hover:text-[#15233E] hover:bg-white/60'
+                        ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
+                        : 'text-[#5A6475] hover:text-[#15233E] hover:bg-white/60'
                         }`}
                     >
                       <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
@@ -268,7 +271,7 @@ export function NordicCapEngine() {
         </nav>
 
         {/* Workspace Content Area */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-12">
           {state.activeTab === 'starter' && <StarterView />}
           {state.activeTab === 'setup' && <CompanySetupView />}
           {state.activeTab === 'cap_table' && <CapTableTab />}
@@ -276,6 +279,184 @@ export function NordicCapEngine() {
           {state.activeTab === 'waterfall' && <WaterfallTab />}
           {state.activeTab === 'abl_legal' && <AblLegalTab />}
         </main>
+
+        {/* Institutional Footer */}
+        <footer className="bg-[#15233E] text-[#FCFBF9] border-t border-[#8C6D46]/40 mt-12 pb-24 sm:pb-28">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 pb-8 border-b border-[#8C6D46]/30">
+              {/* Brand & Creator Column */}
+              <div className="md:col-span-5 space-y-4">
+                <div className="flex items-center gap-2.5">
+                  <BrandEmblem className="w-7 h-7 shrink-0" />
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="text-xl font-bold tracking-tight text-[#FCFBF9]"
+                      style={{ fontFamily: "'Newsreader', Georgia, serif" }}
+                    >
+                      NordicCap
+                    </span>
+                    <span className="px-2 py-0.5 text-[10px] font-mono tracking-wider uppercase rounded bg-[#8C6D46]/30 text-[#D8B98E] border border-[#8C6D46]/50">
+                      By Alfred Stengard
+                    </span>
+                  </div>
+                </div>
+
+                <p className="text-xs text-[#D8D1C3] leading-relaxed max-w-md">
+                  {isSV
+                    ? 'Specialiserat finansiellt & legalt modelleringsverktyg för svenska aktiebolag (AB). Konstruerat för grundare, VC-investerare och affärsjurister med strikt efterlevnad av Aktiebolagslagen (ABL 2005:551).'
+                    : 'Specialized financial & legal modeling platform for Swedish private limited companies (AB). Engineered for founders, venture investors, and legal counsel with rigorous compliance under the Swedish Companies Act (ABL 2005:551).'}
+                </p>
+
+                {/* Creator Social / Profile Links */}
+                <div className="pt-2">
+                  <div className="text-[11px] font-mono uppercase tracking-wider text-[#D8B98E] mb-2 font-semibold">
+                    {isSV ? 'Skapad av Alfred Stengård:' : 'Created by Alfred Stengard:'}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <a
+                      href="https://github.com/AStengard/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#FCFBF9] bg-[#1F2F4E] hover:bg-[#2A3F68] hover:text-[#D8B98E] border border-[#8C6D46]/40 rounded-md transition-colors"
+                    >
+                      <span>GitHub</span>
+                      <ExternalLink className="w-3 h-3 text-[#D8B98E]" strokeWidth={1.6} />
+                    </a>
+                    <a
+                      href="https://linkedin.com/in/alfredstengard/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#FCFBF9] bg-[#1F2F4E] hover:bg-[#2A3F68] hover:text-[#D8B98E] border border-[#8C6D46]/40 rounded-md transition-colors"
+                    >
+                      <span>LinkedIn</span>
+                      <ExternalLink className="w-3 h-3 text-[#D8B98E]" strokeWidth={1.6} />
+                    </a>
+                    <a
+                      href="https://astengard.github.io/cv/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#FCFBF9] bg-[#1F2F4E] hover:bg-[#2A3F68] hover:text-[#D8B98E] border border-[#8C6D46]/40 rounded-md transition-colors"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-[#D8B98E]" strokeWidth={1.7} />
+                      <span>Digital CV</span>
+                      <ExternalLink className="w-3 h-3 text-[#D8B98E]" strokeWidth={1.6} />
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Statutory Guardrails & Compliance Column */}
+              <div className="md:col-span-4 space-y-3">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-[#D8B98E] font-semibold flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-[#D8B98E]" />
+                  <span>{isSV ? 'Juridiska Ramverk & ABL' : 'Legal Engine & Statutory Rules'}</span>
+                </h4>
+                <ul className="space-y-2 text-xs text-[#D8D1C3]">
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#8C6D46] mt-1.5 shrink-0" />
+                    <span>
+                      <strong className="text-white font-medium">ABL 2005:551:</strong>{' '}
+                      {isSV
+                        ? 'Fullständig integration med svensk bolagsrätt och Bolagsverket-standarder.'
+                        : 'Full statutory alignment with Swedish company law and Bolagsverket standards.'}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#8C6D46] mt-1.5 shrink-0" />
+                    <span>
+                      <strong className="text-white font-medium">Leo-lagen (16 kap. ABL):</strong>{' '}
+                      {isSV
+                        ? '90 % kvalificerad röstmajoritet vid emission av personalwarranter.'
+                        : '90% qualified supermajority required for insider warrant programs.'}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#8C6D46] mt-1.5 shrink-0" />
+                    <span>
+                      <strong className="text-white font-medium">Max 10:1 Röstvärdestak (4:5 ABL):</strong>{' '}
+                      {isSV
+                        ? 'Inget aktieslag får överstiga tio gånger röstvärdet för annat aktieslag.'
+                        : 'No share class may carry voting rights exceeding 10x that of any other.'}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#8C6D46] mt-1.5 shrink-0" />
+                    <span>
+                      <strong className="text-white font-medium">ESOP Solver:</strong>{' '}
+                      {isSV
+                        ? 'Numerisk lösare för pre-money cirkulära optionstilldelningar.'
+                        : 'Numerical solver for iterative pre-money option pool shuffles.'}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Client-Side Privacy & Fast Links Column */}
+              <div className="md:col-span-3 space-y-3">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-[#D8B98E] font-semibold flex items-center gap-1.5">
+                  <Compass className="w-4 h-4 text-[#D8B98E]" />
+                  <span>{isSV ? 'Integritet & Navigering' : 'Privacy & Navigation'}</span>
+                </h4>
+                <div className="p-3 rounded-lg bg-[#1F2F4E]/80 border border-[#8C6D46]/30 text-xs text-[#D8D1C3] space-y-1.5">
+                  <div className="font-semibold text-white flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span>{isSV ? '100% Klientbaserat' : '100% Client-Side Privacy'}</span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-[#A4ADC0]">
+                    {isSV
+                      ? 'All beräkning sker lokalt i din webbläsare. Ingen data överförs till eller lagras på extern server.'
+                      : 'All computation runs locally in your browser. No financial data is ever transmitted or stored on external servers.'}
+                  </p>
+                </div>
+
+                <div className="pt-1 flex flex-col gap-1.5 text-xs text-[#D8D1C3]">
+                  <button
+                    type="button"
+                    onClick={() => setIsAboutOpen(true)}
+                    className="inline-flex items-center gap-1.5 text-left hover:text-[#D8B98E] transition-colors cursor-pointer"
+                  >
+                    <HelpCircle className="w-3.5 h-3.5 text-[#D8B98E]" />
+                    <span>{isSV ? 'Interaktiv användarguide' : 'Interactive User Guide'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={demo.startDemo}
+                    className="inline-flex items-center gap-1.5 text-left hover:text-[#D8B98E] transition-colors cursor-pointer"
+                  >
+                    <Play className="w-3.5 h-3.5 text-[#D8B98E]" />
+                    <span>{isSV ? 'Starta 60s rekryteringsdemo' : 'Start 60s Guided Demo'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="inline-flex items-center gap-1.5 text-left hover:text-[#D8B98E] transition-colors cursor-pointer"
+                  >
+                    <Printer className="w-3.5 h-3.5 text-[#D8B98E]" />
+                    <span>{isSV ? 'Skriv ut transaktions-PM' : 'Print Executive Transaction PM'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Disclaimer & Copyright */}
+            <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#A4ADC0]">
+              <div className="flex flex-wrap items-center gap-2 text-center sm:text-left">
+                <span>© {new Date().getFullYear()} NordicCap.</span>
+                <span className="hidden sm:inline">•</span>
+                <span className="text-[#D8B98E] font-medium">By Alfred Stengard</span>
+                <span className="hidden sm:inline">•</span>
+                <span>
+                  {isSV
+                    ? 'Byggd för svenska tillväxtbolag & VC-transaktioner'
+                    : 'Built for Swedish venture transactions'}
+                </span>
+              </div>
+              <div className="text-[11px] font-mono text-[#7A8291]">
+                Aktiebolagslagen (2005:551) • Swedish Jurisdiction
+              </div>
+            </div>
+          </div>
+        </footer>
 
         {/* Global Demo & About Overlays */}
         <DemoNarratorBox />
