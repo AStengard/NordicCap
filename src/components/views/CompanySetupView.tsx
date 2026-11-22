@@ -15,7 +15,7 @@ import {
   Users,
   X,
 } from 'lucide-react';
-import { ShareClass, Shareholder, StakeholderCategory } from '../../types';
+import { ConvertibleNote, ShareClass, Shareholder, StakeholderCategory, WarrantProgram } from '../../types';
 import { useCapTable, useCapTableMetrics } from '../../context/CapTableContext';
 import { DEMO_STEPS, useRecruiterDemo } from '../../context/RecruiterDemoContext';
 import { createPreSeriesAScenario, createSeriesARecruiterDemoScenario } from '../../constants/scenarios';
@@ -31,8 +31,8 @@ type DrawerMode =
   | { type: 'none' }
   | { type: 'shareholder'; item?: Shareholder }
   | { type: 'share_class'; item?: ShareClass }
-  | { type: 'note'; item?: any }
-  | { type: 'warrant'; item?: any };
+  | { type: 'note'; item?: ConvertibleNote }
+  | { type: 'warrant'; item?: WarrantProgram };
 
 export function CompanySetupView() {
   const { state, dispatch, t } = useCapTable();
@@ -761,58 +761,248 @@ export function CompanySetupView() {
       </div>
       </DemoSpotlight>
 
-      {/* SECTION 4: Optional Convertible Notes & Warrants */}
-      <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-2xl p-6 shadow-xs space-y-4">
-        <div className="flex items-center gap-2.5 border-b border-[#E5E0D5] pb-3">
-          <span className="w-7 h-7 rounded-lg bg-[#5C6F68] text-[#FCFBF9] flex items-center justify-center text-xs font-bold font-mono">
-            4
-          </span>
-          <div>
-            <h2 className="text-base font-bold text-[#15233E]" style={{ fontFamily: "'Newsreader', Georgia, serif" }}>
-              {isSV ? 'Konvertibellån (K-lån) & Optioner (ESOP)' : 'Convertible Debt & Options (Optional)'}
-            </h2>
-            <span className="text-xs text-[#5A6475]">
-              {isSV ? 'Valfritt: lägg till brygglån eller personaloptionsprogram' : 'Optional: bridge loans or warrant incentive programs'}
+      {/* SECTION 4: Convertible Notes & Warrants */}
+      <div className="bg-[#FCFBF9] border border-[#E5E0D5] rounded-2xl p-6 shadow-xs space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E5E0D5] pb-3">
+          <div className="flex items-center gap-2.5">
+            <span className="w-7 h-7 rounded-lg bg-[#5C6F68] text-[#FCFBF9] flex items-center justify-center text-xs font-bold font-mono">
+              4
             </span>
+            <div>
+              <h2 className="text-base font-bold text-[#15233E]" style={{ fontFamily: "'Newsreader', Georgia, serif" }}>
+                {isSV ? 'Konvertibellån (K-lån) & Optioner (ESOP)' : 'Convertible Debt (K-lån) & Warrant Pools (ESOP)'}
+              </h2>
+              <span className="text-xs text-[#5A6475]">
+                {isSV
+                  ? `${state.convertibleNotes.length} konvertibler • ${state.warrantPrograms.length} optionsprogram registrerade`
+                  : `${state.convertibleNotes.length} convertible notes • ${state.warrantPrograms.length} warrant programs active`}
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-white border border-[#E5E0D5] rounded-xl p-4 flex items-center justify-between">
-            <div>
-              <div className="font-semibold text-xs text-[#15233E]">
-                {isSV ? 'Konvertibellån (K-lån)' : 'Convertible Notes (K-lån)'}
-              </div>
-              <div className="text-[11px] text-[#5A6475]">
-                {state.convertibleNotes.length} {isSV ? 'registrerade lån' : 'notes active'}
-              </div>
+        {/* 4.1 Convertible Notes (K-lån) */}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-[#15233E]">
+                {isSV ? '1. Konvertibellån (K-lån)' : '1. Convertible Notes (K-lån)'}
+              </h3>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#EDE8DF] text-[#5A6475] border border-[#D8D1C3]">
+                15 kap. ABL
+              </span>
             </div>
             <button
               type="button"
               onClick={() => setDrawer({ type: 'note' })}
-              className="px-3 py-1.5 text-xs font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] rounded-md transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] hover:bg-[#1E3156] rounded-md shadow-xs transition-colors cursor-pointer"
             >
-              + {isSV ? 'Lägg till lån' : 'Add Note'}
+              <Plus className="w-3.5 h-3.5 text-[#D8B98E]" />
+              <span>{isSV ? 'Lägg till K-lån' : 'Add Note'}</span>
             </button>
           </div>
 
-          <div className="bg-white border border-[#E5E0D5] rounded-xl p-4 flex items-center justify-between">
-            <div>
-              <div className="font-semibold text-xs text-[#15233E]">
-                {isSV ? 'Teckningsoptioner (ESOP)' : 'Warrant Pools (ESOP)'}
-              </div>
-              <div className="text-[11px] text-[#5A6475]">
-                {state.warrantPrograms.length} {isSV ? 'optionsprogram' : 'programs active'}
-              </div>
+          {state.convertibleNotes.length === 0 ? (
+            <div className="bg-white border border-dashed border-[#D8D1C3] rounded-xl p-5 text-center space-y-2">
+              <p className="text-xs text-[#5A6475]">
+                {isSV
+                  ? 'Inga registrerade konvertibellån. Lägg till bryggfinansiering med värderingstak (cap) och konverteringsrabatt.'
+                  : 'No active convertible notes registered. Add bridge notes with valuation cap and conversion discount.'}
+              </p>
+              <button
+                type="button"
+                onClick={() => setDrawer({ type: 'note' })}
+                className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium text-[#8C6D46] hover:text-[#735836] bg-[#8C6D46]/10 hover:bg-[#8C6D46]/20 rounded-md transition-colors cursor-pointer"
+              >
+                <Plus className="w-3 h-3" />
+                <span>{isSV ? 'Lägg till K-lån' : 'Add Note'}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {state.convertibleNotes.map((note) => (
+                <div
+                  key={note.id}
+                  className="bg-white border border-[#E5E0D5] rounded-xl p-4 shadow-2xs hover:border-[#8C6D46]/50 transition-colors space-y-3"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start gap-2.5 min-w-0">
+                      <span className="w-7 h-7 rounded-md bg-[#1F2F4E] text-[#D8B98E] flex items-center justify-center font-mono font-bold text-xs shrink-0 mt-0.5">
+                        K
+                      </span>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs text-[#15233E] truncate" title={note.holderName}>
+                          {note.holderName}
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                          <CategoryBadge category={note.category} />
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#EDE8DF] text-[#5A6475]">
+                            {note.status === 'converted' ? (isSV ? 'Konverterat' : 'Converted') : (isSV ? 'Aktivt lån' : 'Active')}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setDrawer({ type: 'note', item: note })}
+                        className="p-1 text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF] rounded transition-colors cursor-pointer"
+                        title={isSV ? 'Redigera lån' : 'Edit note'}
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => dispatch({ type: 'DELETE_NOTE', payload: note.id })}
+                        className="p-1 text-[#5A6475] hover:text-[#9A342D] hover:bg-[#F6F4EF] rounded transition-colors cursor-pointer"
+                        title={isSV ? 'Ta bort lån' : 'Delete note'}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-[11px] text-[#5A6475] font-mono pt-2 border-t border-[#E5E0D5]/70">
+                    <div>
+                      {isSV ? 'Lånebelopp:' : 'Principal:'}{' '}
+                      <strong className="text-[#15233E]">{formatSEK(note.principal)}</strong>
+                    </div>
+                    <div>
+                      {isSV ? 'Värderingstak:' : 'Valuation Cap:'}{' '}
+                      <strong className="text-[#15233E]">
+                        {note.valuationCap > 0 ? formatSEK(note.valuationCap) : (isSV ? 'Inget tak' : 'No Cap')}
+                      </strong>
+                    </div>
+                    <div>
+                      {isSV ? 'Rabatt:' : 'Discount:'}{' '}
+                      <strong className="text-[#15233E]">{note.discountRate}%</strong>
+                    </div>
+                    <div>
+                      {isSV ? 'Ränta / Löptid:' : 'Interest / Term:'}{' '}
+                      <strong className="text-[#15233E]">
+                        {note.interestRate}% ({note.accrualMonths} {isSV ? 'mån' : 'mo'})
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 4.2 Warrant Pools (ESOP) */}
+        <div className="space-y-3 pt-3 border-t border-[#E5E0D5]">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-[#15233E]">
+                {isSV ? '2. Teckningsoptioner & ESOP' : '2. Warrant Pools & ESOP'}
+              </h3>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#EDE8DF] text-[#5A6475] border border-[#D8D1C3]">
+                14 kap. ABL
+              </span>
             </div>
             <button
               type="button"
               onClick={() => setDrawer({ type: 'warrant' })}
-              className="px-3 py-1.5 text-xs font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] rounded-md transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#15233E] text-[#FCFBF9] hover:bg-[#1E3156] rounded-md shadow-xs transition-colors cursor-pointer"
             >
-              + {isSV ? 'Lägg till optioner' : 'Add Warrants'}
+              <Plus className="w-3.5 h-3.5 text-[#D8B98E]" />
+              <span>{isSV ? 'Lägg till optioner' : 'Add Warrants'}</span>
             </button>
           </div>
+
+          {state.warrantPrograms.length === 0 ? (
+            <div className="bg-white border border-dashed border-[#D8D1C3] rounded-xl p-5 text-center space-y-2">
+              <p className="text-xs text-[#5A6475]">
+                {isSV
+                  ? 'Inga registrerade optionsprogram. Skapa personaloptionspool (ESOP) för anställda eller nyckelrådgivare.'
+                  : 'No warrant programs registered. Create an employee stock option pool (ESOP) or advisor pool.'}
+              </p>
+              <button
+                type="button"
+                onClick={() => setDrawer({ type: 'warrant' })}
+                className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium text-[#8C6D46] hover:text-[#735836] bg-[#8C6D46]/10 hover:bg-[#8C6D46]/20 rounded-md transition-colors cursor-pointer"
+              >
+                <Plus className="w-3 h-3" />
+                <span>{isSV ? 'Lägg till optioner' : 'Add Warrants'}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {state.warrantPrograms.map((wp) => {
+                const targetClass = state.shareClasses.find((c) => c.id === wp.targetShareClassId);
+                const fdShares = metrics.totalIssuedShares + metrics.totalWarrants;
+                const poolFdPct = fdShares > 0 ? (wp.totalWarrants / fdShares) * 100 : 0;
+
+                return (
+                  <div
+                    key={wp.id}
+                    className="bg-white border border-[#E5E0D5] rounded-xl p-4 shadow-2xs hover:border-[#8C6D46]/50 transition-colors space-y-3"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-start gap-2.5 min-w-0">
+                        <span className="w-7 h-7 rounded-md bg-[#2C4A3E] text-[#D8B98E] flex items-center justify-center font-mono font-bold text-xs shrink-0 mt-0.5">
+                          TO
+                        </span>
+                        <div className="min-w-0">
+                          <div className="font-semibold text-xs text-[#15233E] truncate" title={wp.name}>
+                            {wp.name}
+                          </div>
+                          <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#EDE8DF] text-[#15233E] font-medium">
+                              {wp.recipientCategory}
+                            </span>
+                            <span className="text-[10px] font-mono text-[#7A8291]">
+                              {targetClass?.name ?? (isSV ? 'Stam' : 'Common')}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                        <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => setDrawer({ type: 'warrant', item: wp })}
+                          className="p-1 text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF] rounded transition-colors cursor-pointer"
+                          title={isSV ? 'Redigera optionsprogram' : 'Edit warrant pool'}
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => dispatch({ type: 'DELETE_WARRANT', payload: wp.id })}
+                          className="p-1 text-[#5A6475] hover:text-[#9A342D] hover:bg-[#F6F4EF] rounded transition-colors cursor-pointer"
+                          title={isSV ? 'Ta bort optionsprogram' : 'Delete warrant pool'}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-[11px] text-[#5A6475] font-mono pt-2 border-t border-[#E5E0D5]/70">
+                      <div>
+                        {isSV ? 'Antal optioner:' : 'Total Warrants:'}{' '}
+                        <strong className="text-[#15233E]">{formatInt(wp.totalWarrants)}</strong>
+                      </div>
+                      <div>
+                        {isSV ? 'Lösenpris:' : 'Strike Price:'}{' '}
+                        <strong className="text-[#15233E]">{wp.strikePrice} SEK</strong>
+                      </div>
+                      <div>
+                        {isSV ? 'Målaktieklass:' : 'Target Class:'}{' '}
+                        <strong className="text-[#15233E]">{targetClass?.name ?? (isSV ? 'Stam' : 'Common')}</strong>
+                      </div>
+                      <div>
+                        {isSV ? 'Utspädd andel (FD):' : 'Fully Diluted:'}{' '}
+                        <strong className="text-[#15233E]">{formatPct(poolFdPct)}</strong>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
