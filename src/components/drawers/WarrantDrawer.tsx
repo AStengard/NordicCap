@@ -54,8 +54,8 @@ export function WarrantDrawer({
   return (
     <SlideOverDrawer
       open={open}
-      title={initial ? 'Edit Warrant Program' : 'Add Warrant Program (Teckningsoptioner)'}
-      subtitle="Swedish Teckningsoptioner (ABL 14 kap.) or KPO."
+      title={initial ? 'Edit Warrant Program' : 'Add Warrant Program (ESOP)'}
+      subtitle="Employee stock option & warrant program (Ch. 14 Companies Act)."
       onClose={onClose}
     >
       <form onSubmit={handleSubmit} className="space-y-4">

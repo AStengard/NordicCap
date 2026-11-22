@@ -48,7 +48,8 @@ export function exportCapTableToCSV(
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.setAttribute('download', `${state.company.name.replace(/\s+/g, '_')}_Aktiebok.csv`);
+  const suffix = state.language === 'SV' ? 'Aktiebok' : 'Cap_Table';
+  link.setAttribute('download', `${state.company.name.replace(/\s+/g, '_')}_${suffix}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

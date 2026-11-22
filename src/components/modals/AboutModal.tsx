@@ -212,7 +212,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                       <p className="text-xs text-[#5A6475] leading-relaxed">
                         {isSV
                           ? 'Mata in bolagsnamn, aktiekapital, konfigurera Stam A/B och lägg till grundare & investerare med snabbformuläret.'
-                          : 'Enter company details, share capital, configure Stam A/B, and add founders with the fast inline form.'}
+                          : 'Enter company details, share capital, configure Class A/B shares, and add founders with the fast inline form.'}
                       </p>
                     </div>
 
@@ -457,7 +457,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                 <p className="text-xs text-[#FCFBF9]/90 leading-relaxed">
                   {isSV
                     ? 'Här matar du in all information för ditt bolag: grunddata, aktieslag (Stam A & B), aktieägare, konvertibler och optioner.'
-                    : 'Where you enter all company info: legal details, share classes (Stam A & B), shareholders, convertibles, and warrants.'}
+                    : 'Where you enter all company info: legal details, share classes (Class A & B), shareholders, convertibles, and warrants.'}
                 </p>
               </div>
 
@@ -489,7 +489,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                     <p className="text-xs text-[#5A6475] mt-1">
                       {isSV
                         ? 'Konfigurera Stam A (t.ex. 10 röster) och Stam B (1 röst). Systemet vaktar automatiskt mot brott mot ABL 4:5 (röstskillnaden får ej överstiga 10:1).'
-                        : 'Configure Stam A (10 votes) and Stam B (1 vote). The engine guards against ABL 4:5 violations (voting ratio cannot exceed 10:1).'}
+                        : 'Configure Class A (10 votes) and Class B (1 vote). The engine guards against statutory voting limit violations (ratio cannot exceed 10:1).'}
                     </p>
                   </div>
                 </div>
@@ -656,12 +656,12 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                     <Scale className="w-5 h-5 text-[#5C6F68] mt-0.5 shrink-0" />
                     <div>
                       <h4 className="font-semibold text-xs text-[#15233E]">
-                        {isSV ? '4. ABL Juridik & Klausuler (Leo-lagen & Bolagsverket)' : '4. ABL Legal & Clause Drafting (Aktiebolagslagen)'}
+                        {isSV ? '4. ABL Juridik & Klausuler (Leo-lagen & Bolagsverket)' : '4. Legal & Clause Drafting (Corporate Law)'}
                       </h4>
                       <p className="text-xs text-[#5A6475] mt-1">
                         {isSV
                           ? 'Verifierar 90% majoritet för personaloptioner enligt Leo-lagen (16 kap. ABL), genererar 6 Bolagsverket-handlingar och skriver live-klausuler för aktieägaravtalet.'
-                          : 'Enforces Leo-lagen 90% majorities (Ch. 16 ABL), prepares 6 Bolagsverket filing exhibits, and drafts SHA clauses.'}
+                          : 'Enforces the Leo Act 90% supermajority (Ch. 16), prepares 6 company registry filing exhibits, and drafts SHA clauses.'}
                       </p>
                     </div>
                   </div>

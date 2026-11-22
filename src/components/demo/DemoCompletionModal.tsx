@@ -32,21 +32,21 @@ export function DemoCompletionModal() {
 
   const achievements = isSV
     ? [
-        'Sida 2: Bolagsregistrering (25k+ SEK aktiekapital) och direkt inmatning av grundare och aktieslag verifierad.',
-        'Aktiebok (10:1 Stam A/B), aktiva K-lan och ESOP-pool verifierade enligt ABL 4 kap. 5 §.',
-        'Serie A-emission simulerad med cirkular Pre-Money ESOP-top-up och K-lan-konvertering.',
-        'Exit Waterfall utvarderad over 15–120 MSEK med automatisk preferenskonvertering och in-the-money-optioner.',
-        '16 kap. ABL (Leo-lagen 9/10-majoritet) och Bolagsverkets registreringshandlingar kontrollerade.',
-        'Dynamiska klausuler (SHA & Bolagsordning), Excel CSV-export och juridiskt transaktions-PM bekraftade.',
-      ]
+      'Sida 2: Bolagsregistrering (25k+ SEK aktiekapital) och direkt inmatning av grundare och aktieslag verifierad.',
+      'Aktiebok (10:1 Stam A/B), aktiva K-lan och ESOP-pool verifierade enligt ABL 4 kap. 5 §.',
+      'Serie A-emission simulerad med cirkular Pre-Money ESOP-top-up och K-lan-konvertering.',
+      'Exit Waterfall utvarderad over 15–120 MSEK med automatisk preferenskonvertering och in-the-money-optioner.',
+      '16 kap. ABL (Leo-lagen 9/10-majoritet) och Bolagsverkets registreringshandlingar kontrollerade.',
+      'Dynamiska klausuler (SHA & Bolagsordning), Excel CSV-export och juridiskt transaktions-PM bekraftade.',
+    ]
     : [
-        'Page 2: Swedish company registration (25k+ SEK capital) and live founder data entry verified.',
-        'Dual-class Aktiebok (10:1 Class A/B), K-lan notes, and ESOP warrants validated under ABL 4 kap. 5 §.',
-        'Series A round modeled with circular Pre-Money ESOP shuffle and K-lan conversion.',
-        'Equilibrium Exit Waterfall swept across 15–120 MSEK showing rational preferred conversion and ITM warrants.',
-        '16 kap. ABL (Leo-lagen 9/10 majority) and Bolagsverket corporate filing dossier verified live.',
-        'Live Clause-to-Math SHA/Bolagsordning drafting, Excel CSV export, and PDF transaction brief confirmed.',
-      ];
+      'Page 2: Company registration (25k+ SEK capital) and live founder data entry verified.',
+      'Dual-class Share Register (10:1 Class A/B), convertible notes, and ESOP warrants validated under Companies Act Ch. 4 § 5.',
+      'Series A round modeled with circular Pre-Money ESOP shuffle and convertible note conversion.',
+      'Equilibrium Exit Waterfall swept across 15–120 MSEK showing rational preferred conversion and ITM warrants.',
+      'Companies Act Ch. 16 (Leo Act 90% majority) and corporate registration filing dossier verified live.',
+      'Live Clause-to-Math SHA and Articles of Association drafting, Excel CSV export, and PDF transaction brief confirmed.',
+    ];
 
   return (
     <div className="no-print fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -128,7 +128,7 @@ export function DemoCompletionModal() {
 
           <div className="pt-4 border-t border-[#E5E0D5] flex flex-wrap items-center justify-between gap-3">
             <span className="text-[11px] font-mono uppercase tracking-wider text-[#667085]">
-              {isSV ? 'Skapad av Alfred Stengård:' : 'Created by Alfred Stengård:'}
+              {isSV ? 'Skapad av Alfred Stengard:' : 'Created by Alfred Stengard:'}
             </span>
             <div className="flex flex-wrap items-center gap-2">
               <a

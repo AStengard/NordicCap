@@ -150,7 +150,7 @@ export function CapTableTab() {
             <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
               subPage === 'instruments' ? 'bg-white/15 text-white' : 'bg-[#E5E0D5] text-[#5A6475]'
             }`}>
-              {state.shareClasses.length} klasser
+              {state.shareClasses.length} {state.language === 'SV' ? 'klasser' : 'classes'}
             </span>
           </button>
         </div>
@@ -277,7 +277,7 @@ export function CapTableTab() {
                 />
               </div>
               <div>
-                <label className="block text-[10px] uppercase text-[#667085]">Aktiekapital (SEK)</label>
+                <label className="block text-[10px] uppercase text-[#667085]">{state.language === 'SV' ? 'Aktiekapital (SEK)' : 'Share Capital (SEK)'}</label>
                 <input
                   type="number"
                   value={capDraft}
@@ -605,7 +605,7 @@ export function CapTableTab() {
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#15233E] bg-white border border-[#D8D1C3] hover:bg-[#F6F4EF] rounded-md transition-colors cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.8} />
-                <span>{state.language === 'SV' ? '+ K-lån' : '+ K-lan Note'}</span>
+                <span>{state.language === 'SV' ? '+ K-lån' : '+ Convertible Note'}</span>
               </button>
               <button
                 type="button"
@@ -703,7 +703,9 @@ export function CapTableTab() {
           </div>
           <div className="divide-y divide-[#E5E0D5]/70 flex-1">
             {state.convertibleNotes.length === 0 ? (
-              <div className="px-5 py-8 text-xs text-[#7A8291] text-center">No convertible notes (K-lan) registered.</div>
+              <div className="px-5 py-8 text-xs text-[#7A8291] text-center">
+                {state.language === 'SV' ? 'Inga registrerade konvertibellån (K-lån).' : 'No convertible notes registered.'}
+              </div>
             ) : (
               state.convertibleNotes.map((note) => (
                 <div key={note.id} className="px-5 py-3.5 flex items-start justify-between gap-2">

@@ -24,11 +24,11 @@ export const DEMO_STEPS: DemoStepConfig[] = [
     bulletsEN: [
       {
         label: 'Architecture Decision',
-        text: 'Reactive form writes directly into normalized company and shareholder records with immediate Kvotvärde derivation and validation.',
+        text: 'Reactive form writes directly into normalized company and shareholder records with immediate quota value derivation and validation.',
       },
       {
         label: 'Commercial & Legal Impact',
-        text: 'Enforces ABL 1:5 minimum 25,000 SEK capital, calculates quota value automatically, and sets up Stam A (10 votes) & Stam B (1 vote).',
+        text: 'Enforces minimum 25,000 SEK capital, calculates quota value automatically, and sets up Class A (10 votes) & Class B (1 vote).',
       },
     ],
     bulletsSV: [
@@ -45,7 +45,7 @@ export const DEMO_STEPS: DemoStepConfig[] = [
   {
     index: 1,
     targetTab: 'cap_table',
-    badgeEN: 'Dual-Class Aktiebok & ABL Guardrails',
+    badgeEN: 'Dual-Class Share Register & Statutory Guardrails',
     badgeSV: 'Aktiebok & ABL-vaktare',
     titleEN: '2. Swedish Dual-Class Equity & Live Ledger',
     titleSV: '2. Svensk aktiebok & 10:1-röstvärde',
@@ -135,20 +135,20 @@ export const DEMO_STEPS: DemoStepConfig[] = [
   {
     index: 4,
     targetTab: 'abl_legal',
-    badgeEN: 'ABL Majority & Leo-lagen Rules Engine',
+    badgeEN: 'Statutory Majority & Leo Act Rules Engine',
     badgeSV: 'ABL Majoritets- & Leo-lagen-motor',
     titleEN: '5. Swedish Companies Act (ABL) Formalia Check',
     titleSV: '5. ABL Majoritetskrav & Bolagsverket',
-    actionLabelEN: 'Flagging 16 kap. ABL (Leo-lagen 9/10) & verifying Bolagsverket dossier...',
+    actionLabelEN: 'Flagging Leo Act (90% supermajority) & verifying corporate filing dossier...',
     actionLabelSV: 'Flaggar 16 kap. ABL (Leo-lagen 9/10) & kontrollerar Bolagsverkets handlingar...',
     bulletsEN: [
       {
         label: 'Architecture Decision',
-        text: 'Deterministic legal rules engine inspects warrant recipients and directed rounds to detect 9/10 Leo-lagen (16 kap. ABL) and 2/3 directed issue thresholds.',
+        text: 'Deterministic legal rules engine inspects warrant recipients and directed rounds to detect 9/10 Leo Act (Ch. 16 Companies Act) and 2/3 directed issue thresholds.',
       },
       {
         label: 'Commercial & Legal Impact',
-        text: 'Prevents invalid general meeting resolutions and Bolagsverket rejections by mapping exact statutory majorities directly to current founder/investor voting shares.',
+        text: 'Prevents invalid general meeting resolutions and corporate registry rejections by mapping exact statutory majorities directly to current founder/investor voting shares.',
       },
     ],
     bulletsSV: [
@@ -174,11 +174,11 @@ export const DEMO_STEPS: DemoStepConfig[] = [
     bulletsEN: [
       {
         label: 'Architecture Decision',
-        text: 'Reactive drafting templates bind Share Class math directly into bilingual SHA and Bolagsordning clauses alongside an A4 @media print executive brief.',
+        text: 'Reactive drafting templates bind Share Class math directly into bilingual SHA and Articles of Association clauses alongside an A4 @media print executive brief.',
       },
       {
         label: 'Commercial & Legal Impact',
-        text: 'Bridges corporate lawyers and VC deal teams — exporting an Excel-ready Aktiebok CSV or print-ready transaction memo in one click.',
+        text: 'Bridges corporate lawyers and VC deal teams — exporting an Excel-ready Cap Table CSV or print-ready transaction memo in one click.',
       },
     ],
     bulletsSV: [

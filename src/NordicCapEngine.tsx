@@ -47,6 +47,39 @@ export function NordicCapEngine() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const isSV = state.language === 'SV';
 
+  const [densityMode, setDensityMode] = useState<'auto' | 'monitor' | 'laptop'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('nordiccap_density');
+      if (saved === 'monitor' || saved === 'laptop') return saved;
+    }
+    return 'auto';
+  });
+
+  const handleDensityChange = (mode: 'auto' | 'monitor' | 'laptop') => {
+    setDensityMode(mode);
+    if (typeof document !== 'undefined') {
+      if (mode === 'auto') {
+        document.documentElement.removeAttribute('data-density');
+        localStorage.removeItem('nordiccap_density');
+      } else if (mode === 'monitor') {
+        document.documentElement.setAttribute('data-density', 'comfortable');
+        localStorage.setItem('nordiccap_density', 'monitor');
+      } else if (mode === 'laptop') {
+        document.documentElement.setAttribute('data-density', 'compact');
+        localStorage.setItem('nordiccap_density', 'laptop');
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (typeof document !== 'undefined' && densityMode !== 'auto') {
+      document.documentElement.setAttribute(
+        'data-density',
+        densityMode === 'monitor' ? 'comfortable' : 'compact'
+      );
+    }
+  }, [densityMode]);
+
   useEffect(() => {
     if (typeof document !== 'undefined') {
       document.title = 'NordicCap — Swedish Cap Table & VC Waterfall Engine';
@@ -355,16 +388,16 @@ export function NordicCapEngine() {
                   <li className="flex items-start gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#8C6D46] mt-1.5 shrink-0" />
                     <span>
-                      <strong className="text-white font-medium">ABL 2005:551:</strong>{' '}
+                      <strong className="text-white font-medium">{isSV ? 'ABL 2005:551:' : 'Companies Act (ABL):'}</strong>{' '}
                       {isSV
                         ? 'Fullständig integration med svensk bolagsrätt och Bolagsverket-standarder.'
-                        : 'Full statutory alignment with Swedish company law and Bolagsverket standards.'}
+                        : 'Full statutory alignment with Swedish company law and corporate registry standards.'}
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#8C6D46] mt-1.5 shrink-0" />
                     <span>
-                      <strong className="text-white font-medium">Leo-lagen (16 kap. ABL):</strong>{' '}
+                      <strong className="text-white font-medium">{isSV ? 'Leo-lagen (16 kap. ABL):' : 'Leo Act (Ch. 16):'}</strong>{' '}
                       {isSV
                         ? '90 % kvalificerad röstmajoritet vid emission av personalwarranter.'
                         : '90% qualified supermajority required for insider warrant programs.'}
@@ -373,7 +406,7 @@ export function NordicCapEngine() {
                   <li className="flex items-start gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#8C6D46] mt-1.5 shrink-0" />
                     <span>
-                      <strong className="text-white font-medium">Max 10:1 Röstvärdestak (4:5 ABL):</strong>{' '}
+                      <strong className="text-white font-medium">{isSV ? 'Max 10:1 Röstvärdestak (4:5 ABL):' : 'Max 10:1 Voting Ratio Cap (Ch. 4 § 5):'}</strong>{' '}
                       {isSV
                         ? 'Inget aktieslag får överstiga tio gånger röstvärdet för annat aktieslag.'
                         : 'No share class may carry voting rights exceeding 10x that of any other.'}
@@ -438,9 +471,9 @@ export function NordicCapEngine() {
               </div>
             </div>
 
-            {/* Bottom Disclaimer & Copyright */}
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#A4ADC0]">
-              <div className="flex flex-wrap items-center gap-2 text-center sm:text-left">
+            {/* Bottom Disclaimer, Display Scaling & Copyright */}
+            <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#A4ADC0]">
+              <div className="flex flex-wrap items-center gap-2 text-center md:text-left">
                 <span>© {new Date().getFullYear()} NordicCap.</span>
                 <span className="hidden sm:inline">•</span>
                 <span className="text-[#D8B98E] font-medium">By Alfred Stengard</span>
@@ -451,6 +484,49 @@ export function NordicCapEngine() {
                     : 'Built for Swedish venture transactions'}
                 </span>
               </div>
+
+              {/* Display Density Switcher */}
+              <div className="flex items-center gap-1.5 bg-[#1F2F4E] border border-[#8C6D46]/40 rounded-full px-2.5 py-1 text-[11px] font-mono shrink-0 shadow-2xs">
+                <Sliders className="w-3 h-3 text-[#D8B98E] shrink-0" strokeWidth={2} />
+                <span className="text-[#D8D1C3] pr-0.5">{isSV ? 'Skärmläge:' : 'Display:'}</span>
+                <button
+                  type="button"
+                  onClick={() => handleDensityChange('auto')}
+                  title={isSV ? 'Anpassar automatiskt mellan laptop och extern skärm' : 'Adapts automatically between laptop and external monitor'}
+                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
+                    densityMode === 'auto'
+                      ? 'bg-[#8C6D46] text-white font-semibold shadow-xs'
+                      : 'text-[#D8D1C3] hover:text-white'
+                  }`}
+                >
+                  Auto
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDensityChange('monitor')}
+                  title={isSV ? 'Fast monitorläge (100% standard)' : 'Fixed monitor mode (100% standard)'}
+                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
+                    densityMode === 'monitor'
+                      ? 'bg-[#8C6D46] text-white font-semibold shadow-xs'
+                      : 'text-[#D8D1C3] hover:text-white'
+                  }`}
+                >
+                  Monitor
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDensityChange('laptop')}
+                  title={isSV ? 'Fast laptopläge (kompakt skala, optimal för bärbar dator)' : 'Fixed laptop mode (compact scale, optimal for laptops)'}
+                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
+                    densityMode === 'laptop'
+                      ? 'bg-[#8C6D46] text-white font-semibold shadow-xs'
+                      : 'text-[#D8D1C3] hover:text-white'
+                  }`}
+                >
+                  Laptop
+                </button>
+              </div>
+
               <div className="text-[11px] font-mono text-[#7A8291]">
                 Aktiebolagslagen (2005:551) • Swedish Jurisdiction
               </div>

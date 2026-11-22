@@ -19,6 +19,7 @@ export function ExecutiveTransactionMemo({
     month: 'long',
     day: 'numeric',
   });
+  const isSV = state.language === 'SV';
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white text-[#15233E] space-y-6 font-serif">
@@ -32,7 +33,7 @@ export function ExecutiveTransactionMemo({
             {state.company.name} (publ / AB)
           </h1>
           <div className="text-xs font-mono text-[#5A6475] mt-1">
-            Org.nr {state.company.orgNumber} | Aktiekapital: {formatSEK(state.company.shareCapital)} | Scenario: {state.company.scenarioLabel}
+            Org.nr {state.company.orgNumber} | {isSV ? 'Aktiekapital' : 'Share Capital'}: {formatSEK(state.company.shareCapital)} | Scenario: {state.company.scenarioLabel}
           </div>
         </div>
 
@@ -57,7 +58,7 @@ export function ExecutiveTransactionMemo({
           <span className="font-mono font-bold text-sm text-[#15233E]">{formatSEK(state.company.postMoneyValuation, true)}</span>
         </div>
         <div>
-          <span className="text-[10px] uppercase text-[#667085] block">Quota Value (Kvotvarde)</span>
+          <span className="text-[10px] uppercase text-[#667085] block">{isSV ? 'Kvotvärde' : 'Par Value / Quota Value'}</span>
           <span className="font-mono font-bold text-sm text-[#15233E]">{metrics.quotaValue.toFixed(4)} SEK</span>
         </div>
       </div>
@@ -65,7 +66,7 @@ export function ExecutiveTransactionMemo({
       {/* Certified Aktiebok Schedule */}
       <div className="space-y-2">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#15233E] border-b border-[#D8D1C3] pb-1">
-          1. Shareholder Register (Aktiebok per ABL 5 kap.)
+          {isSV ? '1. Aktiebok (enligt 5 kap. ABL)' : '1. Shareholder Register (Statutory Cap Table)'}
         </h2>
         <table className="w-full text-left text-xs border-collapse font-sans">
           <thead>
@@ -137,7 +138,7 @@ export function ExecutiveTransactionMemo({
       {/* Key Commercial Clauses */}
       <div className="space-y-3 pt-2">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#15233E] border-b border-[#D8D1C3] pb-1">
-          3. Principal SHA & Bolagsordning Clauses
+          {isSV ? '3. Klausuler (Aktieägaravtal & Bolagsordning)' : '3. Key Commercial Clauses (SHA & Articles of Association)'}
         </h2>
         <div className="space-y-3">
           {clauses.slice(0, 3).map((clause) => (

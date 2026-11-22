@@ -29,7 +29,7 @@ export function evaluateABLCompliance(
       statute: '16 kap. 2 & 8 §§ ABL (Leo-lagen)',
       severity: 'critical',
       majorityRequired: '9/10 (90%) Votes & Shares',
-      titleEN: 'Leo-lagen Qualified Majority Alert (ESOP / Board Warrants)',
+      titleEN: 'Leo Act 90% Qualified Majority Alert (ESOP / Board Warrants)',
       titleSV: 'Leo-lagen — Skarpt majoritetskrav (Personal- / Styrelseoptioner)',
       explanationEN: `Detected ${leoWarrants.length} warrant program(s) (${formatInt(totalLeo)} warrants) directed to Employees or Board members. Under Chapter 16 ABL, resolutions issuing warrants or directed shares to insiders require at least 9/10 (90%) of both votes cast and shares represented at the General Meeting.`,
       explanationSV: `Identifierade ${leoWarrants.length} teckningsoptionsprogram (${formatInt(totalLeo)} optioner) riktade till anstallda eller styrelse. Enligt 16 kap. ABL (Leo-lagen) kraver beslutet minst 9/10 (90%) av bade avgivna roster och vid stamman foretradda aktier.`,
@@ -40,7 +40,7 @@ export function evaluateABLCompliance(
       statute: '16 kap. ABL (Leo-lagen)',
       severity: 'pass',
       majorityRequired: 'N/A',
-      titleEN: 'Leo-lagen (16 kap. ABL) — No Insider Warrants Active',
+      titleEN: 'Leo Act (Ch. 16 Companies Act) — No Insider Warrants Active',
       titleSV: 'Leo-lagen (16 kap. ABL) — Inga riktade personaloptioner',
       explanationEN: 'No employee or board warrant pools detected. Standard majority rules apply.',
       explanationSV: 'Inga personal- eller styrelseoptioner registrerade. Ordinarie majoritetsregler galler.',
@@ -71,9 +71,9 @@ export function evaluateABLCompliance(
     statute: '7 kap. 42–45 §§ ABL',
     severity: hasPrefClass ? 'warning' : 'pass',
     majorityRequired: '2/3 (or 9/10 if altering class rights)',
-    titleEN: 'Articles of Association Amendment (Bolagsordningsandring)',
+    titleEN: 'Articles of Association Amendment',
     titleSV: 'Andring av bolagsordning (Aktieslag & Aktiekapitalgranser)',
-    explanationEN: `Introduction of new share classes (${state.shareClasses.map((c) => c.name).join(', ')}) or expanding share capital limits (must respect 1:4 min/max ratio under 3 kap. 1 § ABL) requires amending the Bolagsordning by 2/3 majority (higher under 7 kap. 43–45 §§ if impairing existing class rights).`,
+    explanationEN: `Introduction of new share classes (${state.shareClasses.map((c) => c.name).join(', ')}) or expanding share capital limits (must respect 1:4 min/max ratio under 3 kap. 1 § ABL) requires amending the Articles of Association by 2/3 majority (higher under 7 kap. 43–45 §§ if impairing existing class rights).`,
     explanationSV: `Inforande av nya aktieslag (${state.shareClasses.map((c) => c.name).join(', ')}) eller andrade aktiekapitalgranser (max 1:4-spann enligt 3 kap. 1 § ABL) kraver bolagsordningsandring med 2/3 majoritet (eller skarpt krav enligt 7 kap. 43–45 §§ vid inskrankning av aktieslagsratt).`,
   });
 
@@ -83,11 +83,11 @@ export function evaluateABLCompliance(
     statute: '4 kap. 5 § ABL',
     severity: metrics.ablVotingCompliant ? 'pass' : 'critical',
     majorityRequired: 'Statutory Ceiling 10:1',
-    titleEN: 'Voting Power Discrepancy Limit (Rostvardesskillnad)',
+    titleEN: 'Voting Power Discrepancy Limit',
     titleSV: 'Begransning av rostvardesskillnad (Max 10:1)',
     explanationEN: metrics.ablVotingCompliant
       ? `Compliant: Current maximum voting ratio across share classes is ${metrics.votingRatio.toFixed(1)}:1, within the strict Swedish statutory ceiling of 10:1.`
-      : `Statutory Breach: Voting ratio is ${metrics.votingRatio.toFixed(1)}:1, exceeding the maximum 10:1 ratio permitted under 4 kap. 5 § ABL. Bolagsverket will refuse registration.`,
+      : `Statutory Breach: Voting ratio is ${metrics.votingRatio.toFixed(1)}:1, exceeding the maximum 10:1 ratio permitted under 4 kap. 5 § ABL. The Companies Registration Office will refuse registration.`,
     explanationSV: metrics.ablVotingCompliant
       ? `Uppfylld: Maximal rostvardesskillnad ar ${metrics.votingRatio.toFixed(1)}:1, inom lagens tak pa 10:1.`
       : `Lagbrott: Rostvardesskillnaden ar ${metrics.votingRatio.toFixed(1)}:1 vilket overstiger taket 10:1 enligt 4 kap. 5 § ABL. Bolagsverket vagar registrering.`,
@@ -99,7 +99,7 @@ export function evaluateABLCompliance(
     statute: '1 kap. 5 § ABL',
     severity: metrics.ablCapitalCompliant ? 'pass' : 'critical',
     majorityRequired: '>= 25 000 SEK',
-    titleEN: 'Minimum Private AB Share Capital (Aktiekapital)',
+    titleEN: 'Minimum Private Limited Company Share Capital',
     titleSV: 'Minsta aktiekapital i privat aktiebolag',
     explanationEN: metrics.ablCapitalCompliant
       ? `Compliant: Registered share capital is ${formatSEK(state.company.shareCapital)} (Quota value ${metrics.quotaValue.toFixed(4)} SEK/share), exceeding the 25 000 SEK private AB minimum.`
@@ -120,16 +120,16 @@ export function generateBolagsverketChecklist(state: CapTableState): Bolagsverke
       id: 'doc_stammoprotokoll',
       required: true,
       statute: '7 kap. 48 § & 13 kap. ABL',
-      titleEN: 'General Meeting Minutes (Stammoprotokoll)',
+      titleEN: 'General Meeting Minutes',
       titleSV: 'Bolagsstammoprotokoll (med rostlangd)',
-      noteEN: 'Signed minutes with voting list (rostlangd) evidencing 2/3 or 9/10 qualified majority.',
+      noteEN: 'Signed minutes with voting list evidencing 2/3 or 9/10 qualified majority.',
       noteSV: 'Justerat protokoll med rostlangd som styrker 2/3- eller 9/10-majoritet.',
     },
     {
       id: 'doc_bolagsordning',
       required: true,
       statute: '3 kap. 1 § & 7 kap. 42 § ABL',
-      titleEN: 'Updated Articles of Association (Bolagsordning)',
+      titleEN: 'Updated Articles of Association',
       titleSV: 'Uppdaterad bolagsordning',
       noteEN: 'Reflects new share classes, preference clauses, and updated share capital / share count intervals.',
       noteSV: 'Innehaller nya aktieslag, preferensbestammelser samt justerade aktiekapital- och aktiegranser.',
@@ -138,7 +138,7 @@ export function generateBolagsverketChecklist(state: CapTableState): Bolagsverke
       id: 'doc_redogorelse',
       required: true,
       statute: '13 kap. 6 § ABL',
-      titleEN: 'Board Report on Significant Events (Styrelsens redogorelse)',
+      titleEN: 'Board Report on Significant Events',
       titleSV: 'Styrelsens redogorelse for vasentliga handelser',
       noteEN: 'Required if the issue resolution is passed outside the Annual General Meeting (EGM).',
       noteSV: 'Kravs vid extra bolagsstamma nar arsstamma inte hallits i anslutning till beslutet.',
@@ -147,20 +147,20 @@ export function generateBolagsverketChecklist(state: CapTableState): Bolagsverke
       id: 'doc_teckningslista',
       required: true,
       statute: '13 kap. 13 § ABL',
-      titleEN: 'Subscription List (Teckningslista)',
+      titleEN: 'Subscription List',
       titleSV: 'Teckningslista',
-      noteEN: 'Executed subscription list confirming allotment of new shares, warrants, or converted K-lan.',
+      noteEN: 'Executed subscription list confirming allotment of new shares, warrants, or converted notes.',
       noteSV: 'Undertecknad teckningslista som bekr\u00E4ftar teckning och tilldelning av aktier/optioner.',
     },
     {
       id: 'doc_revisor',
       required: hasNotes,
       statute: '13 kap. 8 § & 15 kap. ABL',
-      titleEN: 'Auditor Statement (Revisorsyttrande)',
+      titleEN: 'Auditor Statement',
       titleSV: 'Revisorsyttrande (Kvittning / Apport / 13 kap. 6 §)',
       noteEN: hasNotes
-        ? 'Required for set-off issue (kvittningsemission) when converting K-lan principal & accrued interest.'
-        : 'Conditional: required if payment is made via set-off (kvittning) or contribution in kind (apport).',
+        ? 'Required for set-off issue when converting note principal & accrued interest.'
+        : 'Conditional: required if payment is made via set-off or contribution in kind.',
       noteSV: hasNotes
         ? 'Kravs for kvittningsemission vid konvertering av konvertibellan (K-lan) och upplupen ranta.'
         : 'Villkorat: kravs vid kvittningsemission eller apportegendom.',
@@ -169,7 +169,7 @@ export function generateBolagsverketChecklist(state: CapTableState): Bolagsverke
       id: 'doc_bankintyg',
       required: true,
       statute: '13 kap. 28 § & 5 kap. 1 § ABL',
-      titleEN: 'Bank Payment Certificate & Updated Aktiebok',
+      titleEN: 'Bank Payment Certificate & Updated Share Register',
       titleSV: 'Bankintyg & Uppdaterad aktiebok',
       noteEN: `Bank certificate confirming paid-in cash + updated share register${hasWarrants ? ' and warrant register' : ''}.`,
       noteSV: `Bankintyg over inbetald emissionslikvid samt uppdaterad aktiebok${hasWarrants ? ' och optionsbok' : ''}.`,

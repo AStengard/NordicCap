@@ -40,7 +40,7 @@ export function StarterView() {
       <div className="text-center space-y-4 max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#15233E]/10 text-[#15233E] border border-[#8C6D46]/30 text-xs font-mono font-medium">
           <BrandEmblem className="w-3.5 h-3.5" />
-          <span>{isSV ? 'Aktiebolagslagen (2005:551) Verifierad' : 'Aktiebolagslagen (2005:551) Verified'}</span>
+          <span>{isSV ? 'Aktiebolagslagen (2005:551) Verifierad' : 'Companies Act (ABL 2005:551) Verified'}</span>
         </div>
 
         <h1
@@ -154,7 +154,7 @@ export function StarterView() {
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#8C6D46] shrink-0" />
-                <span>{isSV ? 'Leo-lagen (16 kap. ABL) & Bolagsverket-dossier' : 'Leo-lagen 90% voting check & SHA drafting'}</span>
+                <span>{isSV ? 'Leo-lagen (16 kap. ABL) & Bolagsverket-dossier' : 'Leo Act 90% voting check & SHA drafting'}</span>
               </li>
             </ul>
           </div>
@@ -175,22 +175,22 @@ export function StarterView() {
       {/* Trust & Legal Guardrails Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center border-t border-[#E5E0D5] pt-8">
         <div className="space-y-1">
-          <div className="text-xs font-bold font-mono text-[#8C6D46] uppercase">ABL 4 kap. 5 §</div>
+          <div className="text-xs font-bold font-mono text-[#8C6D46] uppercase">{isSV ? 'ABL 4 kap. 5 §' : 'Ch. 4 § 5 ABL'}</div>
           <div className="text-xs text-[#15233E] font-medium">{isSV ? 'Max 10:1 Röstvärdestak' : 'Max 10:1 Voting Ratio'}</div>
           <div className="text-[11px] text-[#7A8291]">{isSV ? 'Statutär kontroll' : 'Statutory guardrail'}</div>
         </div>
         <div className="space-y-1">
-          <div className="text-xs font-bold font-mono text-[#8C6D46] uppercase">ABL 16 kap.</div>
-          <div className="text-xs text-[#15233E] font-medium">{isSV ? 'Leo-lagen (90% majoritet)' : 'Leo-lagen 90% Majority'}</div>
+          <div className="text-xs font-bold font-mono text-[#8C6D46] uppercase">{isSV ? 'ABL 16 kap.' : 'Ch. 16 ABL'}</div>
+          <div className="text-xs text-[#15233E] font-medium">{isSV ? 'Leo-lagen (90% majoritet)' : 'Leo Act (90% Majority)'}</div>
           <div className="text-[11px] text-[#7A8291]">{isSV ? 'Personaloptioner' : 'Insider warrant protection'}</div>
         </div>
         <div className="space-y-1">
-          <div className="text-xs font-bold font-mono text-[#8C6D46] uppercase">ABL 1 kap. 5 §</div>
-          <div className="text-xs text-[#15233E] font-medium">{isSV ? 'Minst 25 000 SEK kapital' : 'Min 25 000 SEK Capital'}</div>
-          <div className="text-[11px] text-[#7A8291]">{isSV ? 'Privata aktiebolag' : 'Private Swedish AB'}</div>
+          <div className="text-xs font-bold font-mono text-[#8C6D46] uppercase">{isSV ? 'ABL 1 kap. 5 §' : 'Ch. 1 § 5 ABL'}</div>
+          <div className="text-xs text-[#15233E] font-medium">{isSV ? 'Minst 25 000 SEK kapital' : 'Min 25,000 SEK Capital'}</div>
+          <div className="text-[11px] text-[#7A8291]">{isSV ? 'Privata aktiebolag' : 'Private Limited Company'}</div>
         </div>
         <div className="space-y-1">
-          <div className="text-xs font-bold font-mono text-[#8C6D46] uppercase">Bolagsverket</div>
+          <div className="text-xs font-bold font-mono text-[#8C6D46] uppercase">{isSV ? 'Bolagsverket' : 'Registry'}</div>
           <div className="text-xs text-[#15233E] font-medium">{isSV ? '6 Registreringsdokument' : '6 Filing Dossiers'}</div>
           <div className="text-[11px] text-[#7A8291]">{isSV ? 'Exportfärdiga bilagor' : 'Export-ready exhibits'}</div>
         </div>

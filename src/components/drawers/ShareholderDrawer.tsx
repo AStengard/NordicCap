@@ -51,7 +51,7 @@ export function ShareholderDrawer({
     <SlideOverDrawer
       open={open}
       title={initial ? 'Edit Shareholder' : 'Add Shareholder'}
-      subtitle="Register an equity holder in the Swedish Aktiebok."
+      subtitle="Register an equity holder in the share register."
       onClose={onClose}
     >
       <form onSubmit={handleSubmit} className="space-y-4">

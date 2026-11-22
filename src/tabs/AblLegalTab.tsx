@@ -241,7 +241,7 @@ export function AblLegalTab() {
               {t.ablChecklistTitle}
             </h3>
             <span className="text-[11px] font-mono text-[#667085]">
-              Bolagsverket Registration Dossier
+              {state.language === 'SV' ? 'Bolagsverket Registreringsdossier' : 'Corporate Registry Filing Dossier'}
             </span>
           </div>
 
@@ -494,7 +494,7 @@ export function AblLegalTab() {
                   Conversion Price = min( Round Share Price &times; (1 &minus; Discount Rate), Valuation Cap / Pre-Money Shares )
                 </div>
                 <p>
-                  NordicCap models both mechanisms and issues shadow or separate share classes preserving statutory Swedish Kvotvarde.
+                  NordicCap models both mechanisms and issues shadow or separate share classes preserving statutory par value (Kvotvärde).
                 </p>
               </div>
 

@@ -504,10 +504,10 @@ export function CompanySetupView() {
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-[11px] text-[#5A6475] font-mono pt-1 border-t border-[#E5E0D5]/60">
-                <div>Röster: <strong className="text-[#15233E]">{cls.votesPerShare}x</strong></div>
-                <div>Typ: <strong className="text-[#15233E]">{cls.isPreferred ? `${cls.liquidationMultiple}x Pref` : 'Stam'}</strong></div>
-                <div>Kvotkurs: <strong className="text-[#15233E]">{cls.issuePrice} SEK</strong></div>
-                <div>Senioritet: <strong className="text-[#15233E]">{cls.seniority}</strong></div>
+                <div>{isSV ? 'Röster:' : 'Votes:'} <strong className="text-[#15233E]">{cls.votesPerShare}x</strong></div>
+                <div>{isSV ? 'Typ:' : 'Type:'} <strong className="text-[#15233E]">{cls.isPreferred ? `${cls.liquidationMultiple}x Pref` : (isSV ? 'Stam' : 'Common')}</strong></div>
+                <div>{isSV ? 'Kvotkurs:' : 'Par Price:'} <strong className="text-[#15233E]">{cls.issuePrice} SEK</strong></div>
+                <div>{isSV ? 'Senioritet:' : 'Seniority:'} <strong className="text-[#15233E]">{cls.seniority}</strong></div>
               </div>
             </div>
           ))}
@@ -721,7 +721,7 @@ export function CompanySetupView() {
                       <td className="py-3 px-3">
                         <CategoryBadge category={sh.category} />
                       </td>
-                      <td className="py-3 px-3 text-xs text-[#495264]">{cls?.name ?? 'Stam'}</td>
+                      <td className="py-3 px-3 text-xs text-[#495264]">{cls?.name ?? (isSV ? 'Stam' : 'Common')}</td>
                       <td className="py-3 px-3 text-right font-mono tabular-nums text-[#15233E]">
                         {formatInt(sh.shares)}
                       </td>

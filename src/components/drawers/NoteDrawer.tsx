@@ -57,8 +57,8 @@ export function NoteDrawer({
   return (
     <SlideOverDrawer
       open={open}
-      title={initial ? 'Edit Convertible Note (K-lan)' : 'Add Convertible Note (K-lan)'}
-      subtitle="Swedish Konvertibel (ABL 15 kap.) with cap and discount conversion mechanics."
+      title={initial ? 'Edit Convertible Note' : 'Add Convertible Note'}
+      subtitle="Convertible debt (Ch. 15 Companies Act) with cap and discount conversion mechanics."
       onClose={onClose}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -69,7 +69,7 @@ export function NoteDrawer({
             required
             value={holderName}
             onChange={(e) => setHolderName(e.target.value)}
-            placeholder="e.g., Almi Invest AB (K-lan)"
+            placeholder="e.g., Almi Invest AB (Convertible)"
             className="w-full px-3 py-2 text-sm bg-white border border-[#D8D1C3] rounded-md"
           />
         </div>
@@ -149,7 +149,7 @@ export function NoteDrawer({
             Cancel
           </button>
           <button type="submit" className="px-4 py-2 text-xs font-medium bg-[#15233E] text-[#FCFBF9] rounded-md">
-            {initial ? 'Update Note' : 'Add K-lan'}
+            {initial ? 'Update Note' : 'Add Note'}
           </button>
         </div>
       </form>

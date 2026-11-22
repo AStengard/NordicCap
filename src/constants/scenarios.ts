@@ -114,7 +114,7 @@ export function createPreSeriesAScenario(): CapTableSnapshot {
     convertibleNotes: [
       {
         id: 'note_klan_1',
-        holderName: 'Holmberg Ventures AB (K-lan)',
+        holderName: 'Holmberg Ventures AB (Convertible Note)',
         category: 'Angel',
         principal: 3_000_000,
         interestRate: 6.0,
@@ -232,7 +232,7 @@ export function createSeriesARecruiterDemoScenario(): CapTableSnapshot {
       },
       {
         id: 'sh_angel_conv',
-        name: 'Holmberg Ventures AB (Converted K-lan)',
+        name: 'Holmberg Ventures AB (Converted Note)',
         category: 'Angel',
         shareClassId: 'cls_seed_pref',
         shares: 87_845,
@@ -258,7 +258,7 @@ export function createSeriesARecruiterDemoScenario(): CapTableSnapshot {
     convertibleNotes: [
       {
         id: 'note_klan_1',
-        holderName: 'Holmberg Ventures AB (K-lan)',
+        holderName: 'Holmberg Ventures AB (Convertible Note)',
         category: 'Angel',
         principal: 3_000_000,
         interestRate: 6.0,

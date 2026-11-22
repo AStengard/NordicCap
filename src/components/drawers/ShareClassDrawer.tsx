@@ -71,8 +71,8 @@ export function ShareClassDrawer({
   return (
     <SlideOverDrawer
       open={open}
-      title={initial ? 'Edit Share Class' : 'Add Share Class (Aktieslag)'}
-      subtitle="Define voting power (ABL 4 kap. 5 §) and preference rights."
+      title={initial ? 'Edit Share Class' : 'Add Share Class'}
+      subtitle="Define voting power (Ch. 4 § 5 Companies Act) and preference rights."
       onClose={onClose}
     >
       <form onSubmit={handleSubmit} className="space-y-4">

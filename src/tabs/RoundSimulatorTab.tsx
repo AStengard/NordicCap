@@ -44,7 +44,7 @@ const CHART_SERIES = [
   { key: 'Founders', label: 'Founders', color: '#15233E' },
   { key: 'Angels', label: 'Angels', color: '#8C6D46' },
   { key: 'ExistingVC', label: 'Existing VC', color: '#3B5984' },
-  { key: 'ConvertedNotes', label: 'Converted K-lan', color: '#B59870' },
+  { key: 'ConvertedNotes', label: 'Converted Notes', color: '#B59870' },
   { key: 'NewInvestor', label: 'New Investor', color: '#6E85A3' },
   { key: 'ESOP', label: 'ESOP Pool', color: '#5C6F68' },
 ] as const;
@@ -351,7 +351,7 @@ export function RoundSimulatorTab() {
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-[#3B5B4A]" strokeWidth={1.7} />
             <span>
-              <strong>{justAppliedToast}</strong> committed to the live Cap Table, updating Aktiekapital, Preference Classes, and K-lan status for Exit Waterfall and ABL Legal modules.
+              <strong>{justAppliedToast}</strong> {state.language === 'SV' ? 'har verkställts i aktieboken och uppdaterat aktiekapital och preferensklasser.' : 'committed to the live Cap Table, updating share capital, preference classes, and convertible notes.'}
             </span>
           </div>
           <button type="button" onClick={() => setJustAppliedToast(null)} className="text-[#3B5B4A] hover:text-[#15233E]">
@@ -394,7 +394,7 @@ export function RoundSimulatorTab() {
             <div className="mt-2 text-2xl font-semibold text-[#8C6D46] font-mono tabular-nums">{formatInt(simulation.newInvestorShares)}</div>
             <div className="mt-1 text-[11px] font-mono text-[#667085]">
               New Investor: {formatPct(simulation.newInvestorOwnershipPct)} FD
-              {simulation.totalConvertedNoteShares > 0 && ` (+${formatInt(simulation.totalConvertedNoteShares)} K-lan)`}
+              {simulation.totalConvertedNoteShares > 0 && ` (+${formatInt(simulation.totalConvertedNoteShares)} ${state.language === 'SV' ? 'K-lån' : 'notes'})`}
             </div>
           </div>
         </div>
@@ -784,7 +784,7 @@ export function RoundSimulatorTab() {
                   {t.simDilutionTable}
                 </h3>
                 <span className="text-[11px] font-mono tabular-nums text-[#667085]">
-                  Aktiekapital +{formatSEK(simulation.shareCapitalIncrease)} (Kvotvarde {simulation.quotaValue.toFixed(4)} SEK)
+                  {state.language === 'SV' ? 'Aktiekapital' : 'Share Capital'} +{formatSEK(simulation.shareCapitalIncrease)} ({state.language === 'SV' ? 'Kvotvärde' : 'Par Value'} {simulation.quotaValue.toFixed(4)} SEK)
                 </span>
               </div>
               <div className="overflow-x-auto">
