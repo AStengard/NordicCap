@@ -18,6 +18,7 @@ import {
 import { ShareClass, Shareholder, StakeholderCategory } from '../../types';
 import { useCapTable, useCapTableMetrics } from '../../context/CapTableContext';
 import { DEMO_STEPS, useRecruiterDemo } from '../../context/RecruiterDemoContext';
+import { createPreSeriesAScenario, createSeriesARecruiterDemoScenario } from '../../constants/scenarios';
 import { formatInt, formatPct, formatSEK, generateId } from '../../utils/formatters';
 import { CategoryBadge } from '../ui/CategoryBadge';
 import { DemoSpotlight } from '../demo/DemoSpotlight';
@@ -276,6 +277,58 @@ export function CompanySetupView() {
           >
             <span>{isSV ? 'Gå till aktiebok & analys' : 'Proceed to Cap Table & Analytics'}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+      </div>
+
+      {/* Sample Companies Quick-Loader */}
+      <div className="bg-[#FCFBF9] border border-[#8C6D46]/30 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-start gap-3.5 max-w-xl">
+          <span className="w-9 h-9 rounded-xl bg-[#8C6D46]/15 text-[#8C6D46] flex items-center justify-center shrink-0 mt-0.5">
+            <Sparkles className="w-5 h-5" />
+          </span>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-bold text-[#15233E]">
+                {isSV ? 'Förifyll med ett exempelbolag' : 'Pre-fill with a Sample Company'}
+              </h2>
+              <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded bg-[#8C6D46]/15 text-[#8C6D46] font-semibold">
+                {isSV ? 'Exempel' : 'Samples'}
+              </span>
+            </div>
+            <p className="text-xs text-[#5A6475] mt-1 leading-relaxed">
+              {isSV
+                ? 'Vill du se ett färdigt bolag i aktieboken? Klicka på ett exempel för att automatiskt ladda in bolagsuppgifter, aktieslag och investerare.'
+                : 'Want to explore realistic data? Click a sample company below to instantly populate founders, share classes, and investments.'}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => {
+              dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() });
+              if (demo.isDemoActive) demo.exitDemo();
+            }}
+            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-[#15233E] bg-[#F6F4EF] hover:bg-[#EAE5D9] border border-[#D8D1C3] rounded-lg transition-all cursor-pointer shadow-2xs hover:shadow-xs group"
+            title={t.sampleSeedTooltip}
+          >
+            <span className="w-2.5 h-2.5 rounded-full bg-[#8C6D46] shrink-0" />
+            <span>{isSV ? 'Såddbolag (Seed)' : 'Seed Stage Sample'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              dispatch({ type: 'LOAD_SCENARIO', payload: createSeriesARecruiterDemoScenario() });
+              if (demo.isDemoActive) demo.exitDemo();
+            }}
+            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-[#FCFBF9] bg-[#15233E] hover:bg-[#1E3156] rounded-lg transition-all cursor-pointer shadow-xs group"
+            title={t.sampleSeriesATooltip}
+          >
+            <span className="w-2.5 h-2.5 rounded-full bg-[#D8B98E] shrink-0" />
+            <span>{isSV ? 'Serie A VC-bolag' : 'Series A VC Sample'}</span>
           </button>
         </div>
       </div>

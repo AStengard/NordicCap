@@ -18,8 +18,6 @@ import { useCapTable, useCapTableMetrics } from './context/CapTableContext';
 import { useRecruiterDemo } from './context/RecruiterDemoContext';
 import {
   createBlankScenario,
-  createPreSeriesAScenario,
-  createSeriesARecruiterDemoScenario,
 } from './constants/scenarios';
 import { FAVICON_SVG_DATA_URI } from './constants/brand';
 import { formatSEK } from './utils/formatters';
@@ -143,40 +141,6 @@ export function NordicCapEngine() {
                 <span>{t.startOverBtn || 'Start Over'}</span>
               </button>
 
-              {/* Compact Sample Scenarios Group (Visible at all times on all screens!) */}
-              <div className="flex items-center bg-[#1F2F4E] p-0.5 px-1.5 rounded-full border border-[#8C6D46]/40 text-xs shrink-0">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-[#D8B98E] px-1 font-semibold">
-                  {t.samplesLabel}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() });
-                    dispatch({ type: 'SET_TAB', payload: 'cap_table' });
-                    if (demo.isDemoActive) demo.exitDemo();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="px-2 py-0.5 text-xs text-[#D8D1C3] hover:text-white rounded-full hover:bg-white/10 transition-colors cursor-pointer whitespace-nowrap"
-                  title={t.sampleSeedTooltip}
-                >
-                  {t.sampleSeedShort || 'Seed'}
-                </button>
-                <span className="text-[#8C6D46]/50 text-xs">|</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatch({ type: 'LOAD_SCENARIO', payload: createSeriesARecruiterDemoScenario() });
-                    dispatch({ type: 'SET_TAB', payload: 'cap_table' });
-                    if (demo.isDemoActive) demo.exitDemo();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="px-2 py-0.5 text-xs text-[#D8D1C3] hover:text-white rounded-full hover:bg-white/10 transition-colors cursor-pointer whitespace-nowrap"
-                  title={t.sampleSeriesATooltip}
-                >
-                  {t.sampleSeriesAShort || 'Series A'}
-                </button>
-              </div>
-
               {/* Recruiter Demo Launcher */}
               <button
                 type="button"
@@ -282,36 +246,29 @@ export function NordicCapEngine() {
               </div>
             </div>
 
-            {/* Right: Actions and company context - clean, compact, non-intrusive */}
-            <div className="flex items-center gap-2 text-xs font-mono text-[#5A6475] shrink-0">
-              <span className="hidden xl:inline text-[#15233E] font-medium">{state.company.name}</span>
-              <span className="hidden xl:inline text-[#D8D1C3]">|</span>
-              <span className="hidden lg:inline text-[#667085]">{formatSEK(state.company.shareCapital)}</span>
-
-              {/* Print and Export buttons shown on Step 3 and analytics tabs */}
-              {['cap_table', 'round_sim', 'waterfall', 'abl_legal'].includes(state.activeTab) && (
-                <div className="flex items-center gap-1.5 pl-1.5 lg:border-l lg:border-[#E5E0D5]">
-                  <button
-                    type="button"
-                    onClick={() => exportCapTableToCSV(state, metrics)}
-                    title={t.exportCsv}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
-                  >
-                    <Download className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
-                    <span>{t.exportCsvShort || 'CSV'}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => window.print()}
-                    title={t.printMemo}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
-                  >
-                    <Printer className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
-                    <span>{t.printMemoShort || 'Print'}</span>
-                  </button>
-                </div>
-              )}
-            </div>
+            {/* Right: Actions on Step 3 analytics views */}
+            {['cap_table', 'round_sim', 'waterfall', 'abl_legal'].includes(state.activeTab) && (
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => exportCapTableToCSV(state, metrics)}
+                  title={t.exportCsv}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
+                >
+                  <Download className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
+                  <span>{t.exportCsvShort || 'CSV'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  title={t.printMemo}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
+                >
+                  <Printer className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
+                  <span>{t.printMemoShort || 'Print'}</span>
+                </button>
+              </div>
+            )}
           </div>
         </nav>
 
