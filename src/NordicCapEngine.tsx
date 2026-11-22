@@ -108,7 +108,7 @@ export function NordicCapEngine() {
                   NordicCap
                 </span>
                 <span className="px-1.5 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded bg-[#8C6D46]/30 text-[#D8B98E] border border-[#8C6D46]/50 shrink-0">
-                  ABL 2005:551
+                  By Alfred Stengard
                 </span>
               </div>
             </button>
@@ -146,11 +146,10 @@ export function NordicCapEngine() {
               <button
                 type="button"
                 onClick={demo.startDemo}
-                className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                  demo.isDemoActive
+                className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${demo.isDemoActive
                     ? 'bg-[#8C6D46] text-[#FCFBF9] ring-2 ring-[#D8B98E]'
                     : 'bg-[#D8B98E] hover:bg-[#C9A676] text-[#15233E]'
-                }`}
+                  }`}
                 title={t.demoLauncher}
               >
                 <Play className="w-3.5 h-3.5 fill-current shrink-0" strokeWidth={0} />
@@ -162,18 +161,16 @@ export function NordicCapEngine() {
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'EN' })}
-                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${
-                    state.language === 'EN' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
-                  }`}
+                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${state.language === 'EN' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
+                    }`}
                 >
                   EN
                 </button>
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'SV' })}
-                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${
-                    state.language === 'SV' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
-                  }`}
+                  className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${state.language === 'SV' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
+                    }`}
                 >
                   SV
                 </button>
@@ -190,11 +187,10 @@ export function NordicCapEngine() {
               <button
                 type="button"
                 onClick={() => dispatch({ type: 'SET_TAB', payload: 'starter' })}
-                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${
-                  state.activeTab === 'starter'
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${state.activeTab === 'starter'
                     ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
                     : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
-                }`}
+                  }`}
                 title={t.tabStarter}
               >
                 <Compass className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
@@ -204,11 +200,10 @@ export function NordicCapEngine() {
               <button
                 type="button"
                 onClick={() => dispatch({ type: 'SET_TAB', payload: 'setup' })}
-                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${
-                  state.activeTab === 'setup'
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${state.activeTab === 'setup'
                     ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
                     : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
-                }`}
+                  }`}
                 title={isSV ? 'Sida 2: Bolagsuppgifter & Inmatning' : 'Page 2: Company Setup & Input'}
               >
                 <Users className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
@@ -233,11 +228,10 @@ export function NordicCapEngine() {
                       key={tab.id}
                       type="button"
                       onClick={() => dispatch({ type: 'SET_TAB', payload: tab.id as WorkspaceTab })}
-                      className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap transition-all cursor-pointer ${
-                        isActive
+                      className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap transition-all cursor-pointer ${isActive
                           ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
                           : 'text-[#5A6475] hover:text-[#15233E] hover:bg-white/60'
-                      }`}
+                        }`}
                     >
                       <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
                       <span>{tab.label}</span>
