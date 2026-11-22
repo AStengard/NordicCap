@@ -51,6 +51,41 @@ export function DemoNarratorBox() {
         </ul>
 
         {currentStepIndex === totalSteps - 1 && (
+          <div className="pt-2.5 border-t border-[#E5E0D5] space-y-1.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#8C6D46] font-semibold block">
+              {isSV ? 'Projekt & Kontakt (Alfred Stengård):' : 'Connect & Author (Alfred Stengard):'}
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <a
+                href="https://github.com/AStengard/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] rounded border border-[#D8D1C3] transition-colors"
+              >
+                <span>GitHub</span>
+                <ExternalLink className="w-2.5 h-2.5 text-[#5A6475]" />
+              </a>
+              <a
+                href="https://linkedin.com/in/alfredstengard/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] rounded border border-[#D8D1C3] transition-colors"
+              >
+                <span>LinkedIn</span>
+                <ExternalLink className="w-2.5 h-2.5 text-[#5A6475]" />
+              </a>
+              <a
+                href="https://astengard.github.io/cv/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] rounded border border-[#D8D1C3] transition-colors"
+              >
+                <FileText className="w-2.5 h-2.5 text-[#8C6D46]" />
+                <span>Digital CV</span>
+                <ExternalLink className="w-2.5 h-2.5 text-[#5A6475]" />
+              </a>
+            </div>
+          </div>
         )}
       </div>
     </aside>
