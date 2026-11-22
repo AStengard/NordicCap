@@ -18,8 +18,6 @@ import { useCapTable, useCapTableMetrics } from './context/CapTableContext';
 import { useRecruiterDemo } from './context/RecruiterDemoContext';
 import {
   createBlankScenario,
-  createPreSeriesAScenario,
-  createSeriesARecruiterDemoScenario,
 } from './constants/scenarios';
 import { FAVICON_SVG_DATA_URI } from './constants/brand';
 import { formatSEK } from './utils/formatters';
@@ -88,7 +86,7 @@ export function NordicCapEngine() {
       <div className="print:hidden">
         {/* Top Editorial Header */}
         <header className="bg-[#15233E] text-[#FCFBF9] border-b border-[#8C6D46]/30 shadow-md">
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5 flex items-center justify-between gap-3 overflow-x-auto">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-2.5 flex flex-wrap items-center justify-between gap-y-2 gap-x-2 sm:gap-x-3">
             {/* Logo & Site Name */}
             <button
               type="button"
@@ -97,37 +95,34 @@ export function NordicCapEngine() {
                 if (demo.isDemoActive) demo.exitDemo();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="flex items-center gap-2.5 text-left group cursor-pointer focus:outline-none shrink-0"
+              className="flex items-center gap-2 group cursor-pointer focus:outline-none shrink-0"
               title="NordicCap Home (Starter Page)"
             >
-              <BrandEmblem className="w-7 h-7 shrink-0 transition-transform group-hover:scale-105" />
-              <div className="flex items-center gap-2">
-                <h1
-                  className="text-lg sm:text-xl font-bold tracking-tight text-[#FCFBF9] group-hover:text-[#D8B98E] transition-colors leading-none"
+              <BrandEmblem className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 transition-transform group-hover:scale-105" />
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span
+                  className="text-base sm:text-lg font-bold tracking-tight text-[#FCFBF9] group-hover:text-[#D8B98E] transition-colors leading-none"
                   style={{ fontFamily: "'Newsreader', Georgia, serif" }}
                 >
                   NordicCap
-                </h1>
+                </span>
                 <span className="px-1.5 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded bg-[#8C6D46]/30 text-[#D8B98E] border border-[#8C6D46]/50 shrink-0">
                   ABL 2005:551
-                </span>
-                <span className="hidden 2xl:inline text-xs text-[#D8D1C3] border-l border-[#8C6D46]/40 pl-2 font-sans font-normal">
-                  {t.appSubtitle}
                 </span>
               </div>
             </button>
 
-            {/* Top Navigation Menu (Aligned higher up directly next to logo & title) */}
-            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* Top Navigation Menu (Compact, uncluttered, visible on all screens with zero side-scroll) */}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
               {/* About & Instructions Modal Launcher */}
               <button
                 type="button"
                 onClick={() => setIsAboutOpen(true)}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#D8B98E] hover:text-white border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#D8B98E] hover:text-white border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
                 title={t.howItWorksTitle}
               >
                 <HelpCircle className="w-3.5 h-3.5 shrink-0" />
-                <span>{t.howItWorks}</span>
+                <span>{t.guideBtn || 'Guide'}</span>
               </button>
 
               {/* Start Over Button (Goes back to Page 1 Starter with blank clean state) */}
@@ -139,68 +134,35 @@ export function NordicCapEngine() {
                   if (demo.isDemoActive) demo.exitDemo();
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#FCFBF9] hover:text-[#D8B98E] border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-[#1F2F4E] hover:bg-[#2A3F68] text-[#FCFBF9] hover:text-[#D8B98E] border border-[#8C6D46]/50 transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
                 title={t.startOverTooltip}
               >
                 <RotateCcw className="w-3.5 h-3.5 text-[#D8B98E] shrink-0" />
-                <span>{t.startOver}</span>
+                <span>{t.startOverBtn || 'Start Over'}</span>
               </button>
-
-              {/* Clear Sample Scenarios Group */}
-              <div className="hidden lg:flex items-center gap-1 bg-[#1F2F4E] p-0.5 px-1.5 rounded-full border border-[#8C6D46]/30">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-[#D8B98E] px-1 font-semibold">
-                  {t.samplesLabel}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatch({ type: 'LOAD_SCENARIO', payload: createPreSeriesAScenario() });
-                    dispatch({ type: 'SET_TAB', payload: 'cap_table' });
-                    if (demo.isDemoActive) demo.exitDemo();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="px-2 py-0.5 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10 transition-colors cursor-pointer whitespace-nowrap"
-                  title={t.sampleSeedTooltip}
-                >
-                  {t.sampleSeed}
-                </button>
-                <span className="text-[#8C6D46]/50 text-xs">|</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatch({ type: 'LOAD_SCENARIO', payload: createSeriesARecruiterDemoScenario() });
-                    dispatch({ type: 'SET_TAB', payload: 'cap_table' });
-                    if (demo.isDemoActive) demo.exitDemo();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="px-2 py-0.5 text-[11px] text-[#D8D1C3] hover:text-white rounded hover:bg-[#FCFBF9]/10 transition-colors cursor-pointer whitespace-nowrap"
-                  title={t.sampleSeriesATooltip}
-                >
-                  {t.sampleSeriesA}
-                </button>
-              </div>
 
               {/* Recruiter Demo Launcher */}
               <button
                 type="button"
                 onClick={demo.startDemo}
-                className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   demo.isDemoActive
                     ? 'bg-[#8C6D46] text-[#FCFBF9] ring-2 ring-[#D8B98E]'
                     : 'bg-[#D8B98E] hover:bg-[#C9A676] text-[#15233E]'
                 }`}
+                title={t.demoLauncher}
               >
                 <Play className="w-3.5 h-3.5 fill-current shrink-0" strokeWidth={0} />
-                <span>{demo.isDemoActive ? t.demoLauncherActive : t.demoLauncher}</span>
+                <span>{demo.isDemoActive ? (t.demoLauncherActiveShort || 'Demo Active') : (t.demoLauncherShort || '60s Demo')}</span>
               </button>
 
               {/* Language Switcher */}
-              <div className="inline-flex rounded-full border border-[#8C6D46]/40 p-0.5 bg-[#1F2F4E]">
+              <div className="inline-flex rounded-full border border-[#8C6D46]/40 p-0.5 bg-[#1F2F4E] shrink-0">
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'EN' })}
                   className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${
-                    state.language === 'EN' ? 'bg-[#8C6D46] text-white' : 'text-[#D8D1C3] hover:text-white'
+                    state.language === 'EN' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
                   }`}
                 >
                   EN
@@ -209,7 +171,7 @@ export function NordicCapEngine() {
                   type="button"
                   onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: 'SV' })}
                   className={`px-2 py-0.5 text-xs font-mono font-medium rounded-full transition-colors cursor-pointer ${
-                    state.language === 'SV' ? 'bg-[#8C6D46] text-white' : 'text-[#D8D1C3] hover:text-white'
+                    state.language === 'SV' ? 'bg-[#8C6D46] text-white shadow-2xs' : 'text-[#D8D1C3] hover:text-white'
                   }`}
                 >
                   SV
@@ -221,39 +183,41 @@ export function NordicCapEngine() {
 
         {/* Workspace Navigation Bar */}
         <nav className="bg-[#FCFBF9] border-b border-[#E5E0D5] sticky top-0 z-30 shadow-xs">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between overflow-x-auto">
-            <div className="flex items-center space-x-1 sm:space-x-1.5 py-2">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-y-2 gap-x-2 sm:gap-x-4 py-1.5 sm:py-2">
+            <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
               {/* Step 1 & Step 2 */}
               <button
                 type="button"
                 onClick={() => dispatch({ type: 'SET_TAB', payload: 'starter' })}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${
                   state.activeTab === 'starter'
                     ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
                     : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
                 }`}
+                title={t.tabStarter}
               >
-                <Compass className="w-3.5 h-3.5" strokeWidth={1.8} />
+                <Compass className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
                 <span>{t.tabStarter}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => dispatch({ type: 'SET_TAB', payload: 'setup' })}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors cursor-pointer ${
                   state.activeTab === 'setup'
                     ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
                     : 'text-[#5A6475] hover:text-[#15233E] hover:bg-[#F6F4EF]'
                 }`}
+                title={isSV ? 'Sida 2: Bolagsuppgifter & Inmatning' : 'Page 2: Company Setup & Input'}
               >
-                <Users className="w-3.5 h-3.5" strokeWidth={1.8} />
+                <Users className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
                 <span>{t.tabSetup}</span>
               </button>
 
-              <div className="h-4 w-px bg-[#E5E0D5] mx-1 shrink-0" />
+              <div className="h-4 w-px bg-[#E5E0D5] mx-0.5 sm:mx-1 shrink-0" />
 
               {/* Step 3 Analytics Suite Group */}
-              <div className="flex items-center bg-[#F6F4EF] p-0.5 rounded-lg border border-[#E5E0D5] space-x-0.5 sm:space-x-1">
+              <div className="flex flex-wrap items-center bg-[#F6F4EF] p-0.5 rounded-lg border border-[#E5E0D5] gap-0.5 sm:gap-1">
                 {[
                   { id: 'cap_table', label: t.tabCapTable, icon: Layers },
                   { id: 'round_sim', label: t.tabRoundSim, icon: Sliders },
@@ -268,13 +232,13 @@ export function NordicCapEngine() {
                       key={tab.id}
                       type="button"
                       onClick={() => dispatch({ type: 'SET_TAB', payload: tab.id as WorkspaceTab })}
-                      className={`inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap transition-all cursor-pointer ${
+                      className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap transition-all cursor-pointer ${
                         isActive
                           ? 'bg-[#15233E] text-[#FCFBF9] shadow-xs font-semibold'
                           : 'text-[#5A6475] hover:text-[#15233E] hover:bg-white/60'
                       }`}
                     >
-                      <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
+                      <Icon className="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
                       <span>{tab.label}</span>
                     </button>
                   );
@@ -282,35 +246,29 @@ export function NordicCapEngine() {
               </div>
             </div>
 
-            <div className="hidden md:flex items-center gap-3 text-xs font-mono text-[#5A6475] py-2 shrink-0">
-              <span>{state.company.name}</span>
-              <span className="text-[#D8D1C3]">|</span>
-              <span>Aktiekapital: {formatSEK(state.company.shareCapital)}</span>
-
-              {/* Print and Export buttons shown on Step 3 and analytics tabs */}
-              {['cap_table', 'round_sim', 'waterfall', 'abl_legal'].includes(state.activeTab) && (
-                <div className="flex items-center gap-1.5 pl-3 border-l border-[#E5E0D5]">
-                  <button
-                    type="button"
-                    onClick={() => exportCapTableToCSV(state, metrics)}
-                    title={t.exportCsv}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer"
-                  >
-                    <Download className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.8} />
-                    <span>{t.exportCsv}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => window.print()}
-                    title={t.printMemo}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer"
-                  >
-                    <Printer className="w-3.5 h-3.5 text-[#8C6D46]" strokeWidth={1.8} />
-                    <span>{t.printMemo}</span>
-                  </button>
-                </div>
-              )}
-            </div>
+            {/* Right: Actions on Step 3 analytics views */}
+            {['cap_table', 'round_sim', 'waterfall', 'abl_legal'].includes(state.activeTab) && (
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => exportCapTableToCSV(state, metrics)}
+                  title={t.exportCsv}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
+                >
+                  <Download className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
+                  <span>{t.exportCsvShort || 'CSV'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  title={t.printMemo}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-sans font-medium text-[#15233E] bg-[#F6F4EF] hover:bg-[#E5E0D5] border border-[#D8D1C3] transition-colors cursor-pointer shadow-2xs"
+                >
+                  <Printer className="w-3.5 h-3.5 text-[#8C6D46] shrink-0" strokeWidth={1.8} />
+                  <span>{t.printMemoShort || 'Print'}</span>
+                </button>
+              </div>
+            )}
           </div>
         </nav>
 
